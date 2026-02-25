@@ -21,6 +21,39 @@ import BaseEntityVersionModel from "./BaseEntityVersionModel.js";
 import BaseEntityVersion_MiddleTableModel from './BaseEntityVersion_MiddleTableModel.js';
 import FUAFormatFromSchemaModel from './FUAFormatFromSchemaModel';
 
+import RuleSet  from './RuleSetModel';
+import Rule     from './RuleModel';
+import RuleNode from './RuleNodeModel';
+import RuleEdge from './RuleEdgeModel';
+
+// ── Relaciones FK de Validacion──
+
+// RuleSet 1:N Rule
+RuleSet.hasMany(Rule, { 
+    foreignKey: { 
+        name: 'RuleSetId', 
+        allowNull: false 
+    } 
+});
+Rule.belongsTo(RuleSet);
+
+// Rule 1:N RuleNode
+Rule.hasMany(RuleNode, { 
+    foreignKey: { 
+        name: 'RuleId', 
+        allowNull: false 
+    } 
+});
+RuleNode.belongsTo(Rule);
+
+// Rule 1:N RuleEdge
+Rule.hasMany(RuleEdge, { 
+    foreignKey: { 
+        name: 'RuleId', 
+        allowNull: false 
+    } 
+});
+RuleEdge.belongsTo(Rule);
 
 // Foreign keys
 
@@ -118,7 +151,11 @@ BaseEntityVersionModel.hasOne( FUAFromVisitPDFModel, {
 
 
 //Exports
-export {    
+export {
+    RuleSet,
+    Rule,
+    RuleNode,
+    RuleEdge,    
     User,
     Visit,
     FUAFormat,
