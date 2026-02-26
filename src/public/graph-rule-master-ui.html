@@ -485,6 +485,10 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
       Exportar
     </button>
+    <button class="btn small" onclick="showEvalRuleSetModal()" id="btnEvalRuleSet">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      Evaluar RuleSet
+    </button>
   </div>
 </div>
 
@@ -535,6 +539,10 @@
       <button class="btn small" onclick="validateCurrentGraph()" id="btnValidate" disabled>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M9 12l2 2 4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
         Validar
+      </button>
+      <button class="btn small" onclick="showEvalRuleModal()" id="btnEvalRule" disabled>
+        <svg viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2" width="14" height="14"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        Evaluar Regla
       </button>
       <button class="btn small" onclick="saveCurrentGraph()" id="btnSave" disabled>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1-2 2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
@@ -692,6 +700,26 @@
     <div class="modal-footer">
       <button class="btn" onclick="closeModal('importModal')">Cancelar</button>
       <button class="btn primary" onclick="doImport()">Importar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── MODAL: EVALUAR ─── -->
+<div class="modal-overlay hidden" id="evalModal">
+  <div class="modal" style="width:560px">
+    <div class="modal-header">
+      <h2 id="evalModalTitle">Evaluar</h2>
+      <button class="btn small icon-only" onclick="closeModal('evalModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label id="evalModalLabel">JSON de datos a evaluar</label>
+        <textarea id="eval_json" class="json-editor" style="min-height:200px" placeholder='{ "campo": "valor", ... }'></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('evalModal')">Cancelar</button>
+      <button class="btn primary" id="evalModalBtn" onclick="">Evaluar</button>
     </div>
   </div>
 </div>
@@ -931,7 +959,7 @@ function updateBreadcrumb() {
 // TOOLBAR STATE
 // ════════════════════════════════════════════
 function enableToolbar(enabled) {
-  ['btnAddCondition', 'btnAddGate', 'btnAddParam', 'btnValidate', 'btnSave', 'btnAutoLayout'].forEach(id => {
+  ['btnAddCondition', 'btnAddGate', 'btnAddParam', 'btnValidate', 'btnEvalRule', 'btnSave', 'btnAutoLayout'].forEach(id => {
     document.getElementById(id).disabled = !enabled;
   });
   document.getElementById('canvasHelp').style.opacity = enabled ? '0' : '1';
@@ -1640,6 +1668,118 @@ async function validateCurrentGraph() {
   } catch (e) {
     toast('Error validando: ' + e.message, 'error');
   }
+}
+
+// ════════════════════════════════════════════
+// EVALUATE
+// ════════════════════════════════════════════
+function showEvalRuleModal() {
+  if (!state.currentRule) return;
+  document.getElementById('evalModalTitle').textContent = `Evaluar Regla: ${state.currentRule.name}`;
+  document.getElementById('evalModalLabel').textContent = 'JSON de datos a evaluar contra la regla';
+  document.getElementById('eval_json').value = '';
+  document.getElementById('evalModalBtn').setAttribute('onclick', 'doEvaluateRule()');
+  showModal('evalModal');
+}
+
+function showEvalRuleSetModal() {
+  if (!state.currentRuleSet) {
+    toast('Selecciona un RuleSet primero', 'warning');
+    return;
+  }
+  document.getElementById('evalModalTitle').textContent = `Evaluar RuleSet: ${state.currentRuleSet.name}`;
+  document.getElementById('evalModalLabel').textContent = 'JSON de datos a evaluar contra todas las reglas del RuleSet';
+  document.getElementById('eval_json').value = '';
+  document.getElementById('evalModalBtn').setAttribute('onclick', 'doEvaluateRuleSet()');
+  showModal('evalModal');
+}
+
+async function doEvaluateRule() {
+  if (!state.currentRule) return;
+  let data;
+  try {
+    data = JSON.parse(document.getElementById('eval_json').value);
+  } catch {
+    toast('JSON inválido', 'error');
+    return;
+  }
+  closeModal('evalModal');
+  try {
+    const result = await api('POST', `/Evaluate/rule/${state.currentRule.uuid}`, { data });
+    renderEvalResult(result, 'Resultado — Evaluar Regla');
+    toast(result.isValid ? 'Regla válida ✓' : 'Regla inválida ✗', result.isValid ? 'success' : 'error');
+  } catch (e) {
+    toast('Error evaluando regla: ' + e.message, 'error');
+  }
+}
+
+async function doEvaluateRuleSet() {
+  if (!state.currentRuleSet) return;
+  let data;
+  try {
+    data = JSON.parse(document.getElementById('eval_json').value);
+  } catch {
+    toast('JSON inválido', 'error');
+    return;
+  }
+  closeModal('evalModal');
+  try {
+    const result = await api('POST', `/Evaluate/ruleset/${state.currentRuleSet.id}`, { data });
+    renderEvalRuleSetResult(result);
+    toast(result.isValid ? 'RuleSet válido ✓' : 'RuleSet inválido ✗', result.isValid ? 'success' : 'error');
+  } catch (e) {
+    toast('Error evaluando RuleSet: ' + e.message, 'error');
+  }
+}
+
+function renderEvalResult(result, title) {
+  const panel = document.getElementById('propsBody');
+  document.getElementById('propsTitle').textContent = title || 'Resultado Evaluación';
+
+  let html = `<div class="validation-result ${result.isValid ? 'valid' : 'invalid'}">`;
+  html += `<div style="font-weight:600;margin-bottom:8px">${result.isValid ? '✅ Válido' : '❌ Inválido'}</div>`;
+  html += `<div class="val-item" style="font-size:11px;color:var(--text-muted)">Regla #${result.ruleNumber} · ${result.ruleName} · ${result.executionTimeMs}ms</div>`;
+
+  if (result.errors?.length) {
+    html += `<div style="margin-top:8px;font-weight:500;font-size:12px">Errores:</div>`;
+    result.errors.forEach(e => {
+      html += `<div class="val-item"><span class="val-icon">🔴</span><span>[${e.nodeId}] ${e.message}</span></div>`;
+    });
+  }
+  if (result.activatedParameters?.length) {
+    html += `<div style="margin-top:8px;font-weight:500;font-size:12px">Parámetros activados:</div>`;
+    result.activatedParameters.forEach(p => {
+      html += `<div class="val-item"><span class="val-icon">🟢</span><span>${p.field}: <code>${JSON.stringify(p.value)}</code></span></div>`;
+    });
+  }
+  if (result.isValid && !result.errors?.length) {
+    html += '<div class="val-item"><span>Sin errores</span></div>';
+  }
+  html += '</div>';
+  panel.innerHTML = html;
+}
+
+function renderEvalRuleSetResult(result) {
+  const panel = document.getElementById('propsBody');
+  document.getElementById('propsTitle').textContent = 'Resultado — Evaluar RuleSet';
+
+  let html = `<div class="validation-result ${result.isValid ? 'valid' : 'invalid'}">`;
+  html += `<div style="font-weight:600;margin-bottom:8px">${result.isValid ? '✅ RuleSet válido' : '❌ RuleSet inválido'}</div>`;
+  html += `<div class="val-item" style="font-size:11px;color:var(--text-muted)">Total: ${result.totalRules} · ✓ ${result.passedRules} · ✗ ${result.failedRules} · omitidas ${result.skippedRules} · ${result.executionTimeMs}ms</div>`;
+
+  if (result.ruleResults?.length) {
+    html += `<div style="margin-top:8px;font-weight:500;font-size:12px">Reglas evaluadas:</div>`;
+    result.ruleResults.forEach(r => {
+      html += `<div class="val-item"><span class="val-icon">${r.isValid ? '✅' : '❌'}</span><span>#${r.ruleNumber} ${r.ruleName}</span></div>`;
+      if (r.errors?.length) {
+        r.errors.forEach(e => {
+          html += `<div class="val-item" style="padding-left:16px"><span class="val-icon">🔴</span><span style="font-size:11px">[${e.nodeId}] ${e.message}</span></div>`;
+        });
+      }
+    });
+  }
+  html += '</div>';
+  panel.innerHTML = html;
 }
 
 // ════════════════════════════════════════════
