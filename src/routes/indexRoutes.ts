@@ -13,10 +13,11 @@ import FUAFromVisitPDFRouter from './FUAFromVisitPDFRoutes';
 
 import RuleSetRouter    from './RuleSetRoutes';
 import GraphRuleRouter  from './GraphRuleRoutes';
-
+import EvaluateRouter from './EvaluateRoutes';
 
 const globalRouter = express.Router();
 
+globalRouter.use('/Evaluate', EvaluateRouter);
 globalRouter.use('/RuleSet', RuleSetRouter);
 globalRouter.use('/GraphRule', GraphRuleRouter);
 //globalRouter.use('/FUAFormat', FUAFormatRouter);
