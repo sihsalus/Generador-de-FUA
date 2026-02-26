@@ -8,6 +8,7 @@ import RuleImplementation from "../implementation/sequelize/RuleImplementation";
 import RuleNodeImplementation from "../implementation/sequelize/RuleNodeImplementation";
 import RuleEdgeImplementation from "../implementation/sequelize/RuleEdgeImplementation";
 import { validateGraph, GraphNode, GraphEdge, GraphValidationResult } from "../utils/graphValidator";
+import { CREATED_BY_PLACEHOLDER } from "../utils/constants";
 
 // ────────────────────────────────────────────
 // Zod Schemas para operaciones del orquestador
@@ -137,6 +138,7 @@ class GraphRuleService {
                 ruleType: ruleData.ruleType,
                 enabled: ruleData.enabled,
                 priority: ruleData.priority,
+                createdBy: CREATED_BY_PLACEHOLDER,
             });
 
             const ruleId = rule.get('id') as number;
@@ -150,6 +152,7 @@ class GraphRuleService {
                 label: n.label,
                 isEntry: n.isEntry,
                 isDefault: n.isDefault,
+                createdBy: CREATED_BY_PLACEHOLDER,
             }));
             await RuleNodeImplementation.bulkCreateNodesSequelize(nodesToCreate);
 
@@ -161,6 +164,7 @@ class GraphRuleService {
                     targetNodeId: e.targetNodeId,
                     edgeOrder: e.edgeOrder,
                     label: e.label,
+                    createdBy: CREATED_BY_PLACEHOLDER,
                 }));
                 await RuleEdgeImplementation.bulkCreateEdgesSequelize(edgesToCreate);
             }
@@ -552,6 +556,7 @@ class GraphRuleService {
                 label: n.label,
                 isEntry: n.isEntry,
                 isDefault: n.isDefault,
+                createdBy: CREATED_BY_PLACEHOLDER,
             }));
             await RuleNodeImplementation.bulkCreateNodesSequelize(nodesToCreate);
 
@@ -563,6 +568,7 @@ class GraphRuleService {
                     targetNodeId: e.targetNodeId,
                     edgeOrder: e.edgeOrder,
                     label: e.label,
+                    createdBy: CREATED_BY_PLACEHOLDER,
                 }));
                 await RuleEdgeImplementation.bulkCreateEdgesSequelize(edgesToCreate);
             }

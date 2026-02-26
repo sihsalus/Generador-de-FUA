@@ -1,5 +1,6 @@
 import { z } from "zod";
 import RuleSetImplementation from "../implementation/sequelize/RuleSetImplementation";
+import { CREATED_BY_PLACEHOLDER } from "../utils/constants";
 
 // ── Zod Schemas ──
 
@@ -27,7 +28,7 @@ class RuleSetService {
             throw err;
         }
 
-        const created = await RuleSetImplementation.createRuleSetSequelize(result.data);
+        const created = await RuleSetImplementation.createRuleSetSequelize({ ...result.data, createdBy: CREATED_BY_PLACEHOLDER });
         return { uuid: created.get('uuid'), id: created.get('id') };
     }
 
