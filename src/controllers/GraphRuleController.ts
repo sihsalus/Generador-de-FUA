@@ -52,7 +52,7 @@ const GraphRuleController = {
 
     async getFullRule(req: Request, res: Response): Promise<void> {
         try {
-            const result = await GraphRuleService.getFullRule(req.params.ruleId);
+            const result = await GraphRuleService.getFullRule(req.params.ruleId as string);
             if (result === null) {
                 res.status(404).json({ error: `Rule '${req.params.ruleId}' couldn't be found.` });
                 return;
@@ -112,7 +112,7 @@ const GraphRuleController = {
 
     async updateRule(req: Request, res: Response): Promise<void> {
         try {
-            const result = await RuleService.update(req.params.ruleId, req.body);
+            const result = await RuleService.update(req.params.ruleId as string, req.body);
             loggerInstance.printLog(new Log({
                 timeStamp: new Date(),
                 logLevel: Logger_LogLevel.INFO,
@@ -138,7 +138,7 @@ const GraphRuleController = {
 
     async deleteRule(req: Request, res: Response): Promise<void> {
         try {
-            const result = await RuleService.softDelete(req.params.ruleId, req.body.inactiveBy || 'system', req.body.inactiveReason);
+            const result = await RuleService.softDelete(req.params.ruleId as string, req.body.inactiveBy || 'system', req.body.inactiveReason);
             loggerInstance.printLog(new Log({
                 timeStamp: new Date(),
                 logLevel: Logger_LogLevel.INFO,
@@ -167,7 +167,7 @@ const GraphRuleController = {
     async replaceGraph(req: Request, res: Response): Promise<void> {
         try {
             const result = await GraphRuleService.replaceGraph(
-                req.params.ruleId,
+                req.params.ruleId as string,
                 req.body.graph,
                 req.body.replacedBy || 'system',
             );
@@ -198,7 +198,7 @@ const GraphRuleController = {
 
     async addNode(req: Request, res: Response): Promise<void> {
         try {
-            const result = await GraphRuleService.addNode(req.params.ruleId, req.body);
+            const result = await GraphRuleService.addNode(req.params.ruleId as string, req.body);
             loggerInstance.printLog(new Log({
                 timeStamp: new Date(),
                 logLevel: Logger_LogLevel.INFO,
@@ -224,7 +224,7 @@ const GraphRuleController = {
 
     async updateNode(req: Request, res: Response): Promise<void> {
         try {
-            const result = await GraphRuleService.updateNode(req.params.ruleId, req.params.nodeId, req.body);
+            const result = await GraphRuleService.updateNode(req.params.ruleId as string, req.params.nodeId as string, req.body);
             loggerInstance.printLog(new Log({
                 timeStamp: new Date(),
                 logLevel: Logger_LogLevel.INFO,
@@ -251,8 +251,8 @@ const GraphRuleController = {
     async removeNode(req: Request, res: Response): Promise<void> {
         try {
             const result = await GraphRuleService.removeNode(
-                req.params.ruleId,
-                req.params.nodeId,
+                req.params.ruleId as string,
+                req.params.nodeId as string,
                 req.body.inactiveBy || 'system',
             );
             loggerInstance.printLog(new Log({
@@ -282,7 +282,7 @@ const GraphRuleController = {
 
     async addEdge(req: Request, res: Response): Promise<void> {
         try {
-            const result = await GraphRuleService.addEdge(req.params.ruleId, req.body);
+            const result = await GraphRuleService.addEdge(req.params.ruleId as string, req.body);
             loggerInstance.printLog(new Log({
                 timeStamp: new Date(),
                 logLevel: Logger_LogLevel.INFO,
@@ -314,7 +314,7 @@ const GraphRuleController = {
                 return;
             }
             const result = await GraphRuleService.removeEdge(
-                req.params.ruleId,
+                req.params.ruleId as string,
                 edgeId,
                 req.body.inactiveBy || 'system',
             );
@@ -345,7 +345,7 @@ const GraphRuleController = {
 
     async validateGraph(req: Request, res: Response): Promise<void> {
         try {
-            const result = await GraphRuleService.validateRuleGraph(req.params.ruleId);
+            const result = await GraphRuleService.validateRuleGraph(req.params.ruleId as string);
             loggerInstance.printLog(new Log({
                 timeStamp: new Date(),
                 logLevel: Logger_LogLevel.INFO,
@@ -404,7 +404,7 @@ const GraphRuleController = {
 
     async exportRuleToJSON(req: Request, res: Response): Promise<void> {
         try {
-            const result = await GraphRuleService.exportRuleToJSON(req.params.ruleId);
+            const result = await GraphRuleService.exportRuleToJSON(req.params.ruleId as string);
             loggerInstance.printLog(new Log({
                 timeStamp: new Date(),
                 logLevel: Logger_LogLevel.INFO,
@@ -430,7 +430,7 @@ const GraphRuleController = {
 
     async exportRuleSetToJSON(req: Request, res: Response): Promise<void> {
         try {
-            const result = await GraphRuleService.exportRuleSetToJSON(req.params.ruleSetId);
+            const result = await GraphRuleService.exportRuleSetToJSON(req.params.ruleSetId as string);
             loggerInstance.printLog(new Log({
                 timeStamp: new Date(),
                 logLevel: Logger_LogLevel.INFO,

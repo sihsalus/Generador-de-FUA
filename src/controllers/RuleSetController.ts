@@ -69,7 +69,7 @@ const RuleSetController = {
 
     async getRuleSetById(req: Request, res: Response): Promise<void> {
         try {
-            const item = await RuleSetService.getByIdOrUUID(req.params.id);
+            const item = await RuleSetService.getByIdOrUUID(req.params.id as string);
             if (item === null) {
                 res.status(404).json({ error: `RuleSet '${req.params.id}' couldn't be found.` });
                 return;
@@ -99,7 +99,7 @@ const RuleSetController = {
 
     async updateRuleSet(req: Request, res: Response): Promise<void> {
         try {
-            const result = await RuleSetService.update(req.params.id, req.body);
+            const result = await RuleSetService.update(req.params.id as string, req.body);
             loggerInstance.printLog(new Log({
                 timeStamp: new Date(),
                 logLevel: Logger_LogLevel.INFO,
@@ -125,7 +125,7 @@ const RuleSetController = {
 
     async deleteRuleSet(req: Request, res: Response): Promise<void> {
         try {
-            const result = await RuleSetService.softDelete(req.params.id, req.body.inactiveBy || 'system', req.body.inactiveReason);
+            const result = await RuleSetService.softDelete(req.params.id as string, req.body.inactiveBy || 'system', req.body.inactiveReason);
             loggerInstance.printLog(new Log({
                 timeStamp: new Date(),
                 logLevel: Logger_LogLevel.INFO,
