@@ -38,7 +38,7 @@ const FUAFieldController = {
     },
 
     async getById (req: Request, res: Response): Promise<void>  {
-        const payload = req.params.id;
+        const payload = req.params.id as string;
 
         let searchedFUAFormat = null;
 
@@ -65,7 +65,7 @@ const FUAFieldController = {
     },
 
     async getListByFUAFormat (req: Request, res: Response): Promise<void>  {
-        const payload = req.params.id;
+        const payload = req.params.id as string;
 
         let searchedFUAFields = [];
 

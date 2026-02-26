@@ -91,6 +91,17 @@ app.get('/', (req, res) => {
 });
 
 
+//Ruta para graph-rule-front
+app.get('/graph-rules', (req, res) => {
+  const fs = require('fs');
+  let html = fs.readFileSync(path.resolve(__dirname, './public/graph-rule-master-ui.html'), 'utf-8');
+  html = html.replace(
+    "const API = 'http://localhost:3000/ws';",
+    `const API = '/ws';\nconst TOKEN = '${process.env.TOKEN}';`
+  );
+  res.send(html);
+});
+
 // Ruta para obtener un paciente por ID
 app.get('/patient/:id', async (req, res) => {
   const { id } = req.params;

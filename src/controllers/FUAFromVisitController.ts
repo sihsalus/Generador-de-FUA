@@ -35,7 +35,7 @@ const FUAFromVisitController = {
     },
 
     async render (req: Request, res: Response) : Promise<void>{
-        const id = req.params.id;
+        const id = req.params.id as string;
 
         let htmlRender : string = "";
 
@@ -87,7 +87,7 @@ const FUAFromVisitController = {
     },
 
     async generateSignedPdf(req: Request, res: Response): Promise<void> {
-        const id = req.params.id;
+        const id = req.params.id as string;
         
         let pdfBytes = null;
         
@@ -124,7 +124,7 @@ const FUAFromVisitController = {
     },
 
     async getById (req: Request, res: Response): Promise<void> {
-        const payload = req.params.id;
+        const payload = req.params.id as string;
 
         let searchedFUA = null;
 
@@ -165,7 +165,7 @@ const FUAFromVisitController = {
     },
 
     async addFUAinQueueFromDatabase(req: Request, res: Response): Promise<void>{
-        const fuaUUID = req.params.id;
+        const fuaUUID = req.params.id as string;
         let fuaVisitUUID = null;
         try{
             const fuaFromVisitFromDatabase = await FUAFromVisitService.getByIdOrUUID(fuaUUID as string);

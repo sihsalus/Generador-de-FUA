@@ -1,0 +1,1836 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Graph Rule Master v2</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg-primary: #0f1117;
+    --bg-secondary: #1a1d27;
+    --bg-tertiary: #242834;
+    --bg-hover: #2d3242;
+    --border: #333a4a;
+    --text-primary: #e8eaed;
+    --text-secondary: #9aa0b0;
+    --text-muted: #5f6577;
+    --accent-blue: #4a9eff;
+    --accent-green: #34d399;
+    --accent-orange: #f59e0b;
+    --accent-purple: #a78bfa;
+    --accent-red: #ef4444;
+    --accent-cyan: #22d3ee;
+    --node-condition: #1e3a5f;
+    --node-condition-border: #4a9eff;
+    --node-gate: #3b2e5a;
+    --node-gate-border: #a78bfa;
+    --node-parameter: #1a3d2e;
+    --node-parameter-border: #34d399;
+    --radius: 8px;
+    --radius-lg: 12px;
+    --shadow: 0 4px 24px rgba(0,0,0,0.4);
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ─── TOP BAR ─── */
+  .topbar {
+    height: 48px;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    gap: 16px;
+    flex-shrink: 0;
+    z-index: 100;
+  }
+  .topbar-logo {
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--accent-blue);
+    letter-spacing: -0.3px;
+    white-space: nowrap;
+  }
+  .topbar-logo span { color: var(--text-muted); font-weight: 400; }
+  .topbar-divider { width: 1px; height: 24px; background: var(--border); }
+  .topbar-breadcrumb {
+    font-size: 13px;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+  }
+  .topbar-breadcrumb .sep { color: var(--text-muted); }
+  .topbar-breadcrumb .current { color: var(--text-primary); font-weight: 500; }
+  .topbar-actions { margin-left: auto; display: flex; gap: 8px; }
+
+  /* ─── LAYOUT ─── */
+  .layout {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  /* ─── SIDEBAR ─── */
+  .sidebar {
+    width: 280px;
+    background: var(--bg-secondary);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+  .sidebar-section {
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+  }
+  .sidebar-section.flex-grow { flex: 1; overflow: hidden; }
+  .sidebar-header {
+    padding: 12px 16px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .sidebar-list {
+    overflow-y: auto;
+    padding: 0 8px 8px;
+    flex: 1;
+  }
+  .sidebar-item {
+    padding: 8px 12px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.15s;
+    color: var(--text-secondary);
+  }
+  .sidebar-item:hover { background: var(--bg-hover); color: var(--text-primary); }
+  .sidebar-item.active { background: var(--bg-tertiary); color: var(--text-primary); }
+  .sidebar-item .badge {
+    margin-left: auto;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .sidebar-item .badge.blue { background: rgba(74,158,255,0.15); color: var(--accent-blue); }
+  .sidebar-item .badge.green { background: rgba(52,211,153,0.15); color: var(--accent-green); }
+  .sidebar-item .badge.orange { background: rgba(245,158,11,0.15); color: var(--accent-orange); }
+  .sidebar-item .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .sidebar-empty {
+    padding: 16px;
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  /* ─── MAIN AREA ─── */
+  .main-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* ─── TOOLBAR ─── */
+  .toolbar {
+    height: 44px;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  .toolbar-group {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .toolbar-sep { width: 1px; height: 24px; background: var(--border); margin: 0 6px; }
+
+  /* ─── BUTTONS ─── */
+  .btn {
+    padding: 6px 12px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    font-size: 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .btn:hover { background: var(--bg-hover); border-color: var(--text-muted); }
+  .btn.primary { background: var(--accent-blue); border-color: var(--accent-blue); color: #fff; }
+  .btn.primary:hover { background: #3d8be0; }
+  .btn.success { background: var(--accent-green); border-color: var(--accent-green); color: #0f1117; }
+  .btn.danger { background: var(--accent-red); border-color: var(--accent-red); color: #fff; }
+  .btn.small { padding: 4px 8px; font-size: 11px; }
+  .btn.icon-only { padding: 6px; }
+  .btn svg { width: 14px; height: 14px; }
+
+  /* ─── CANVAS ─── */
+  .canvas-container {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+    background:
+      radial-gradient(circle at 50% 50%, rgba(74,158,255,0.03) 0%, transparent 70%),
+      var(--bg-primary);
+  }
+  .canvas-container svg {
+    width: 100%;
+    height: 100%;
+  }
+  .grid-pattern { stroke: var(--border); stroke-width: 0.5; opacity: 0.3; }
+
+  /* ─── SVG NODES ─── */
+  .graph-node {
+    cursor: grab;
+    user-select: none;
+  }
+  .graph-node:active { cursor: grabbing; }
+  .graph-node rect.node-bg {
+    rx: 8;
+    ry: 8;
+    stroke-width: 2;
+    transition: filter 0.15s;
+  }
+  .graph-node:hover rect.node-bg { filter: brightness(1.2); }
+  .graph-node.selected rect.node-bg { stroke-width: 3; filter: brightness(1.3); }
+  .graph-node text { font-family: 'DM Sans', sans-serif; pointer-events: none; }
+  .node-type-label {
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .node-id-label { font-size: 13px; font-weight: 600; }
+  .node-desc-label { font-size: 10px; fill: var(--text-secondary); }
+
+  /* ─── SVG PORTS ─── */
+  .node-port {
+    cursor: crosshair;
+    transition: r 0.15s;
+  }
+  .node-port:hover { r: 7; }
+
+  /* ─── SVG EDGES ─── */
+  .graph-edge {
+    cursor: pointer;
+    stroke-width: 2;
+    fill: none;
+    transition: stroke-width 0.15s;
+  }
+  .graph-edge:hover { stroke-width: 3; }
+  .graph-edge.selected { stroke-width: 3; stroke-dasharray: none; }
+  .edge-temp {
+    stroke: var(--accent-blue);
+    stroke-width: 2;
+    stroke-dasharray: 6 4;
+    fill: none;
+    pointer-events: none;
+    opacity: 0.6;
+  }
+
+  /* ─── PROPERTIES PANEL ─── */
+  .props-panel {
+    width: 320px;
+    background: var(--bg-secondary);
+    border-left: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+  .props-panel.hidden { display: none; }
+  .props-header {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .props-header h3 { font-size: 13px; font-weight: 600; }
+  .props-body {
+    padding: 16px;
+    overflow-y: auto;
+    flex: 1;
+  }
+
+  /* ─── FORMS ─── */
+  .form-group { margin-bottom: 14px; }
+  .form-group label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    border-color: var(--accent-blue);
+  }
+  .form-group textarea { resize: vertical; min-height: 60px; }
+  .form-group .json-editor {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    min-height: 120px;
+    line-height: 1.5;
+  }
+  .form-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+  }
+  .form-row {
+    display: flex;
+    gap: 8px;
+  }
+  .form-row .form-group { flex: 1; }
+
+  /* ─── MODAL ─── */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+  }
+  .modal-overlay.hidden { display: none; }
+  .modal {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    width: 480px;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow);
+  }
+  .modal-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .modal-header h2 { font-size: 15px; font-weight: 600; }
+  .modal-body { padding: 20px; }
+  .modal-footer {
+    padding: 12px 20px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+
+  /* ─── TOAST ─── */
+  .toast-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .toast {
+    padding: 10px 16px;
+    border-radius: var(--radius);
+    font-size: 13px;
+    font-weight: 500;
+    box-shadow: var(--shadow);
+    animation: toastIn 0.3s ease;
+    max-width: 360px;
+  }
+  .toast.success { background: var(--accent-green); color: #0f1117; }
+  .toast.error { background: var(--accent-red); color: #fff; }
+  .toast.warning { background: var(--accent-orange); color: #0f1117; }
+  .toast.info { background: var(--accent-blue); color: #fff; }
+  @keyframes toastIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+  /* ─── VALIDATION PANEL ─── */
+  .validation-result {
+    margin-top: 12px;
+    padding: 10px;
+    border-radius: var(--radius);
+    font-size: 12px;
+  }
+  .validation-result.valid { background: rgba(52,211,153,0.1); border: 1px solid rgba(52,211,153,0.3); }
+  .validation-result.invalid { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); }
+  .validation-result .val-item { padding: 4px 0; display: flex; gap: 6px; align-items: flex-start; }
+  .validation-result .val-icon { flex-shrink: 0; margin-top: 2px; }
+
+  /* ─── ZOOM CONTROLS ─── */
+  .zoom-controls {
+    position: absolute;
+    bottom: 16px;
+    left: 16px;
+    display: flex;
+    gap: 4px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 4px;
+    z-index: 10;
+  }
+  .zoom-label {
+    padding: 4px 8px;
+    font-size: 11px;
+    color: var(--text-muted);
+    font-family: 'JetBrains Mono', monospace;
+    display: flex;
+    align-items: center;
+  }
+
+  /* ─── CONTEXT HELP ─── */
+  .canvas-help {
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 11px;
+    color: var(--text-muted);
+    z-index: 10;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+
+  /* ─── SCROLLBAR ─── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+</style>
+</head>
+<body>
+
+<!-- ─── TOP BAR ─── -->
+<div class="topbar">
+  <div class="topbar-logo">Graph Rule Master <span>v2.0</span></div>
+  <div class="topbar-divider"></div>
+  <div class="topbar-breadcrumb" id="breadcrumb">
+    <span class="current">Selecciona un RuleSet</span>
+  </div>
+  <div class="topbar-actions">
+    <button class="btn small" onclick="showImportModal()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Importar JSON
+    </button>
+    <button class="btn small" onclick="exportRuleSet()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      Exportar
+    </button>
+  </div>
+</div>
+
+<div class="layout">
+  <!-- ─── SIDEBAR ─── -->
+  <div class="sidebar">
+    <!-- RuleSets -->
+    <div class="sidebar-section">
+      <div class="sidebar-header">
+        RuleSets
+        <button class="btn small" onclick="showRuleSetModal()">+ Nuevo</button>
+      </div>
+      <div class="sidebar-list" id="ruleSetList" style="max-height: 160px;">
+        <div class="sidebar-empty">Cargando...</div>
+      </div>
+    </div>
+
+    <!-- Rules -->
+    <div class="sidebar-section flex-grow">
+      <div class="sidebar-header">
+        Reglas
+        <button class="btn small" id="btnNewRule" onclick="showRuleModal()" style="display:none">+ Nueva</button>
+      </div>
+      <div class="sidebar-list" id="ruleList">
+        <div class="sidebar-empty">Selecciona un RuleSet</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── MAIN CANVAS ─── -->
+  <div class="main-area">
+    <div class="toolbar">
+      <div class="toolbar-group">
+        <button class="btn small" onclick="addNodeToCanvas('CONDITION')" id="btnAddCondition" disabled>
+          <svg viewBox="0 0 24 24" fill="none" stroke="#4a9eff" stroke-width="2" width="14" height="14"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          Condition
+        </button>
+        <button class="btn small" onclick="addNodeToCanvas('GATE')" id="btnAddGate" disabled>
+          <svg viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2" width="14" height="14"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5"/></svg>
+          Gate
+        </button>
+        <button class="btn small" onclick="addNodeToCanvas('PARAMETER')" id="btnAddParam" disabled>
+          <svg viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2" width="14" height="14"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          Parameter
+        </button>
+      </div>
+      <div class="toolbar-sep"></div>
+      <button class="btn small" onclick="validateCurrentGraph()" id="btnValidate" disabled>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M9 12l2 2 4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
+        Validar
+      </button>
+      <button class="btn small" onclick="saveCurrentGraph()" id="btnSave" disabled>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1-2 2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        Guardar
+      </button>
+      <div class="toolbar-sep"></div>
+      <button class="btn small danger" onclick="deleteSelectedElement()" id="btnDelete" disabled>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14H7L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+        Eliminar
+      </button>
+      <div style="margin-left:auto">
+        <button class="btn small" onclick="autoLayout()" id="btnAutoLayout" disabled title="Auto-organizar nodos">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+          Auto Layout
+        </button>
+      </div>
+    </div>
+
+    <div class="canvas-container" id="canvasContainer">
+      <div class="canvas-help" id="canvasHelp">Selecciona una regla para editar su grafo, o crea una nueva</div>
+      <svg id="graphSvg">
+        <defs>
+          <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+            <path d="M 20 0 L 0 0 0 20" fill="none" class="grid-pattern"/>
+          </pattern>
+          <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto" fill="var(--text-muted)">
+            <polygon points="0 0, 10 3.5, 0 7"/>
+          </marker>
+          <marker id="arrowhead-blue" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto" fill="var(--accent-blue)">
+            <polygon points="0 0, 10 3.5, 0 7"/>
+          </marker>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#grid)"/>
+        <g id="graphGroup" transform="translate(0,0) scale(1)">
+          <g id="edgesGroup"></g>
+          <g id="nodesGroup"></g>
+        </g>
+        <line id="tempEdge" class="edge-temp" x1="0" y1="0" x2="0" y2="0" style="display:none" marker-end="url(#arrowhead-blue)"/>
+      </svg>
+      <div class="zoom-controls">
+        <button class="btn small icon-only" onclick="zoomIn()">+</button>
+        <span class="zoom-label" id="zoomLabel">100%</span>
+        <button class="btn small icon-only" onclick="zoomOut()">−</button>
+        <button class="btn small icon-only" onclick="zoomReset()" title="Reset">⊡</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── PROPERTIES PANEL ─── -->
+  <div class="props-panel" id="propsPanel">
+    <div class="props-header">
+      <h3 id="propsTitle">Propiedades</h3>
+      <button class="btn small icon-only" onclick="closePropsPanel()">✕</button>
+    </div>
+    <div class="props-body" id="propsBody">
+      <div class="sidebar-empty">Selecciona un nodo o arista</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── TOAST CONTAINER ─── -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- ─── MODAL: RULESET ─── -->
+<div class="modal-overlay hidden" id="ruleSetModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="ruleSetModalTitle">Nuevo RuleSet</h2>
+      <button class="btn small icon-only" onclick="closeModal('ruleSetModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Nombre</label>
+        <input id="rs_name" placeholder="Ej: Validación FUA">
+      </div>
+      <div class="form-group">
+        <label>Tipo de Documento</label>
+        <input id="rs_docType" placeholder="Ej: FUA">
+      </div>
+      <div class="form-group">
+        <label>Descripción</label>
+        <textarea id="rs_desc" placeholder="Descripción opcional..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Modo de Evaluación</label>
+        <select id="rs_evalMode">
+          <option value="ALL">ALL — Evaluar todas las reglas</option>
+          <option value="FIRST_MATCH">FIRST_MATCH — Detenerse en la primera que aplica</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('ruleSetModal')">Cancelar</button>
+      <button class="btn primary" onclick="saveRuleSet()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── MODAL: RULE ─── -->
+<div class="modal-overlay hidden" id="ruleModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="ruleModalTitle">Nueva Regla</h2>
+      <button class="btn small icon-only" onclick="closeModal('ruleModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Número de Regla</label>
+          <input id="r_number" placeholder="Ej: 1" type="text">
+        </div>
+        <div class="form-group">
+          <label>Prioridad</label>
+          <input id="r_priority" type="number" value="1" min="1">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Nombre</label>
+        <input id="r_name" placeholder="Ej: Validación Edad">
+      </div>
+      <div class="form-group">
+        <label>Tipo</label>
+        <select id="r_type">
+          <option value="VALIDATION">VALIDATION</option>
+          <option value="CONSISTENCY">CONSISTENCY</option>
+          <option value="FORMAT">FORMAT</option>
+          <option value="BUSINESS">BUSINESS</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Descripción</label>
+        <textarea id="r_desc" placeholder="Descripción opcional..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('ruleModal')">Cancelar</button>
+      <button class="btn primary" onclick="saveRule()">Crear Regla</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── MODAL: IMPORT ─── -->
+<div class="modal-overlay hidden" id="importModal">
+  <div class="modal" style="width:560px">
+    <div class="modal-header">
+      <h2>Importar Reglas (JSON)</h2>
+      <button class="btn small icon-only" onclick="closeModal('importModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Pega el JSON aquí</label>
+        <textarea id="import_json" class="json-editor" style="min-height:250px" placeholder='{ "rules": [ ... ] }'></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('importModal')">Cancelar</button>
+      <button class="btn primary" onclick="doImport()">Importar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════════
+// CONFIG & STATE
+// ════════════════════════════════════════════
+const API = 'http://localhost:3000/ws';
+
+const state = {
+  ruleSets: [],
+  currentRuleSet: null,
+  rules: [],
+  currentRule: null,
+  // Graph state
+  nodes: [],     // { nodeId, nodeType, config, label, isDefault, x, y }
+  edges: [],     // { id?, sourceNodeId, targetNodeId, edgeOrder, label }
+  selectedNode: null,
+  selectedEdge: null,
+  // Canvas
+  zoom: 1,
+  panX: 0,
+  panY: 0,
+  // Drag
+  draggingNode: null,
+  dragOffsetX: 0,
+  dragOffsetY: 0,
+  // Edge creation
+  creatingEdge: false,
+  edgeSourceNodeId: null,
+  // Counters for auto-naming
+  nodeCounters: { CONDITION: 0, GATE: 0, PARAMETER: 0 },
+  // dirty flag
+  isDirty: false,
+};
+
+// ════════════════════════════════════════════
+// API HELPERS
+// ════════════════════════════════════════════
+async function api(method, path, body = null) {
+  const opts = {
+    method,
+    headers: { 'Content-Type': 'application/json', 'fuagentoken': TOKEN },
+  };
+  if (body) opts.body = JSON.stringify(body);
+  const res = await fetch(API + path, opts);
+  const data = await res.json();
+  if (!res.ok) {
+    const msg = data.message || data.error || 'Error desconocido';
+    const err = new Error(msg);
+    err.details = data.details;
+    err.status = res.status;
+    throw err;
+  }
+  return data;
+}
+
+// ════════════════════════════════════════════
+// TOAST
+// ════════════════════════════════════════════
+function toast(message, type = 'info') {
+  const container = document.getElementById('toastContainer');
+  const el = document.createElement('div');
+  el.className = `toast ${type}`;
+  el.textContent = message;
+  container.appendChild(el);
+  setTimeout(() => el.remove(), 4000);
+}
+
+// ════════════════════════════════════════════
+// MODAL HELPERS
+// ════════════════════════════════════════════
+function showModal(id) { document.getElementById(id).classList.remove('hidden'); }
+function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+
+// ════════════════════════════════════════════
+// RULESET CRUD
+// ════════════════════════════════════════════
+async function loadRuleSets() {
+  try {
+    state.ruleSets = await api('GET', '/RuleSet/');
+    renderRuleSetList();
+  } catch (e) {
+    toast('Error cargando RuleSets: ' + e.message, 'error');
+  }
+}
+
+function renderRuleSetList() {
+  const list = document.getElementById('ruleSetList');
+  if (state.ruleSets.length === 0) {
+    list.innerHTML = '<div class="sidebar-empty">No hay RuleSets. Crea uno nuevo.</div>';
+    return;
+  }
+  list.innerHTML = state.ruleSets.map(rs => `
+    <div class="sidebar-item ${state.currentRuleSet?.id === rs.id ? 'active' : ''}"
+         onclick="selectRuleSet(${rs.id})">
+      <div class="dot" style="background:var(--accent-blue)"></div>
+      <span style="flex:1;overflow:hidden;text-overflow:ellipsis">${rs.name}</span>
+      <span class="badge blue">${rs.documentType}</span>
+    </div>
+  `).join('');
+}
+
+function showRuleSetModal() {
+  document.getElementById('rs_name').value = '';
+  document.getElementById('rs_docType').value = '';
+  document.getElementById('rs_desc').value = '';
+  document.getElementById('rs_evalMode').value = 'ALL';
+  document.getElementById('ruleSetModalTitle').textContent = 'Nuevo RuleSet';
+  showModal('ruleSetModal');
+}
+
+async function saveRuleSet() {
+  try {
+    await api('POST', '/RuleSet/', {
+      name: document.getElementById('rs_name').value,
+      documentType: document.getElementById('rs_docType').value,
+      description: document.getElementById('rs_desc').value || undefined,
+      evaluationMode: document.getElementById('rs_evalMode').value,
+    });
+    closeModal('ruleSetModal');
+    toast('RuleSet creado', 'success');
+    await loadRuleSets();
+  } catch (e) {
+    toast('Error: ' + e.message, 'error');
+  }
+}
+
+async function selectRuleSet(id) {
+  state.currentRuleSet = state.ruleSets.find(rs => rs.id === id);
+  state.currentRule = null;
+  clearGraph();
+  renderRuleSetList();
+  document.getElementById('btnNewRule').style.display = '';
+  updateBreadcrumb();
+  await loadRules();
+}
+
+// ════════════════════════════════════════════
+// RULE CRUD
+// ════════════════════════════════════════════
+async function loadRules() {
+  if (!state.currentRuleSet) return;
+  try {
+    state.rules = await api('GET', `/GraphRule/ruleset/${state.currentRuleSet.id}/rules`);
+    renderRuleList();
+  } catch (e) {
+    toast('Error cargando reglas: ' + e.message, 'error');
+  }
+}
+
+function renderRuleList() {
+  const list = document.getElementById('ruleList');
+  if (state.rules.length === 0) {
+    list.innerHTML = '<div class="sidebar-empty">No hay reglas. Crea una nueva.</div>';
+    return;
+  }
+  list.innerHTML = state.rules.map(r => `
+    <div class="sidebar-item ${state.currentRule?.id === r.id ? 'active' : ''}"
+         onclick="selectRule('${r.uuid}')">
+      <span class="badge ${r.enabled ? 'green' : 'orange'}">#${r.ruleNumber}</span>
+      <span style="flex:1;overflow:hidden;text-overflow:ellipsis">${r.name}</span>
+    </div>
+  `).join('');
+}
+
+function showRuleModal() {
+  document.getElementById('r_number').value = '';
+  document.getElementById('r_name').value = '';
+  document.getElementById('r_type').value = 'VALIDATION';
+  document.getElementById('r_priority').value = '1';
+  document.getElementById('r_desc').value = '';
+  showModal('ruleModal');
+}
+
+async function saveRule() {
+  if (!state.currentRuleSet) return;
+  try {
+    const result = await api('POST', `/GraphRule/ruleset/${state.currentRuleSet.id}/rule`, {
+      ruleNumber: document.getElementById('r_number').value,
+      name: document.getElementById('r_name').value,
+      ruleType: document.getElementById('r_type').value,
+      priority: parseInt(document.getElementById('r_priority').value) || 1,
+      description: document.getElementById('r_desc').value || undefined,
+      graph: {
+        nodes: [{
+          nodeId: 'P1',
+          nodeType: 'PARAMETER',
+          config: { target_field: 'campo', param_type: 'STRING', constraints: {} },
+          label: 'Parámetro inicial',
+          isDefault: true,
+        }],
+        edges: [],
+      },
+    });
+    closeModal('ruleModal');
+    toast('Regla creada', 'success');
+    await loadRules();
+    await selectRule(result.uuid);
+  } catch (e) {
+    toast('Error: ' + e.message, 'error');
+  }
+}
+
+async function selectRule(idOrUUID) {
+  try {
+    const full = await api('GET', `/GraphRule/rule/${idOrUUID}`);
+    state.currentRule = full;
+    renderRuleList();
+    updateBreadcrumb();
+    loadGraphFromRule(full);
+    enableToolbar(true);
+  } catch (e) {
+    toast('Error cargando regla: ' + e.message, 'error');
+  }
+}
+
+// ════════════════════════════════════════════
+// BREADCRUMB
+// ════════════════════════════════════════════
+function updateBreadcrumb() {
+  const bc = document.getElementById('breadcrumb');
+  let html = '';
+  if (state.currentRuleSet) {
+    html += `<span>${state.currentRuleSet.name}</span>`;
+    if (state.currentRule) {
+      html += `<span class="sep">›</span><span class="current">#${state.currentRule.ruleNumber} ${state.currentRule.name}</span>`;
+    }
+  } else {
+    html = '<span class="current">Selecciona un RuleSet</span>';
+  }
+  bc.innerHTML = html;
+}
+
+// ════════════════════════════════════════════
+// TOOLBAR STATE
+// ════════════════════════════════════════════
+function enableToolbar(enabled) {
+  ['btnAddCondition', 'btnAddGate', 'btnAddParam', 'btnValidate', 'btnSave', 'btnAutoLayout'].forEach(id => {
+    document.getElementById(id).disabled = !enabled;
+  });
+  document.getElementById('canvasHelp').style.opacity = enabled ? '0' : '1';
+}
+
+// ════════════════════════════════════════════
+// GRAPH STATE
+// ════════════════════════════════════════════
+function clearGraph() {
+  state.nodes = [];
+  state.edges = [];
+  state.selectedNode = null;
+  state.selectedEdge = null;
+  state.isDirty = false;
+  state.nodeCounters = { CONDITION: 0, GATE: 0, PARAMETER: 0 };
+  renderGraph();
+  enableToolbar(false);
+}
+
+function loadGraphFromRule(rule) {
+  state.nodes = (rule.graph?.nodes || []).map((n, i) => ({
+    ...n,
+    x: n.x || 100 + (i % 4) * 220,
+    y: n.y || 80 + Math.floor(i / 4) * 140,
+  }));
+  state.edges = rule.graph?.edges || [];
+  state.isDirty = false;
+
+  // Reset counters
+  state.nodeCounters = { CONDITION: 0, GATE: 0, PARAMETER: 0 };
+  state.nodes.forEach(n => {
+    const prefix = n.nodeType === 'CONDITION' ? 'N' : n.nodeType === 'GATE' ? 'G' : 'P';
+    const num = parseInt(n.nodeId.replace(/\D/g, '')) || 0;
+    if (num >= state.nodeCounters[n.nodeType]) {
+      state.nodeCounters[n.nodeType] = num + 1;
+    }
+  });
+
+  autoLayout();
+  renderGraph();
+}
+
+// ════════════════════════════════════════════
+// ADD NODE
+// ════════════════════════════════════════════
+function addNodeToCanvas(type) {
+  const prefixes = { CONDITION: 'N', GATE: 'G', PARAMETER: 'P' };
+  const prefix = prefixes[type];
+  const num = state.nodeCounters[type]++;
+  const nodeId = `${prefix}${num + 1}`;
+
+  const container = document.getElementById('canvasContainer');
+  const cx = (container.clientWidth / 2 - state.panX) / state.zoom;
+  const cy = (container.clientHeight / 2 - state.panY) / state.zoom;
+
+  const defaultConfigs = {
+    CONDITION: { field: '', operator: 'EQUALS', value: '', data_type: 'STRING' },
+    GATE: { logic: 'AND' },
+    PARAMETER: { target_field: '', param_type: 'STRING', constraints: {} },
+  };
+
+  const node = {
+    nodeId,
+    nodeType: type,
+    config: defaultConfigs[type],
+    label: nodeId,
+    isDefault: false,
+    isEntry: type === 'CONDITION',
+    x: cx + (Math.random() - 0.5) * 60,
+    y: cy + (Math.random() - 0.5) * 60,
+  };
+
+  state.nodes.push(node);
+  state.isDirty = true;
+  selectNodeState(nodeId);
+  renderGraph();
+  toast(`Nodo ${nodeId} (${type}) agregado`, 'info');
+}
+
+// ════════════════════════════════════════════
+// SELECTION
+// ════════════════════════════════════════════
+function selectNodeState(nodeId) {
+  state.selectedNode = nodeId;
+  state.selectedEdge = null;
+  document.getElementById('btnDelete').disabled = false;
+  renderGraph();
+  showNodeProps(nodeId);
+}
+
+function selectEdgeState(srcId, tgtId) {
+  state.selectedEdge = `${srcId}->${tgtId}`;
+  state.selectedNode = null;
+  document.getElementById('btnDelete').disabled = false;
+  renderGraph();
+  showEdgeProps(srcId, tgtId);
+}
+
+function clearSelection() {
+  state.selectedNode = null;
+  state.selectedEdge = null;
+  document.getElementById('btnDelete').disabled = true;
+  renderGraph();
+  document.getElementById('propsBody').innerHTML = '<div class="sidebar-empty">Selecciona un nodo o arista</div>';
+  document.getElementById('propsTitle').textContent = 'Propiedades';
+}
+
+// ════════════════════════════════════════════
+// RENDER GRAPH (SVG)
+// ════════════════════════════════════════════
+const NODE_W = 180;
+const NODE_H = 64;
+const PORT_R = 5;
+
+function renderGraph() {
+  renderEdges();
+  renderNodes();
+}
+
+function renderNodes() {
+  const g = document.getElementById('nodesGroup');
+  g.innerHTML = '';
+
+  state.nodes.forEach(node => {
+    const colors = {
+      CONDITION:  { bg: 'var(--node-condition)', border: 'var(--node-condition-border)', text: '#4a9eff' },
+      GATE:       { bg: 'var(--node-gate)', border: 'var(--node-gate-border)', text: '#a78bfa' },
+      PARAMETER:  { bg: 'var(--node-parameter)', border: 'var(--node-parameter-border)', text: '#34d399' },
+    };
+    const c = colors[node.nodeType];
+    const isSelected = state.selectedNode === node.nodeId;
+
+    const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    group.setAttribute('class', `graph-node ${isSelected ? 'selected' : ''}`);
+    group.setAttribute('transform', `translate(${node.x}, ${node.y})`);
+    group.setAttribute('data-node-id', node.nodeId);
+
+    // Background rect
+    const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    rect.setAttribute('class', 'node-bg');
+    rect.setAttribute('width', NODE_W);
+    rect.setAttribute('height', NODE_H);
+    rect.setAttribute('fill', c.bg);
+    rect.setAttribute('stroke', c.border);
+    group.appendChild(rect);
+
+    // Type label
+    const typeText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    typeText.setAttribute('class', 'node-type-label');
+    typeText.setAttribute('x', 12);
+    typeText.setAttribute('y', 18);
+    typeText.setAttribute('fill', c.text);
+    typeText.textContent = node.nodeType;
+    group.appendChild(typeText);
+
+    // Node ID
+    const idText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    idText.setAttribute('class', 'node-id-label');
+    idText.setAttribute('x', 12);
+    idText.setAttribute('y', 36);
+    idText.setAttribute('fill', 'var(--text-primary)');
+    idText.textContent = node.nodeId;
+    group.appendChild(idText);
+
+    // Label/description
+    const descText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    descText.setAttribute('class', 'node-desc-label');
+    descText.setAttribute('x', 12);
+    descText.setAttribute('y', 52);
+    let desc = node.label || '';
+    if (node.nodeType === 'CONDITION' && node.config.field) {
+      desc = `${node.config.field} ${node.config.operator || ''} ${node.config.value ?? ''}`.substring(0, 28);
+    } else if (node.nodeType === 'GATE') {
+      desc = node.config.logic || '';
+    } else if (node.nodeType === 'PARAMETER' && node.config.target_field) {
+      desc = node.config.target_field;
+    }
+    descText.textContent = desc.substring(0, 25);
+    group.appendChild(descText);
+
+    // Input port (left center) — not for CONDITION
+    if (node.nodeType !== 'CONDITION') {
+      const inPort = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      inPort.setAttribute('class', 'node-port');
+      inPort.setAttribute('cx', 0);
+      inPort.setAttribute('cy', NODE_H / 2);
+      inPort.setAttribute('r', PORT_R);
+      inPort.setAttribute('fill', 'var(--bg-primary)');
+      inPort.setAttribute('stroke', c.border);
+      inPort.setAttribute('stroke-width', '2');
+      inPort.setAttribute('data-port', 'in');
+      inPort.setAttribute('data-node-id', node.nodeId);
+      group.appendChild(inPort);
+    }
+
+    // Output port (right center) — not for PARAMETER
+    if (node.nodeType !== 'PARAMETER') {
+      const outPort = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      outPort.setAttribute('class', 'node-port');
+      outPort.setAttribute('cx', NODE_W);
+      outPort.setAttribute('cy', NODE_H / 2);
+      outPort.setAttribute('r', PORT_R);
+      outPort.setAttribute('fill', c.border);
+      outPort.setAttribute('stroke', c.border);
+      outPort.setAttribute('stroke-width', '2');
+      outPort.setAttribute('data-port', 'out');
+      outPort.setAttribute('data-node-id', node.nodeId);
+      group.appendChild(outPort);
+    }
+
+    g.appendChild(group);
+  });
+}
+
+function renderEdges() {
+  const g = document.getElementById('edgesGroup');
+  g.innerHTML = '';
+
+  state.edges.forEach(edge => {
+    const src = state.nodes.find(n => n.nodeId === edge.sourceNodeId);
+    const tgt = state.nodes.find(n => n.nodeId === edge.targetNodeId);
+    if (!src || !tgt) return;
+
+    const x1 = src.x + NODE_W;
+    const y1 = src.y + NODE_H / 2;
+    const x2 = tgt.x;
+    const y2 = tgt.y + NODE_H / 2;
+
+    const dx = Math.abs(x2 - x1) * 0.5;
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    const d = `M ${x1} ${y1} C ${x1 + dx} ${y1}, ${x2 - dx} ${y2}, ${x2} ${y2}`;
+    path.setAttribute('d', d);
+    path.setAttribute('class', `graph-edge ${state.selectedEdge === `${edge.sourceNodeId}->${edge.targetNodeId}` ? 'selected' : ''}`);
+    path.setAttribute('stroke', 'var(--text-muted)');
+    path.setAttribute('marker-end', 'url(#arrowhead)');
+    path.setAttribute('data-source', edge.sourceNodeId);
+    path.setAttribute('data-target', edge.targetNodeId);
+    path.addEventListener('click', (e) => {
+      e.stopPropagation();
+      selectEdgeState(edge.sourceNodeId, edge.targetNodeId);
+    });
+
+    // Order label
+    const orderText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    const mx = (x1 + x2) / 2;
+    const my = (y1 + y2) / 2 - 8;
+    orderText.setAttribute('x', mx);
+    orderText.setAttribute('y', my);
+    orderText.setAttribute('text-anchor', 'middle');
+    orderText.setAttribute('fill', 'var(--text-muted)');
+    orderText.setAttribute('font-size', '10');
+    orderText.setAttribute('font-family', 'JetBrains Mono, monospace');
+    orderText.textContent = edge.edgeOrder || '';
+
+    g.appendChild(path);
+    g.appendChild(orderText);
+  });
+}
+
+// ════════════════════════════════════════════
+// SVG INTERACTION (Drag, Pan, Edge Creation)
+// ════════════════════════════════════════════
+const svg = document.getElementById('graphSvg');
+const graphGroup = document.getElementById('graphGroup');
+let isPanning = false;
+let panStartX = 0, panStartY = 0;
+
+function updateTransform() {
+  graphGroup.setAttribute('transform', `translate(${state.panX},${state.panY}) scale(${state.zoom})`);
+  document.getElementById('zoomLabel').textContent = Math.round(state.zoom * 100) + '%';
+}
+
+function zoomIn() { state.zoom = Math.min(2, state.zoom + 0.1); updateTransform(); }
+function zoomOut() { state.zoom = Math.max(0.3, state.zoom - 0.1); updateTransform(); }
+function zoomReset() { state.zoom = 1; state.panX = 0; state.panY = 0; updateTransform(); }
+
+// Mouse wheel zoom
+svg.addEventListener('wheel', (e) => {
+  e.preventDefault();
+  const delta = e.deltaY > 0 ? -0.05 : 0.05;
+  state.zoom = Math.max(0.3, Math.min(2, state.zoom + delta));
+  updateTransform();
+});
+
+// Mouse events
+svg.addEventListener('mousedown', (e) => {
+  const port = e.target.closest('.node-port');
+  const nodeEl = e.target.closest('.graph-node');
+
+  if (port && port.dataset.port === 'out') {
+    // Start edge creation
+    e.stopPropagation();
+    state.creatingEdge = true;
+    state.edgeSourceNodeId = port.dataset.nodeId;
+    const src = state.nodes.find(n => n.nodeId === state.edgeSourceNodeId);
+    const tempEdge = document.getElementById('tempEdge');
+    tempEdge.style.display = '';
+    tempEdge.setAttribute('x1', src.x + NODE_W);
+    tempEdge.setAttribute('y1', src.y + NODE_H / 2);
+    tempEdge.setAttribute('x2', src.x + NODE_W);
+    tempEdge.setAttribute('y2', src.y + NODE_H / 2);
+    return;
+  }
+
+  if (nodeEl) {
+    // Start dragging node
+    e.stopPropagation();
+    const nodeId = nodeEl.dataset.nodeId;
+    const node = state.nodes.find(n => n.nodeId === nodeId);
+    if (!node) return;
+    state.draggingNode = nodeId;
+    const svgPt = svgPoint(e);
+    state.dragOffsetX = svgPt.x - node.x;
+    state.dragOffsetY = svgPt.y - node.y;
+    selectNodeState(nodeId);
+    return;
+  }
+
+  // Start panning
+  isPanning = true;
+  panStartX = e.clientX - state.panX;
+  panStartY = e.clientY - state.panY;
+  clearSelection();
+});
+
+svg.addEventListener('mousemove', (e) => {
+  if (state.creatingEdge) {
+    const pt = svgPoint(e);
+    const tempEdge = document.getElementById('tempEdge');
+    tempEdge.setAttribute('x2', pt.x);
+    tempEdge.setAttribute('y2', pt.y);
+    return;
+  }
+
+  if (state.draggingNode) {
+    const pt = svgPoint(e);
+    const node = state.nodes.find(n => n.nodeId === state.draggingNode);
+    if (node) {
+      node.x = pt.x - state.dragOffsetX;
+      node.y = pt.y - state.dragOffsetY;
+      state.isDirty = true;
+      renderGraph();
+    }
+    return;
+  }
+
+  if (isPanning) {
+    state.panX = e.clientX - panStartX;
+    state.panY = e.clientY - panStartY;
+    updateTransform();
+  }
+});
+
+svg.addEventListener('mouseup', (e) => {
+  if (state.creatingEdge) {
+    const tempEdge = document.getElementById('tempEdge');
+    tempEdge.style.display = 'none';
+
+    // Check if dropped on an input port
+    const port = e.target.closest('.node-port');
+    if (port && port.dataset.port === 'in' && port.dataset.nodeId !== state.edgeSourceNodeId) {
+      const targetNodeId = port.dataset.nodeId;
+      // Check no duplicate
+      const exists = state.edges.find(
+        ed => ed.sourceNodeId === state.edgeSourceNodeId && ed.targetNodeId === targetNodeId,
+      );
+      if (!exists) {
+        const edgeOrder = state.edges.filter(ed => ed.targetNodeId === targetNodeId).length + 1;
+        state.edges.push({
+          sourceNodeId: state.edgeSourceNodeId,
+          targetNodeId: targetNodeId,
+          edgeOrder,
+        });
+        state.isDirty = true;
+        renderGraph();
+        toast(`Arista ${state.edgeSourceNodeId} → ${targetNodeId}`, 'info');
+      } else {
+        toast('Arista ya existe', 'warning');
+      }
+    }
+
+    state.creatingEdge = false;
+    state.edgeSourceNodeId = null;
+    return;
+  }
+
+  state.draggingNode = null;
+  isPanning = false;
+});
+
+function svgPoint(e) {
+  const pt = svg.createSVGPoint();
+  pt.x = e.clientX;
+  pt.y = e.clientY;
+  const ctm = graphGroup.getScreenCTM().inverse();
+  return pt.matrixTransform(ctm);
+}
+
+// ════════════════════════════════════════════
+// PROPERTIES PANEL
+// ════════════════════════════════════════════
+function showNodeProps(nodeId) {
+  const node = state.nodes.find(n => n.nodeId === nodeId);
+  if (!node) return;
+
+  const panel = document.getElementById('propsBody');
+  const colors = { CONDITION: '#4a9eff', GATE: '#a78bfa', PARAMETER: '#34d399' };
+  document.getElementById('propsTitle').innerHTML = `<span style="color:${colors[node.nodeType]}">${node.nodeType}</span> ${node.nodeId}`;
+
+  let html = `
+    <div class="form-group">
+      <label>Node ID</label>
+      <input value="${node.nodeId}" onchange="updateNodeProp('${nodeId}', 'nodeId', this.value)">
+    </div>
+    <div class="form-group">
+      <label>Label</label>
+      <input value="${node.label || ''}" onchange="updateNodeProp('${nodeId}', 'label', this.value)">
+    </div>
+  `;
+
+  if (node.nodeType === 'CONDITION') {
+    const cfg = node.config;
+    const isComputed = !!cfg.expression;
+    html += `
+      <div class="form-group">
+        <label>Modo</label>
+        <select onchange="toggleConditionMode('${nodeId}', this.value)">
+          <option value="simple" ${!isComputed ? 'selected' : ''}>Simple (field op value)</option>
+          <option value="computed" ${isComputed ? 'selected' : ''}>Computado (expression)</option>
+        </select>
+      </div>
+    `;
+    if (isComputed) {
+      html += `
+        <div class="form-group">
+          <label>Expression</label>
+          <input value="${cfg.expression || ''}" onchange="updateNodeConfig('${nodeId}', 'expression', this.value)">
+        </div>
+        <div class="form-group">
+          <label>Operator</label>
+          <select onchange="updateNodeConfig('${nodeId}', 'operator', this.value)">
+            ${conditionOperatorOptions(cfg.operator)}
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Value</label>
+          <input value="${cfg.value ?? ''}" onchange="updateNodeConfig('${nodeId}', 'value', this.value)">
+        </div>
+        <div class="form-group">
+          <label>Tolerance</label>
+          <input type="number" step="0.01" value="${cfg.tolerance ?? ''}" onchange="updateNodeConfig('${nodeId}', 'tolerance', parseFloat(this.value) || undefined)">
+        </div>
+      `;
+    } else {
+      html += `
+        <div class="form-group">
+          <label>Field</label>
+          <input value="${cfg.field || ''}" onchange="updateNodeConfig('${nodeId}', 'field', this.value)">
+        </div>
+        <div class="form-group">
+          <label>Operator</label>
+          <select onchange="updateNodeConfig('${nodeId}', 'operator', this.value)">
+            ${conditionOperatorOptions(cfg.operator)}
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Value</label>
+          <input value="${cfg.value ?? ''}" onchange="updateNodeConfig('${nodeId}', 'value', parseConfigValue(this.value))">
+        </div>
+        <div class="form-group">
+          <label>Data Type</label>
+          <select onchange="updateNodeConfig('${nodeId}', 'data_type', this.value)">
+            ${['STRING','NUMBER','DATE','BOOLEAN','ENUM'].map(t => `<option ${cfg.data_type===t?'selected':''}>${t}</option>`).join('')}
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Value Type</label>
+          <select onchange="updateNodeConfig('${nodeId}', 'value_type', this.value)">
+            <option value="LITERAL" ${cfg.value_type!=='FIELD_REF'?'selected':''}>LITERAL</option>
+            <option value="FIELD_REF" ${cfg.value_type==='FIELD_REF'?'selected':''}>FIELD_REF</option>
+          </select>
+        </div>
+      `;
+    }
+  } else if (node.nodeType === 'GATE') {
+    const cfg = node.config;
+    html += `
+      <div class="form-group">
+        <label>Logic</label>
+        <select onchange="updateNodeConfig('${nodeId}', 'logic', this.value)">
+          ${['AND','OR','NOT','XOR'].map(l => `<option ${cfg.logic===l?'selected':''}>${l}</option>`).join('')}
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Short Circuit</label>
+        <select onchange="updateNodeConfig('${nodeId}', 'short_circuit', this.value==='true')">
+          <option value="true" ${cfg.short_circuit!==false?'selected':''}>Sí</option>
+          <option value="false" ${cfg.short_circuit===false?'selected':''}>No</option>
+        </select>
+      </div>
+    `;
+  } else if (node.nodeType === 'PARAMETER') {
+    const cfg = node.config;
+    html += `
+      <div class="form-group">
+        <label>Target Field</label>
+        <input value="${cfg.target_field || ''}" onchange="updateNodeConfig('${nodeId}', 'target_field', this.value)">
+      </div>
+      <div class="form-group">
+        <label>Param Type</label>
+        <select onchange="updateNodeConfig('${nodeId}', 'param_type', this.value); showNodeProps('${nodeId}')">
+          ${['STRING','NUMBER','ENUM','DATE','RANGE','ARRAY','BOOLEAN'].map(t => `<option ${cfg.param_type===t?'selected':''}>${t}</option>`).join('')}
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Required</label>
+        <select onchange="updateNodeConfig('${nodeId}', 'required', this.value==='true')">
+          <option value="true" ${cfg.required!==false?'selected':''}>Sí</option>
+          <option value="false" ${cfg.required===false?'selected':''}>No</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Is Default</label>
+        <select onchange="updateNodeProp('${nodeId}', 'isDefault', this.value==='true')">
+          <option value="false" ${!node.isDefault?'selected':''}>No</option>
+          <option value="true" ${node.isDefault?'selected':''}>Sí</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Constraints (JSON)</label>
+        <textarea class="json-editor" onchange="updateNodeConstraints('${nodeId}', this.value)">${JSON.stringify(cfg.constraints || {}, null, 2)}</textarea>
+      </div>
+    `;
+  }
+
+  panel.innerHTML = html;
+}
+
+function conditionOperatorOptions(current) {
+  const ops = ['EQUALS','NOT_EQUALS','GREATER_THAN','GREATER_EQUAL','LESS_THAN','LESS_EQUAL',
+    'IN','NOT_IN','BETWEEN','CONTAINS','STARTS_WITH','ENDS_WITH','REGEX',
+    'IS_NULL','IS_NOT_NULL','IS_EMPTY','IS_NOT_EMPTY'];
+  return ops.map(op => `<option ${current===op?'selected':''}>${op}</option>`).join('');
+}
+
+function parseConfigValue(val) {
+  // Try to parse as JSON (for arrays, numbers, booleans)
+  try {
+    const parsed = JSON.parse(val);
+    return parsed;
+  } catch {
+    return val;
+  }
+}
+
+function updateNodeProp(nodeId, prop, value) {
+  const node = state.nodes.find(n => n.nodeId === nodeId);
+  if (!node) return;
+
+  if (prop === 'nodeId') {
+    // Update references in edges
+    state.edges.forEach(e => {
+      if (e.sourceNodeId === nodeId) e.sourceNodeId = value;
+      if (e.targetNodeId === nodeId) e.targetNodeId = value;
+    });
+    state.selectedNode = value;
+  }
+
+  node[prop] = value;
+  state.isDirty = true;
+  renderGraph();
+}
+
+function updateNodeConfig(nodeId, key, value) {
+  const node = state.nodes.find(n => n.nodeId === nodeId);
+  if (!node) return;
+  node.config[key] = value;
+  state.isDirty = true;
+  renderGraph();
+}
+
+function updateNodeConstraints(nodeId, jsonStr) {
+  try {
+    const constraints = JSON.parse(jsonStr);
+    const node = state.nodes.find(n => n.nodeId === nodeId);
+    if (node) {
+      node.config.constraints = constraints;
+      state.isDirty = true;
+    }
+  } catch {
+    toast('JSON inválido en constraints', 'error');
+  }
+}
+
+function toggleConditionMode(nodeId, mode) {
+  const node = state.nodes.find(n => n.nodeId === nodeId);
+  if (!node) return;
+  if (mode === 'computed') {
+    node.config = { expression: '', operator: 'EQUALS', value: '' };
+  } else {
+    node.config = { field: '', operator: 'EQUALS', value: '', data_type: 'STRING' };
+  }
+  state.isDirty = true;
+  showNodeProps(nodeId);
+  renderGraph();
+}
+
+function showEdgeProps(srcId, tgtId) {
+  const edge = state.edges.find(e => e.sourceNodeId === srcId && e.targetNodeId === tgtId);
+  if (!edge) return;
+
+  document.getElementById('propsTitle').textContent = `Arista ${srcId} → ${tgtId}`;
+  document.getElementById('propsBody').innerHTML = `
+    <div class="form-group">
+      <label>Source</label>
+      <input value="${edge.sourceNodeId}" disabled>
+    </div>
+    <div class="form-group">
+      <label>Target</label>
+      <input value="${edge.targetNodeId}" disabled>
+    </div>
+    <div class="form-group">
+      <label>Edge Order</label>
+      <input type="number" min="1" value="${edge.edgeOrder || 1}" onchange="updateEdgeOrder('${srcId}','${tgtId}', parseInt(this.value))">
+    </div>
+    <div class="form-group">
+      <label>Label</label>
+      <input value="${edge.label || ''}" onchange="updateEdgeLabel('${srcId}','${tgtId}', this.value)">
+    </div>
+    <div class="form-actions">
+      <button class="btn danger small" onclick="deleteEdge('${srcId}','${tgtId}')">Eliminar Arista</button>
+    </div>
+  `;
+}
+
+function updateEdgeOrder(src, tgt, val) {
+  const edge = state.edges.find(e => e.sourceNodeId === src && e.targetNodeId === tgt);
+  if (edge) { edge.edgeOrder = val; state.isDirty = true; renderGraph(); }
+}
+function updateEdgeLabel(src, tgt, val) {
+  const edge = state.edges.find(e => e.sourceNodeId === src && e.targetNodeId === tgt);
+  if (edge) { edge.label = val; state.isDirty = true; }
+}
+
+function closePropsPanel() { clearSelection(); }
+
+// ════════════════════════════════════════════
+// DELETE
+// ════════════════════════════════════════════
+function deleteSelectedElement() {
+  if (state.selectedNode) {
+    const id = state.selectedNode;
+    state.nodes = state.nodes.filter(n => n.nodeId !== id);
+    state.edges = state.edges.filter(e => e.sourceNodeId !== id && e.targetNodeId !== id);
+    state.isDirty = true;
+    clearSelection();
+    renderGraph();
+    toast(`Nodo ${id} eliminado`, 'info');
+  } else if (state.selectedEdge) {
+    const [src, tgt] = state.selectedEdge.split('->');
+    deleteEdge(src, tgt);
+  }
+}
+
+function deleteEdge(src, tgt) {
+  state.edges = state.edges.filter(e => !(e.sourceNodeId === src && e.targetNodeId === tgt));
+  state.isDirty = true;
+  clearSelection();
+  renderGraph();
+  toast(`Arista ${src} → ${tgt} eliminada`, 'info');
+}
+
+// ════════════════════════════════════════════
+// VALIDATE
+// ════════════════════════════════════════════
+async function validateCurrentGraph() {
+  if (!state.currentRule) return;
+  try {
+    // We can validate locally by calling the API with current saved state
+    // or validate the API-side. Let's use the API:
+    const result = await api('GET', `/GraphRule/rule/${state.currentRule.uuid}/validate`);
+    const panel = document.getElementById('propsBody');
+    document.getElementById('propsTitle').textContent = 'Validación del Grafo';
+
+    let html = `<div class="validation-result ${result.isValid ? 'valid' : 'invalid'}">`;
+    html += `<div style="font-weight:600;margin-bottom:8px">${result.isValid ? '✅ Grafo válido' : '❌ Grafo inválido'}</div>`;
+
+    if (result.errors?.length) {
+      result.errors.forEach(e => {
+        html += `<div class="val-item"><span class="val-icon">🔴</span><span>${e.message}</span></div>`;
+      });
+    }
+    if (result.warnings?.length) {
+      result.warnings.forEach(w => {
+        html += `<div class="val-item"><span class="val-icon">🟡</span><span>${w.message}</span></div>`;
+      });
+    }
+    if (result.isValid && (!result.warnings || result.warnings.length === 0)) {
+      html += '<div class="val-item"><span>Sin errores ni advertencias</span></div>';
+    }
+
+    html += '</div>';
+    panel.innerHTML = html;
+
+    toast(result.isValid ? 'Grafo válido' : 'Grafo tiene errores', result.isValid ? 'success' : 'error');
+  } catch (e) {
+    toast('Error validando: ' + e.message, 'error');
+  }
+}
+
+// ════════════════════════════════════════════
+// SAVE GRAPH
+// ════════════════════════════════════════════
+async function saveCurrentGraph() {
+  if (!state.currentRule) return;
+
+  const graphData = {
+    nodes: state.nodes.map(n => ({
+      nodeId: n.nodeId,
+      nodeType: n.nodeType,
+      config: n.config,
+      label: n.label || n.nodeId,
+      isDefault: n.isDefault || false,
+    })),
+    edges: state.edges.map(e => ({
+      sourceNodeId: e.sourceNodeId,
+      targetNodeId: e.targetNodeId,
+      edgeOrder: e.edgeOrder || 1,
+      label: e.label,
+    })),
+  };
+
+  try {
+    const result = await api('PUT', `/GraphRule/rule/${state.currentRule.uuid}/graph`, {
+      graph: graphData,
+      replacedBy: 'ui-user',
+    });
+
+    state.isDirty = false;
+
+    if (result.validation?.warnings?.length) {
+      toast(`Guardado con ${result.validation.warnings.length} advertencia(s)`, 'warning');
+    } else {
+      toast('Grafo guardado correctamente', 'success');
+    }
+
+    // Reload to get IDs
+    await selectRule(state.currentRule.uuid);
+  } catch (e) {
+    toast('Error guardando: ' + e.message, 'error');
+    if (e.details) {
+      console.error('Detalles:', e.details);
+      // Show errors in panel
+      const panel = document.getElementById('propsBody');
+      document.getElementById('propsTitle').textContent = 'Errores de Guardado';
+      let html = '<div class="validation-result invalid">';
+      if (e.details.errors) {
+        e.details.errors.forEach(err => {
+          html += `<div class="val-item"><span class="val-icon">🔴</span><span>${err.message}</span></div>`;
+        });
+      }
+      html += '</div>';
+      panel.innerHTML = html;
+    }
+  }
+}
+
+// ════════════════════════════════════════════
+// AUTO LAYOUT (simple layered/Sugiyama-like)
+// ════════════════════════════════════════════
+function autoLayout() {
+  if (state.nodes.length === 0) return;
+
+  // Build adjacency and compute layers via topological sort
+  const inDegree = {};
+  const adj = {};
+  state.nodes.forEach(n => { inDegree[n.nodeId] = 0; adj[n.nodeId] = []; });
+  state.edges.forEach(e => {
+    if (adj[e.sourceNodeId]) adj[e.sourceNodeId].push(e.targetNodeId);
+    if (inDegree[e.targetNodeId] !== undefined) inDegree[e.targetNodeId]++;
+  });
+
+  // Assign layers
+  const layers = {};
+  const queue = [];
+  Object.keys(inDegree).forEach(id => { if (inDegree[id] === 0) { queue.push(id); layers[id] = 0; } });
+
+  while (queue.length) {
+    const curr = queue.shift();
+    (adj[curr] || []).forEach(next => {
+      inDegree[next]--;
+      layers[next] = Math.max(layers[next] || 0, layers[curr] + 1);
+      if (inDegree[next] === 0) queue.push(next);
+    });
+  }
+
+  // Handle orphans
+  state.nodes.forEach(n => { if (layers[n.nodeId] === undefined) layers[n.nodeId] = 0; });
+
+  // Group by layer
+  const byLayer = {};
+  let maxLayer = 0;
+  state.nodes.forEach(n => {
+    const l = layers[n.nodeId];
+    if (!byLayer[l]) byLayer[l] = [];
+    byLayer[l].push(n);
+    maxLayer = Math.max(maxLayer, l);
+  });
+
+  // Position
+  const gapX = 240;
+  const gapY = 100;
+  const startX = 60;
+  const startY = 60;
+
+  for (let layer = 0; layer <= maxLayer; layer++) {
+    const nodes = byLayer[layer] || [];
+    const totalH = nodes.length * (NODE_H + gapY) - gapY;
+    const offsetY = startY + Math.max(0, (300 - totalH) / 2);
+
+    nodes.forEach((n, i) => {
+      n.x = startX + layer * gapX;
+      n.y = offsetY + i * (NODE_H + gapY);
+    });
+  }
+
+  renderGraph();
+}
+
+// ════════════════════════════════════════════
+// IMPORT / EXPORT
+// ════════════════════════════════════════════
+function showImportModal() {
+  if (!state.currentRuleSet) {
+    toast('Selecciona un RuleSet primero', 'warning');
+    return;
+  }
+  document.getElementById('import_json').value = '';
+  showModal('importModal');
+}
+
+async function doImport() {
+  if (!state.currentRuleSet) return;
+  try {
+    const json = JSON.parse(document.getElementById('import_json').value);
+    const result = await api('POST', `/GraphRule/ruleset/${state.currentRuleSet.id}/import`, json);
+    closeModal('importModal');
+    toast(`Importadas: ${result.successful}/${result.total} reglas`, result.failed > 0 ? 'warning' : 'success');
+    await loadRules();
+  } catch (e) {
+    toast('Error importando: ' + e.message, 'error');
+  }
+}
+
+async function exportRuleSet() {
+  if (!state.currentRuleSet) {
+    toast('Selecciona un RuleSet primero', 'warning');
+    return;
+  }
+  try {
+    const result = await api('GET', `/GraphRule/ruleset/${state.currentRuleSet.id}/export`);
+    const blob = new Blob([JSON.stringify(result, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${state.currentRuleSet.name.replace(/\s+/g, '_')}_export.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast('Exportado correctamente', 'success');
+  } catch (e) {
+    toast('Error exportando: ' + e.message, 'error');
+  }
+}
+
+// ════════════════════════════════════════════
+// KEYBOARD SHORTCUTS
+// ════════════════════════════════════════════
+document.addEventListener('keydown', (e) => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
+
+  if (e.key === 'Delete' || e.key === 'Backspace') {
+    deleteSelectedElement();
+  }
+  if (e.key === 's' && (e.ctrlKey || e.metaKey)) {
+    e.preventDefault();
+    saveCurrentGraph();
+  }
+  if (e.key === 'Escape') {
+    clearSelection();
+  }
+});
+
+// ════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════
+(async function init() {
+  await loadRuleSets();
+  updateTransform();
+})();
+</script>
+</body>
+</html>

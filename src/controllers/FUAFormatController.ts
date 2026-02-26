@@ -37,7 +37,7 @@ class FUAFormatController {
     };
 
     static async getFUAFormatById (req: Request, res: Response): Promise<void>  {
-        const payload = req.params.id;
+        const payload = req.params.id as string;
 
         let searchedFUAFormat = null;
 
@@ -65,7 +65,7 @@ class FUAFormatController {
 
     // Render FUA Format by Id or UUID
     static async render (req: Request, res: Response): Promise<void>  {
-        const payload = req.params.id;
+        const payload = req.params.id as string;
         const { token = "---", visit = "---" } = req.body ?? {};
 
         // Validate token
