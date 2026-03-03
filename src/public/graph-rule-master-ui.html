@@ -1792,7 +1792,7 @@ async function saveCurrentGraph() {
     nodes: state.nodes.map(n => ({
       nodeId: n.nodeId,
       nodeType: n.nodeType,
-      config: n.config,
+      config: n.config || {},
       label: n.label || n.nodeId,
       isDefault: n.isDefault || false,
     })),

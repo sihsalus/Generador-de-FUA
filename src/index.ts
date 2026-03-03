@@ -23,6 +23,8 @@ import { getPatient } from './services/fhirService';
 
 // Import Routes
 import globalRouter from './routes/indexRoutes';
+import swaggerUi from 'swagger-ui-express';
+import swaggerSpec from './swagger';
 import { createDemoFormat } from './utils/utils';
 import { Logger, loggerInstance } from './middleware/logger/models/typescript/Logger';
 import { Log } from './middleware/logger/models/typescript/Log';
@@ -83,6 +85,7 @@ app.use(express.json());
 
 // Importing Routes
 app.use('/ws', globalRouter);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 
 // Comentario para marcelo: Ya funciona el getter del patients a través de la API de OpenMRS, faltarian ajustar algunas cosas como el cors y la seguridad, revisar servicios de getPatient.
