@@ -154,6 +154,36 @@
     font-size: 12px;
     color: var(--text-muted);
   }
+  .var-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 8px;
+    border-radius: var(--radius);
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+  .var-item:hover { background: var(--bg-hover); }
+  .var-item .var-name { flex: 1; font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+  .var-item .var-type { font-size: 10px; padding: 1px 5px; border-radius: 8px; font-weight: 600; background: rgba(74,158,255,0.12); color: var(--accent-blue); }
+  .var-item .var-del { cursor: pointer; color: var(--text-muted); font-size: 14px; line-height: 1; padding: 0 2px; }
+  .var-item .var-del:hover { color: #ef4444; }
+  /* field combobox */
+  .field-combo-wrap { position: relative; }
+  .field-combo-wrap input { width: 100%; box-sizing: border-box; }
+  .field-dropdown {
+    position: absolute; top: 100%; left: 0; right: 0; z-index: 999;
+    background: var(--bg-secondary); border: 1px solid var(--border);
+    border-radius: var(--radius); max-height: 160px; overflow-y: auto;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  }
+  .field-dropdown-item {
+    padding: 6px 10px; font-size: 12px; cursor: pointer;
+    display: flex; align-items: center; gap: 6px;
+    color: var(--text-secondary);
+  }
+  .field-dropdown-item:hover { background: var(--bg-hover); color: var(--text-primary); }
+  .field-dropdown-item .fdi-type { font-size: 10px; padding: 1px 5px; border-radius: 8px; background: rgba(74,158,255,0.12); color: var(--accent-blue); }
 
   /* ─── MAIN AREA ─── */
   .main-area {
@@ -507,13 +537,42 @@
     </div>
 
     <!-- Rules -->
-    <div class="sidebar-section flex-grow">
+    <div class="sidebar-section" style="flex:1;overflow:hidden;min-height:80px">
       <div class="sidebar-header">
         Reglas
         <button class="btn small" id="btnNewRule" onclick="showRuleModal()" style="display:none">+ Nueva</button>
       </div>
       <div class="sidebar-list" id="ruleList">
         <div class="sidebar-empty">Selecciona un RuleSet</div>
+      </div>
+    </div>
+
+    <!-- Variables -->
+    <div class="sidebar-section" style="flex-shrink:0" id="varSection">
+      <div class="sidebar-header" style="cursor:pointer" onclick="toggleVarSection()">
+        Variables
+        <div style="display:flex;gap:6px;align-items:center">
+          <button class="btn small" id="btnNewVar" onclick="event.stopPropagation();showVarForm()" style="display:none">+ Nueva</button>
+          <span id="varChevron" style="font-size:10px;color:var(--text-muted)">▲</span>
+        </div>
+      </div>
+      <div id="varSectionBody">
+        <div id="varAddForm" style="display:none;padding:8px;border-bottom:1px solid var(--border);display:none">
+          <div style="display:flex;gap:6px;margin-bottom:6px">
+            <input id="varNameInput" placeholder="nombre_campo" style="flex:1;font-size:12px;font-family:'JetBrains Mono',monospace">
+            <select id="varTypeInput" style="font-size:12px;width:90px">
+              <option>STRING</option><option>NUMBER</option><option>ENUM</option>
+              <option>DATE</option><option>BOOLEAN</option>
+            </select>
+          </div>
+          <div style="display:flex;gap:6px">
+            <button class="btn small" style="flex:1" onclick="saveVar()">Guardar</button>
+            <button class="btn small" onclick="hideVarForm()">✕</button>
+          </div>
+        </div>
+        <div class="sidebar-list" id="varList" style="max-height:140px">
+          <div class="sidebar-empty" id="varEmpty">Sin variables</div>
+        </div>
       </div>
     </div>
   </div>
@@ -759,6 +818,75 @@ const state = {
 };
 
 // ════════════════════════════════════════════
+// VARIABLES (localStorage per RuleSet)
+// ════════════════════════════════════════════
+function varsKey() {
+  return state.currentRuleSet ? `vars_rs_${state.currentRuleSet.id}` : null;
+}
+function loadVars() {
+  const key = varsKey();
+  if (!key) return [];
+  try { return JSON.parse(localStorage.getItem(key) || '[]'); } catch { return []; }
+}
+function saveVars(vars) {
+  const key = varsKey();
+  if (key) localStorage.setItem(key, JSON.stringify(vars));
+}
+function renderVarList() {
+  const vars = loadVars();
+  const list = document.getElementById('varList');
+  const empty = document.getElementById('varEmpty');
+  const btnNew = document.getElementById('btnNewVar');
+  if (btnNew) btnNew.style.display = state.currentRuleSet ? '' : 'none';
+  if (!vars.length) {
+    empty.style.display = '';
+    list.querySelectorAll('.var-item').forEach(el => el.remove());
+    return;
+  }
+  empty.style.display = 'none';
+  list.querySelectorAll('.var-item').forEach(el => el.remove());
+  vars.forEach((v, i) => {
+    const div = document.createElement('div');
+    div.className = 'var-item';
+    div.innerHTML = `<span class="var-name">${v.name}</span><span class="var-type">${v.type}</span><span class="var-del" onclick="deleteVar(${i})" title="Eliminar">×</span>`;
+    list.appendChild(div);
+  });
+}
+function showVarForm() {
+  const form = document.getElementById('varAddForm');
+  form.style.display = 'block';
+  document.getElementById('varNameInput').value = '';
+  document.getElementById('varNameInput').focus();
+}
+function hideVarForm() {
+  document.getElementById('varAddForm').style.display = 'none';
+}
+function saveVar() {
+  const name = document.getElementById('varNameInput').value.trim();
+  if (!name) { toast('Escribe un nombre para la variable', 'warning'); return; }
+  const type = document.getElementById('varTypeInput').value;
+  const vars = loadVars();
+  if (vars.find(v => v.name === name)) { toast('Ya existe una variable con ese nombre', 'warning'); return; }
+  vars.push({ name, type });
+  saveVars(vars);
+  hideVarForm();
+  renderVarList();
+}
+function deleteVar(index) {
+  const vars = loadVars();
+  vars.splice(index, 1);
+  saveVars(vars);
+  renderVarList();
+}
+function toggleVarSection() {
+  const body = document.getElementById('varSectionBody');
+  const chevron = document.getElementById('varChevron');
+  const collapsed = body.style.display === 'none';
+  body.style.display = collapsed ? '' : 'none';
+  chevron.textContent = collapsed ? '▲' : '▼';
+}
+
+// ════════════════════════════════════════════
 // API HELPERS
 // ════════════════════════════════════════════
 async function api(method, path, body = null) {
@@ -862,6 +990,7 @@ async function selectRuleSet(id) {
   renderRuleSetList();
   document.getElementById('btnNewRule').style.display = '';
   updateBreadcrumb();
+  renderVarList();
   await loadRules();
 }
 
@@ -1378,7 +1507,7 @@ function showNodeProps(nodeId) {
   let html = `
     <div class="form-group">
       <label>Node ID</label>
-      <input value="${node.nodeId}" onchange="updateNodeProp('${nodeId}', 'nodeId', this.value)">
+      <input value="${node.nodeId}" readonly style="opacity:0.5;cursor:default">
     </div>
     <div class="form-group">
       <label>Label</label>
@@ -1423,7 +1552,7 @@ function showNodeProps(nodeId) {
       html += `
         <div class="form-group">
           <label>Field</label>
-          <input value="${cfg.field || ''}" onchange="updateNodeConfig('${nodeId}', 'field', this.value)">
+          ${fieldComboHtml(nodeId, 'field', cfg.field || '')}
         </div>
         <div class="form-group">
           <label>Operator</label>
@@ -1472,7 +1601,7 @@ function showNodeProps(nodeId) {
     html += `
       <div class="form-group">
         <label>Target Field</label>
-        <input value="${cfg.target_field || ''}" onchange="updateNodeConfig('${nodeId}', 'target_field', this.value)">
+        ${fieldComboHtml(nodeId, 'target_field', cfg.target_field || '')}
       </div>
       <div class="form-group">
         <label>Param Type</label>
@@ -1502,6 +1631,49 @@ function showNodeProps(nodeId) {
   }
 
   panel.innerHTML = html;
+}
+
+// ════════════════════════════════════════════
+// FIELD COMBOBOX
+// ════════════════════════════════════════════
+function fieldComboHtml(nodeId, configKey, currentValue) {
+  const id = `fc_${nodeId}_${configKey}`;
+  return `<div class="field-combo-wrap">
+    <input id="${id}" value="${currentValue}"
+      autocomplete="off"
+      oninput="onFieldComboInput('${id}','${nodeId}','${configKey}',this.value)"
+      onblur="closeFieldDropdown('${id}')"
+      onfocus="onFieldComboInput('${id}','${nodeId}','${configKey}',this.value)">
+    <div class="field-dropdown" id="${id}_drop" style="display:none"></div>
+  </div>`;
+}
+
+function onFieldComboInput(inputId, nodeId, configKey, query) {
+  const vars = loadVars();
+  const drop = document.getElementById(inputId + '_drop');
+  if (!drop) return;
+  const q = query.toLowerCase();
+  const filtered = vars.filter(v => v.name.toLowerCase().includes(q) || v.type.toLowerCase().includes(q));
+  if (!filtered.length) { drop.style.display = 'none'; return; }
+  drop.innerHTML = filtered.map(v =>
+    `<div class="field-dropdown-item"
+       onmousedown="selectFieldVar('${inputId}','${nodeId}','${configKey}','${v.name}')"
+     ><span class="fdi-type">${v.type}</span>${v.name}</div>`
+  ).join('');
+  drop.style.display = 'block';
+  updateNodeConfig(nodeId, configKey, query);
+}
+
+function selectFieldVar(inputId, nodeId, configKey, varName) {
+  const input = document.getElementById(inputId);
+  if (input) input.value = varName;
+  closeFieldDropdown(inputId);
+  updateNodeConfig(nodeId, configKey, varName);
+}
+
+function closeFieldDropdown(inputId) {
+  const drop = document.getElementById(inputId + '_drop');
+  if (drop) drop.style.display = 'none';
 }
 
 function conditionOperatorOptions(current) {
