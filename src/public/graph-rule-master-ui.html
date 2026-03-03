@@ -686,20 +686,21 @@
 
 <!-- ─── MODAL: IMPORT ─── -->
 <div class="modal-overlay hidden" id="importModal">
-  <div class="modal" style="width:560px">
+  <div class="modal" style="width:460px">
     <div class="modal-header">
       <h2>Importar Reglas (JSON)</h2>
       <button class="btn small icon-only" onclick="closeModal('importModal')">✕</button>
     </div>
     <div class="modal-body">
       <div class="form-group">
-        <label>Pega el JSON aquí</label>
-        <textarea id="import_json" class="json-editor" style="min-height:250px" placeholder='{ "rules": [ ... ] }'></textarea>
+        <label>Selecciona un archivo <code>.json</code></label>
+        <input type="file" id="import_file" accept=".json,application/json" style="margin-top:8px;width:100%">
+        <span id="import_filename" style="display:block;margin-top:6px;font-size:12px;color:var(--text-muted)"></span>
       </div>
     </div>
     <div class="modal-footer">
       <button class="btn" onclick="closeModal('importModal')">Cancelar</button>
-      <button class="btn primary" onclick="doImport()">Importar</button>
+      <button class="btn primary" id="btnDoImport" onclick="doImport()" disabled>Importar</button>
     </div>
   </div>
 </div>
@@ -767,6 +768,11 @@ async function api(method, path, body = null) {
   };
   if (body) opts.body = JSON.stringify(body);
   const res = await fetch(API + path, opts);
+  const contentType = res.headers.get('content-type') || '';
+  if (!contentType.includes('application/json')) {
+    const text = await res.text();
+    throw new Error(`HTTP ${res.status} – respuesta no-JSON para ${method} ${path}: ${text.slice(0, 120)}`);
+  }
   const data = await res.json();
   if (!res.ok) {
     const msg = data.message || data.error || 'Error desconocido';
@@ -1909,14 +1915,25 @@ function showImportModal() {
     toast('Selecciona un RuleSet primero', 'warning');
     return;
   }
-  document.getElementById('import_json').value = '';
+  const fileInput = document.getElementById('import_file');
+  fileInput.value = '';
+  document.getElementById('import_filename').textContent = '';
+  document.getElementById('btnDoImport').disabled = true;
+  fileInput.onchange = () => {
+    const name = fileInput.files[0]?.name || '';
+    document.getElementById('import_filename').textContent = name ? `Archivo: ${name}` : '';
+    document.getElementById('btnDoImport').disabled = !fileInput.files[0];
+  };
   showModal('importModal');
 }
 
 async function doImport() {
   if (!state.currentRuleSet) return;
+  const file = document.getElementById('import_file').files[0];
+  if (!file) return;
   try {
-    const json = JSON.parse(document.getElementById('import_json').value);
+    const text = await file.text();
+    const json = JSON.parse(text);
     const result = await api('POST', `/GraphRule/ruleset/${state.currentRuleSet.id}/import`, json);
     closeModal('importModal');
     toast(`Importadas: ${result.successful}/${result.total} reglas`, result.failed > 0 ? 'warning' : 'success');
