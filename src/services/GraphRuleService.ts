@@ -37,6 +37,7 @@ const createFullRuleSchema = z.object({
     ruleType: z.enum(['CONSISTENCY', 'VALIDATION', 'FORMAT', 'BUSINESS']),
     enabled: z.boolean().default(true),
     priority: z.number().int().min(1).default(1),
+    weight: z.number().min(0).default(1.0).optional(),
     graph: z.object({
         nodes: z.array(nodeSchema).min(1, "Se requiere al menos un nodo"),
         edges: z.array(edgeSchema).default([]),
@@ -51,6 +52,7 @@ const importJsonSchema = z.object({
         ruleType: z.enum(['CONSISTENCY', 'VALIDATION', 'FORMAT', 'BUSINESS']),
         enabled: z.boolean().default(true),
         priority: z.number().int().min(1).default(1),
+        weight: z.number().min(0).default(1.0).optional(),
         graph: z.object({
             nodes: z.array(nodeSchema).min(1),
             edges: z.array(edgeSchema).default([]),
@@ -138,6 +140,7 @@ class GraphRuleService {
                 ruleType: ruleData.ruleType,
                 enabled: ruleData.enabled,
                 priority: ruleData.priority,
+                weight: ruleData.weight ?? 1.0,
                 createdBy: CREATED_BY_PLACEHOLDER,
             });
 

@@ -4,18 +4,22 @@ import { CREATED_BY_PLACEHOLDER } from "../utils/constants";
 
 // ── Zod Schemas ──
 
+const evaluationModeEnum = z.enum(['ALL', 'FIRST_MATCH', 'FIRST_VALID', 'ANY', 'MAJORITY', 'WEIGHTED']);
+
 const createRuleSetSchema = z.object({
     name: z.string().min(1, "name es requerido").max(255),
     description: z.string().max(1000).optional(),
     documentType: z.string().min(1, "documentType es requerido").max(100),
-    evaluationMode: z.enum(['ALL', 'FIRST_MATCH']).default('ALL'),
+    evaluationMode: evaluationModeEnum.default('ALL'),
+    threshold: z.number().min(0).max(1).default(0.5).optional(),
 });
 
 const updateRuleSetSchema = z.object({
     name: z.string().min(1).max(255).optional(),
     description: z.string().max(1000).optional(),
     documentType: z.string().min(1).max(100).optional(),
-    evaluationMode: z.enum(['ALL', 'FIRST_MATCH']).optional(),
+    evaluationMode: evaluationModeEnum.optional(),
+    threshold: z.number().min(0).max(1).optional(),
 });
 
 class RuleSetService {

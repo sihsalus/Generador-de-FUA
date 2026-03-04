@@ -104,7 +104,12 @@ class RuleEvaluationService {
         let passedRules = 0;
         let failedRules = 0;
         let skippedRules = 0;
-        let allValid = true;
+        const mode = ruleSetPlain.evaluationMode as string;
+        const threshold = typeof ruleSetPlain.threshold === 'number' ? ruleSetPlain.threshold : 0.5;
+
+        // Para WEIGHTED: acumular pesos
+        let sumWeightTotal = 0;
+        let sumWeightPassed = 0;
 
         for (const rule of rules) {
             const ruleUUID = rule.get('uuid') as string;
@@ -115,25 +120,34 @@ class RuleEvaluationService {
                 continue;
             }
 
+            const ruleWeight = parseFloat(rule.get('weight') as string) || 1.0;
+            if (mode === 'WEIGHTED') {
+                sumWeightTotal += ruleWeight;
+            }
+
             try {
                 const result = await this.evaluateRule(ruleUUID, parsed.data);
                 ruleResults.push(result);
 
                 if (result.isValid) {
                     passedRules++;
+                    if (mode === 'WEIGHTED') sumWeightPassed += ruleWeight;
+
+                    // FIRST_MATCH / FIRST_VALID: para en la primera que PASA
+                    if (mode === 'FIRST_MATCH' || mode === 'FIRST_VALID') {
+                        break;
+                    }
                 } else {
                     failedRules++;
-                    allValid = false;
 
-                    // Si evaluationMode es FIRST_MATCH, detenerse en la primera que falle
-                    if (ruleSetPlain.evaluationMode === 'FIRST_MATCH') {
-                        break;
+                    // ALL: para en la primera que falla
+                    if (mode === 'ALL') {
+                        // No break — continúa para reportar todos los fallos
                     }
                 }
             } catch (error: any) {
                 // Si una regla falla en evaluación, reportar como error
                 failedRules++;
-                allValid = false;
                 ruleResults.push({
                     ruleId: String(rule.get('id')),
                     ruleUUID: ruleUUID,
@@ -149,11 +163,29 @@ class RuleEvaluationService {
                     }],
                     executionTimeMs: 0,
                 });
-
-                if (ruleSetPlain.evaluationMode === 'FIRST_MATCH') {
-                    break;
-                }
             }
+        }
+
+        // Determinar isValid según el modo
+        const totalEvaluated = passedRules + failedRules;
+        let isValid: boolean;
+        switch (mode) {
+            case 'ALL':
+                isValid = failedRules === 0 && passedRules > 0;
+                break;
+            case 'FIRST_MATCH':
+            case 'FIRST_VALID':
+            case 'ANY':
+                isValid = passedRules > 0;
+                break;
+            case 'MAJORITY':
+                isValid = totalEvaluated > 0 && passedRules > totalEvaluated / 2;
+                break;
+            case 'WEIGHTED':
+                isValid = sumWeightTotal > 0 && (sumWeightPassed / sumWeightTotal) >= threshold;
+                break;
+            default:
+                isValid = failedRules === 0 && passedRules > 0;
         }
 
         const executionTimeMs = Math.round((performance.now() - startTime) * 100) / 100;
@@ -162,7 +194,7 @@ class RuleEvaluationService {
             ruleSetId: String(ruleSetId),
             ruleSetName: ruleSetPlain.name,
             documentType: ruleSetPlain.documentType,
-            isValid: allValid,
+            isValid,
             totalRules: rules.length,
             passedRules,
             failedRules,

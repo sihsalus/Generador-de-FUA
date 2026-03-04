@@ -22,7 +22,8 @@ const swaggerSpec = {
                     name:           { type: 'string', example: 'Validación FUA 2024' },
                     documentType:   { type: 'string', example: 'FUA' },
                     description:    { type: 'string', example: 'Reglas de validación del formulario FUA' },
-                    evaluationMode: { type: 'string', enum: ['ALL', 'FIRST_MATCH'], default: 'ALL' },
+                    evaluationMode: { type: 'string', enum: ['ALL', 'FIRST_MATCH', 'FIRST_VALID', 'ANY', 'MAJORITY', 'WEIGHTED'], default: 'ALL' },
+                    threshold:      { type: 'number', minimum: 0, maximum: 1, default: 0.5, description: 'Solo para WEIGHTED: proporción mínima de peso para isValid:true' },
                 },
             },
             RuleSetResponse: {
@@ -33,7 +34,8 @@ const swaggerSpec = {
                     name:           { type: 'string' },
                     documentType:   { type: 'string' },
                     description:    { type: 'string' },
-                    evaluationMode: { type: 'string', enum: ['ALL', 'FIRST_MATCH'] },
+                    evaluationMode: { type: 'string', enum: ['ALL', 'FIRST_MATCH', 'FIRST_VALID', 'ANY', 'MAJORITY', 'WEIGHTED'] },
+                    threshold:      { type: 'number' },
                     active:         { type: 'boolean' },
                 },
             },
@@ -68,6 +70,7 @@ const swaggerSpec = {
                     ruleType:    { type: 'string', enum: ['VALIDATION', 'CONSISTENCY', 'FORMAT', 'BUSINESS'] },
                     enabled:     { type: 'boolean', default: true },
                     priority:    { type: 'integer', default: 1 },
+                    weight:      { type: 'number', minimum: 0, default: 1.0, description: 'Solo para WEIGHTED: peso de esta regla en la evaluación' },
                     graph: {
                         type: 'object',
                         properties: {

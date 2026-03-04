@@ -9,6 +9,7 @@ class RuleImplementation {
         ruleType: string;
         enabled?: boolean;
         priority?: number;
+        weight?: number;
         createdBy?: string;
     }) {
         return await Rule.create(data);
@@ -59,6 +60,7 @@ class RuleImplementation {
         ruleType: string;
         enabled: boolean;
         priority: number;
+        weight: number;
         updatedBy: string;
     }>) {
         return await Rule.update(data, { where: { id, active: true } });

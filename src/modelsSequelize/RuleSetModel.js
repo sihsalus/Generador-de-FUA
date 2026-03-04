@@ -19,9 +19,14 @@ const RuleSetModel = sequelize.define(
             allowNull: false,
         },
         evaluationMode: {
-            type: DataTypes.ENUM('ALL', 'FIRST_MATCH'),
+            type: DataTypes.ENUM('ALL', 'FIRST_MATCH', 'FIRST_VALID', 'ANY', 'MAJORITY', 'WEIGHTED'),
             allowNull: false,
             defaultValue: 'ALL',
+        },
+        threshold: {
+            type: DataTypes.FLOAT,
+            allowNull: true,
+            defaultValue: 0.5,
         },
     },
     { sequelize, timestamps: true },

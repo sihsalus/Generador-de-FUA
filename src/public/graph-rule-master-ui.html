@@ -495,6 +495,40 @@
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
   ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+  /* ─── VAR IMPORT PREVIEW ─── */
+  .var-import-row {
+    display: flex; align-items: center; gap: 8px;
+    padding: 6px 8px; border-radius: var(--radius);
+    background: var(--bg-tertiary); margin-bottom: 6px;
+    border: 1px solid var(--border);
+  }
+  .var-import-row.is-existing { opacity: 0.5; }
+  .var-import-row .vi-name {
+    flex: 1; font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    color: var(--text-primary);
+  }
+  .var-import-row .vi-badge {
+    font-size: 10px; padding: 2px 6px; border-radius: 8px; font-weight: 600;
+    background: rgba(52,211,153,0.12); color: var(--accent-green); white-space: nowrap;
+  }
+  .var-import-row .vi-badge.existing {
+    background: rgba(95,101,119,0.2); color: var(--text-muted);
+  }
+  .var-import-row select {
+    width: 90px; font-size: 11px; padding: 3px 6px;
+    background: var(--bg-primary); border: 1px solid var(--border);
+    color: var(--text-primary); border-radius: var(--radius);
+  }
+  .var-import-row .vi-remove {
+    cursor: pointer; color: var(--text-muted); font-size: 15px; line-height: 1;
+    padding: 0 2px; background: none; border: none;
+  }
+  .var-import-row .vi-remove:hover { color: var(--accent-red); }
+  .var-import-section-title {
+    font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.6px;
+    color: var(--text-muted); margin: 12px 0 6px;
+  }
 </style>
 </head>
 <body>
@@ -537,7 +571,7 @@
     </div>
 
     <!-- Rules -->
-    <div class="sidebar-section" style="flex:1;overflow:hidden;min-height:80px">
+    <div class="sidebar-section" style="flex:0 0 220px;overflow:hidden;min-height:80px">
       <div class="sidebar-header">
         Reglas
         <button class="btn small" id="btnNewRule" onclick="showRuleModal()" style="display:none">+ Nueva</button>
@@ -548,7 +582,7 @@
     </div>
 
     <!-- Variables -->
-    <div class="sidebar-section" style="flex-shrink:0" id="varSection">
+    <div class="sidebar-section" style="flex:1;overflow:hidden;min-height:120px" id="varSection">
       <div class="sidebar-header" style="cursor:pointer" onclick="toggleVarSection()">
         Variables
         <div style="display:flex;gap:6px;align-items:center">
@@ -570,7 +604,7 @@
             <button class="btn small" onclick="hideVarForm()">✕</button>
           </div>
         </div>
-        <div class="sidebar-list" id="varList" style="max-height:140px">
+        <div class="sidebar-list" id="varList">
           <div class="sidebar-empty" id="varEmpty">Sin variables</div>
         </div>
       </div>
@@ -687,10 +721,18 @@
       </div>
       <div class="form-group">
         <label>Modo de Evaluación</label>
-        <select id="rs_evalMode">
-          <option value="ALL">ALL — Evaluar todas las reglas</option>
-          <option value="FIRST_MATCH">FIRST_MATCH — Detenerse en la primera que aplica</option>
+        <select id="rs_evalMode" onchange="toggleThresholdField()">
+          <option value="ALL">ALL — Todas deben pasar</option>
+          <option value="FIRST_MATCH">FIRST_MATCH — Para en la primera que pasa</option>
+          <option value="FIRST_VALID">FIRST_VALID — Alias de FIRST_MATCH</option>
+          <option value="ANY">ANY — Al menos una debe pasar</option>
+          <option value="MAJORITY">MAJORITY — Más de la mitad deben pasar</option>
+          <option value="WEIGHTED">WEIGHTED — Suma ponderada ≥ umbral</option>
         </select>
+      </div>
+      <div class="form-group" id="thresholdGroup" style="display:none">
+        <label>Umbral (threshold) <small style="color:var(--text-muted)">0.0 – 1.0, solo para WEIGHTED</small></label>
+        <input id="rs_threshold" type="number" step="0.01" min="0" max="1" value="0.5" placeholder="0.5">
       </div>
     </div>
     <div class="modal-footer">
@@ -716,6 +758,10 @@
         <div class="form-group">
           <label>Prioridad</label>
           <input id="r_priority" type="number" value="1" min="1">
+        </div>
+        <div class="form-group">
+          <label>Peso (Weight)</label>
+          <input id="r_weight" type="number" value="1" min="0" step="0.1" title="Solo relevante en modo WEIGHTED">
         </div>
       </div>
       <div class="form-group">
@@ -760,6 +806,27 @@
     <div class="modal-footer">
       <button class="btn" onclick="closeModal('importModal')">Cancelar</button>
       <button class="btn primary" id="btnDoImport" onclick="doImport()" disabled>Importar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── MODAL: VARIABLES PRE-IMPORT ─── -->
+<div class="modal-overlay hidden" id="varImportModal">
+  <div class="modal" style="width:520px">
+    <div class="modal-header">
+      <h2>Variables detectadas en el JSON</h2>
+      <button class="btn small icon-only" onclick="closeModal('varImportModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px">
+        Se extrajeron los siguientes campos del JSON importado. Revisa los tipos y desmarca los que no quieras guardar como variables. Las variables ya existentes se muestran atenuadas y no se duplicarán.
+      </p>
+      <div id="varImportList"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="cancelVarImport()">Cancelar importación</button>
+      <button class="btn" onclick="skipVarImport()">Importar sin guardar variables</button>
+      <button class="btn primary" id="btnConfirmVarImport" onclick="confirmVarImport()">Guardar variables e Importar</button>
     </div>
   </div>
 </div>
@@ -815,6 +882,8 @@ const state = {
   nodeCounters: { CONDITION: 0, GATE: 0, PARAMETER: 0 },
   // dirty flag
   isDirty: false,
+  // RuleSet edit mode
+  ruleSetEditingId: null,
 };
 
 // ════════════════════════════════════════════
@@ -936,6 +1005,14 @@ function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
 async function loadRuleSets() {
   try {
     state.ruleSets = await api('GET', '/RuleSet/');
+    // Purge localStorage vars for RuleSets that no longer exist in the DB
+    const validIds = new Set(state.ruleSets.map(rs => String(rs.id)));
+    for (const key of Object.keys(localStorage)) {
+      if (key.startsWith('vars_rs_')) {
+        const id = key.slice('vars_rs_'.length);
+        if (!validIds.has(id)) localStorage.removeItem(key);
+      }
+    }
     renderRuleSetList();
   } catch (e) {
     toast('Error cargando RuleSets: ' + e.message, 'error');
@@ -953,30 +1030,62 @@ function renderRuleSetList() {
          onclick="selectRuleSet(${rs.id})">
       <div class="dot" style="background:var(--accent-blue)"></div>
       <span style="flex:1;overflow:hidden;text-overflow:ellipsis">${rs.name}</span>
-      <span class="badge blue">${rs.documentType}</span>
+      <span class="badge blue" title="${rs.evaluationMode || 'ALL'}">${rs.documentType}</span>
+      <button class="btn small icon-only" style="padding:2px 5px;font-size:11px;margin-left:2px" onclick="event.stopPropagation();editRuleSet(${rs.id})" title="Editar RuleSet">✏️</button>
     </div>
   `).join('');
 }
 
+function toggleThresholdField() {
+  const mode = document.getElementById('rs_evalMode').value;
+  const group = document.getElementById('thresholdGroup');
+  if (group) group.style.display = mode === 'WEIGHTED' ? '' : 'none';
+}
+
 function showRuleSetModal() {
+  state.ruleSetEditingId = null;
   document.getElementById('rs_name').value = '';
   document.getElementById('rs_docType').value = '';
   document.getElementById('rs_desc').value = '';
   document.getElementById('rs_evalMode').value = 'ALL';
+  document.getElementById('rs_threshold').value = '0.5';
   document.getElementById('ruleSetModalTitle').textContent = 'Nuevo RuleSet';
+  toggleThresholdField();
+  showModal('ruleSetModal');
+}
+
+function editRuleSet(id) {
+  const rs = state.ruleSets.find(r => r.id === id);
+  if (!rs) return;
+  state.ruleSetEditingId = id;
+  document.getElementById('rs_name').value = rs.name || '';
+  document.getElementById('rs_docType').value = rs.documentType || '';
+  document.getElementById('rs_desc').value = rs.description || '';
+  document.getElementById('rs_evalMode').value = rs.evaluationMode || 'ALL';
+  document.getElementById('rs_threshold').value = rs.threshold ?? 0.5;
+  document.getElementById('ruleSetModalTitle').textContent = 'Editar RuleSet';
+  toggleThresholdField();
   showModal('ruleSetModal');
 }
 
 async function saveRuleSet() {
+  const payload = {
+    name: document.getElementById('rs_name').value,
+    documentType: document.getElementById('rs_docType').value,
+    description: document.getElementById('rs_desc').value || undefined,
+    evaluationMode: document.getElementById('rs_evalMode').value,
+    threshold: parseFloat(document.getElementById('rs_threshold').value) || 0.5,
+  };
   try {
-    await api('POST', '/RuleSet/', {
-      name: document.getElementById('rs_name').value,
-      documentType: document.getElementById('rs_docType').value,
-      description: document.getElementById('rs_desc').value || undefined,
-      evaluationMode: document.getElementById('rs_evalMode').value,
-    });
-    closeModal('ruleSetModal');
-    toast('RuleSet creado', 'success');
+    if (state.ruleSetEditingId !== null) {
+      await api('PUT', `/RuleSet/${state.ruleSetEditingId}`, payload);
+      closeModal('ruleSetModal');
+      toast('RuleSet actualizado', 'success');
+    } else {
+      await api('POST', '/RuleSet/', payload);
+      closeModal('ruleSetModal');
+      toast('RuleSet creado', 'success');
+    }
     await loadRuleSets();
   } catch (e) {
     toast('Error: ' + e.message, 'error');
@@ -1018,15 +1127,26 @@ function renderRuleList() {
          onclick="selectRule('${r.uuid}')">
       <span class="badge ${r.enabled ? 'green' : 'orange'}">#${r.ruleNumber}</span>
       <span style="flex:1;overflow:hidden;text-overflow:ellipsis">${r.name}</span>
+      ${r.weight && r.weight !== 1 ? `<span class="badge blue" title="Peso">${r.weight}w</span>` : ''}
     </div>
   `).join('');
 }
 
 function showRuleModal() {
-  document.getElementById('r_number').value = '';
+  // Auto-calculate next rule number
+  let nextNum = 1;
+  if (state.rules.length > 0) {
+    const maxNum = state.rules.reduce((max, r) => {
+      const n = parseInt(r.ruleNumber, 10);
+      return isNaN(n) ? max : Math.max(max, n);
+    }, 0);
+    nextNum = maxNum + 1;
+  }
+  document.getElementById('r_number').value = String(nextNum);
   document.getElementById('r_name').value = '';
   document.getElementById('r_type').value = 'VALIDATION';
-  document.getElementById('r_priority').value = '1';
+  document.getElementById('r_priority').value = String(nextNum);
+  document.getElementById('r_weight').value = '1';
   document.getElementById('r_desc').value = '';
   showModal('ruleModal');
 }
@@ -1039,6 +1159,7 @@ async function saveRule() {
       name: document.getElementById('r_name').value,
       ruleType: document.getElementById('r_type').value,
       priority: parseInt(document.getElementById('r_priority').value) || 1,
+      weight: parseFloat(document.getElementById('r_weight').value) || 1.0,
       description: document.getElementById('r_desc').value || undefined,
       graph: {
         nodes: [{
@@ -2099,15 +2220,169 @@ function showImportModal() {
   showModal('importModal');
 }
 
+// ── VAR IMPORT STATE ──
+const varImportState = {
+  pendingJson: null,
+  detectedVars: [],   // { name, type, remove: false }
+};
+
 async function doImport() {
   if (!state.currentRuleSet) return;
   const file = document.getElementById('import_file').files[0];
   if (!file) return;
+  let json;
   try {
     const text = await file.text();
-    const json = JSON.parse(text);
+    json = JSON.parse(text);
+  } catch (e) {
+    toast('Error leyendo archivo: ' + e.message, 'error');
+    return;
+  }
+
+  // Extract fields from the JSON rules
+  const rules = Array.isArray(json) ? json : (json.rules || []);
+  const fieldMap = new Map(); // name → inferred type
+
+  rules.forEach(rule => {
+    const nodes = rule.graph?.nodes || [];
+    nodes.forEach(node => {
+      if (node.nodeType === 'CONDITION' && node.config?.field) {
+        const f = node.config.field;
+        if (!fieldMap.has(f)) {
+          // Infer type from data_type if available
+          const dt = node.config.data_type || 'STRING';
+          fieldMap.set(f, dt);
+        }
+      }
+      if (node.nodeType === 'PARAMETER' && node.config?.target_field) {
+        const f = node.config.target_field;
+        if (!fieldMap.has(f)) {
+          const pt = node.config.param_type || 'STRING';
+          fieldMap.set(f, pt);
+        }
+      }
+    });
+  });
+
+  if (fieldMap.size === 0) {
+    // No fields detected — proceed directly
+    varImportState.pendingJson = json;
+    await executeImport();
+    return;
+  }
+
+  const existing = loadVars();
+  const existingNames = new Set(existing.map(v => v.name));
+
+  varImportState.pendingJson = json;
+  varImportState.detectedVars = [];
+  fieldMap.forEach((type, name) => {
+    varImportState.detectedVars.push({
+      name,
+      type,
+      isExisting: existingNames.has(name),
+      remove: existingNames.has(name), // pre-mark existing ones as "skip"
+    });
+  });
+
+  renderVarImportModal();
+  closeModal('importModal');
+  showModal('varImportModal');
+}
+
+function renderVarImportModal() {
+  const list = document.getElementById('varImportList');
+  const newVars = varImportState.detectedVars.filter(v => !v.isExisting);
+  const existingVars = varImportState.detectedVars.filter(v => v.isExisting);
+
+  let html = '';
+
+  if (newVars.length) {
+    html += `<div class="var-import-section-title">Nuevas variables (${newVars.length})</div>`;
+    newVars.forEach((v, idx) => {
+      const globalIdx = varImportState.detectedVars.indexOf(v);
+      html += `
+        <div class="var-import-row" id="virow_${globalIdx}">
+          <span class="vi-name">${v.name}</span>
+          <select onchange="varImportSetType(${globalIdx}, this.value)">
+            ${['STRING','NUMBER','ENUM','DATE','BOOLEAN','RANGE','ARRAY'].map(t =>
+              `<option ${v.type === t ? 'selected' : ''}>${t}</option>`
+            ).join('')}
+          </select>
+          <span class="vi-badge">nueva</span>
+          <button class="vi-remove" title="No importar esta variable" onclick="varImportToggleRemove(${globalIdx})">×</button>
+        </div>
+      `;
+    });
+  }
+
+  if (existingVars.length) {
+    html += `<div class="var-import-section-title">Ya existen (se omitirán)</div>`;
+    existingVars.forEach(v => {
+      html += `
+        <div class="var-import-row is-existing">
+          <span class="vi-name">${v.name}</span>
+          <span class="vi-badge existing">existente</span>
+        </div>
+      `;
+    });
+  }
+
+  if (!html) {
+    html = '<div style="color:var(--text-muted);font-size:13px">No se detectaron campos en las reglas del JSON.</div>';
+  }
+
+  list.innerHTML = html;
+}
+
+function varImportSetType(idx, type) {
+  varImportState.detectedVars[idx].type = type;
+}
+
+function varImportToggleRemove(idx) {
+  const v = varImportState.detectedVars[idx];
+  v.remove = !v.remove;
+  const row = document.getElementById(`virow_${idx}`);
+  if (row) {
+    row.style.opacity = v.remove ? '0.4' : '';
+    row.style.textDecoration = v.remove ? 'line-through' : '';
+  }
+}
+
+async function confirmVarImport() {
+  // Save selected new vars
+  const toAdd = varImportState.detectedVars.filter(v => !v.isExisting && !v.remove);
+  if (toAdd.length > 0) {
+    const vars = loadVars();
+    toAdd.forEach(v => {
+      if (!vars.find(ev => ev.name === v.name)) {
+        vars.push({ name: v.name, type: v.type });
+      }
+    });
+    saveVars(vars);
+    renderVarList();
+  }
+  closeModal('varImportModal');
+  await executeImport();
+}
+
+async function skipVarImport() {
+  closeModal('varImportModal');
+  await executeImport();
+}
+
+function cancelVarImport() {
+  varImportState.pendingJson = null;
+  varImportState.detectedVars = [];
+  closeModal('varImportModal');
+}
+
+async function executeImport() {
+  if (!state.currentRuleSet || !varImportState.pendingJson) return;
+  const json = varImportState.pendingJson;
+  varImportState.pendingJson = null;
+  try {
     const result = await api('POST', `/GraphRule/ruleset/${state.currentRuleSet.id}/import`, json);
-    closeModal('importModal');
     toast(`Importadas: ${result.successful}/${result.total} reglas`, result.failed > 0 ? 'warning' : 'success');
     await loadRules();
   } catch (e) {

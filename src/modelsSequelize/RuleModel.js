@@ -33,6 +33,12 @@ const RuleModel = sequelize.define(
             defaultValue: 1,
             validate: { min: 1 },
         },
+        weight: {
+            type: DataTypes.FLOAT,
+            allowNull: false,
+            defaultValue: 1.0,
+            validate: { min: 0 },
+        },
     },
     { sequelize, timestamps: true },
 );

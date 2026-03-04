@@ -6,6 +6,7 @@ class RuleSetImplementation {
         description?: string;
         documentType: string;
         evaluationMode: string;
+        threshold?: number;
         createdBy?: string;
     }) {
         return await RuleSet.create(data);
@@ -31,6 +32,7 @@ class RuleSetImplementation {
         description: string;
         documentType: string;
         evaluationMode: string;
+        threshold: number;
         updatedBy: string;
     }>) {
         return await RuleSet.update(data, { where: { id, active: true } });
