@@ -31,7 +31,7 @@ const edgeSchema = z.object({
 });
 
 const createFullRuleSchema = z.object({
-    ruleNumber: z.string().min(1).regex(/^\d+$/, "ruleNumber debe ser numérico"),
+    ruleNumber: z.string().min(1).regex(/^[A-Za-z0-9]+$/, "ruleNumber debe ser alfanumérico"),
     name: z.string().min(1).max(255),
     description: z.string().max(1000).optional(),
     ruleType: z.enum(['CONSISTENCY', 'VALIDATION', 'FORMAT', 'BUSINESS']),
@@ -46,7 +46,7 @@ const createFullRuleSchema = z.object({
 
 const importJsonSchema = z.object({
     rules: z.array(z.object({
-        ruleNumber: z.string().min(1).regex(/^\d+$/),
+        ruleNumber: z.string().min(1).regex(/^[A-Za-z0-9]+$/),
         name: z.string().min(1).max(255),
         description: z.string().max(1000).optional(),
         ruleType: z.enum(['CONSISTENCY', 'VALIDATION', 'FORMAT', 'BUSINESS']),
@@ -413,7 +413,7 @@ class GraphRuleService {
         const parsed = importJsonSchema.safeParse(jsonData);
         if (!parsed.success) {
             const err: any = new Error("JSON de importación inválido");
-            err.details = parsed.error.flatten();
+            err.details = parsed.error.errors.map(e => ({ path: e.path.join('.'), message: e.message }));
             throw err;
         }
 

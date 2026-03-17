@@ -1,9 +1,8 @@
 import { Request, Response} from 'express';
-import FUASectionService from '../services/FUASectionService';
+
 import FUAFromVisitService from '../services/FUAFromVisitService';
 
-import { getBrowser } from "../utils/utils";
-import FUAFromVisitRouter from '../routes/FUAFromVisitRouter';
+
 
 
 

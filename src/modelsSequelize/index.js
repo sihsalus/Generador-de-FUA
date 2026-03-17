@@ -6,14 +6,6 @@ import { Sequelize } from 'sequelize';
 import Visit from './VisitModel';
 import User from './User';
 
-import FUAFormat from './FUAFormatModel';
-import FUAPage from './FUAPageModel';
-import FUASection from './FUASectionModel'; 
-import FUAField from './FUAFieldModel';
-import FUAFieldColumn from './FUAFieldColumn';
-import FUAFieldRow from './FUAFieldRow';
-import FUAFieldCell from './FUAFieldCell';
-
 import FUAFromVisitModel from './FUAFromVisitModel';
 import FUAFromVisitPDFModel from './FUAFromVisitPDFModel';
 
@@ -56,7 +48,7 @@ Rule.hasMany(RuleEdge, {
 RuleEdge.belongsTo(Rule);
 
 // Foreign keys
-
+/*
 FUAFormat.hasMany(FUAPage, {
     foreignKey: {
         name: 'FUAFormatId',
@@ -114,6 +106,7 @@ FUAFieldCell.hasMany(FUAField, {
     }
 });
 FUAField.belongsTo(FUAFieldCell);
+*/
 
 // FK of FUAFromVisit with FUAFormatFromSchema
 FUAFormatFromSchemaModel.hasMany( FUAFromVisitModel,{
@@ -158,13 +151,6 @@ export {
     RuleEdge,    
     User,
     Visit,
-    FUAFormat,
-    FUAPage,
-    FUASection,
-    FUAField,
-    FUAFieldColumn,
-    FUAFieldRow,
-    FUAFieldCell,
     FUAFromVisitModel,
     FUAFromVisitPDFModel,
     BaseEntityVersionModel,

@@ -4,7 +4,7 @@ import { CREATED_BY_PLACEHOLDER } from "../utils/constants";
 
 // ── Zod Schemas ──
 
-const evaluationModeEnum = z.enum(['ALL', 'FIRST_MATCH', 'FIRST_VALID', 'ANY', 'MAJORITY', 'WEIGHTED']);
+const evaluationModeEnum = z.enum(['ALL', 'FIRST_VALID', 'ANY', 'MAJORITY', 'WEIGHTED']);
 
 const createRuleSetSchema = z.object({
     name: z.string().min(1, "name es requerido").max(255),

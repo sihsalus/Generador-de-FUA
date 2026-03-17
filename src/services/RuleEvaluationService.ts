@@ -133,8 +133,8 @@ class RuleEvaluationService {
                     passedRules++;
                     if (mode === 'WEIGHTED') sumWeightPassed += ruleWeight;
 
-                    // FIRST_MATCH / FIRST_VALID: para en la primera que PASA
-                    if (mode === 'FIRST_MATCH' || mode === 'FIRST_VALID') {
+                    // FIRST_VALID: para en la primera que PASA
+                    if (mode === 'FIRST_VALID') {
                         break;
                     }
                 } else {
@@ -173,7 +173,6 @@ class RuleEvaluationService {
             case 'ALL':
                 isValid = failedRules === 0 && passedRules > 0;
                 break;
-            case 'FIRST_MATCH':
             case 'FIRST_VALID':
             case 'ANY':
                 isValid = passedRules > 0;

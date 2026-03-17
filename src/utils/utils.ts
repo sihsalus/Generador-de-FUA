@@ -1,21 +1,12 @@
-import { FUAField, FUASection } from "../modelsSequelize";
-import FUAFieldColumnService from "../services/FUAFieldColumnService";
-import FUAFieldService from "../services/FUAFieldService";
-import FUAFormatService from "../services/FUAFormatService";
-import FUAPageService from "../services/FUAPageService";
-import FUASectionService from "../services/FUASectionService";
-
 const crypto = require('crypto');
 import * as fs from 'fs';
 import * as path from 'path';
 import { parse } from 'jsonc-parser';
-import FUARenderingUtils from "./FUARendering";
 import FUAFormat from "../modelsTypeScript/FUAFormat";
 import puppeteer from "puppeteer";
 const archiver = require('archiver');
 import { PassThrough } from 'stream';
 import { importPayloadToMapping } from "./mappingUtils";
-import { map } from "zod";
 
 
 
@@ -32,53 +23,6 @@ export function isValidUUIDv4(uuid: string): boolean {
 
 
 
-export async function fillSection2(auxUser: string, auxVersion: string, sectionUUID: string){
-  // Fecha de atencion table
-  const table1 = await FUAFieldService.create({
-    label: 'FECHA DE ATENCION',
-    showLabel: true,
-    labelOrientation: 'xd',
-    labelPosition: 'xd',
-    valueType: 'xd',
-    orientation: 'xd',
-    codeName: 'date',
-    version: '0.1',
-    bodyHeight: 9.9,
-    bodyWidth: 49.8,
-    top: 2.7,
-    left: 0.0,
-    labelSize: 3.0,
-    FUASectionId: sectionUUID,
-    createdBy: auxUser
-  });  
-
-  //Fill with a field with Dia, Mes, Año
-  /* const DiaColumn = await FUAFieldColumnService.create({
-    label: "DIA",
-    showLabel
-  }); */
-
-
-  // Fecha de atencion table
-  const table2 = await FUAFieldService.create({
-    label: 'FECHA DE ATENCION',
-    showLabel: true,
-    labelOrientation: 'xd',
-    labelPosition: 'xd',
-    valueType: 'xd',
-    orientation: 'xd',
-    codeName: 'date',
-    version: '0.1',
-    bodyHeight: 9.9,
-    bodyWidth: 49.8,
-    top: 2.7,
-    left: 0.0,
-    FUASectionId: sectionUUID,
-    labelSize: 3.0,
-    createdBy: auxUser
-  });  
-
-};
 
 export async function createDemoFormat(printMode : boolean){
   try{

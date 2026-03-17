@@ -545,7 +545,7 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
       Importar JSON
     </button>
-    <button class="btn small" onclick="exportRuleSet()">
+    <button class="btn small" onclick="showExportModal()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
       Exportar
     </button>
@@ -571,7 +571,7 @@
     </div>
 
     <!-- Rules -->
-    <div class="sidebar-section" style="flex:0 0 220px;overflow:hidden;min-height:80px">
+    <div class="sidebar-section" style="flex:0 0 305px;overflow:hidden;min-height:80px">
       <div class="sidebar-header">
         Reglas
         <button class="btn small" id="btnNewRule" onclick="showRuleModal()" style="display:none">+ Nueva</button>
@@ -586,6 +586,7 @@
       <div class="sidebar-header" style="cursor:pointer" onclick="toggleVarSection()">
         Variables
         <div style="display:flex;gap:6px;align-items:center">
+          <button class="btn small" id="btnImportVars" onclick="event.stopPropagation();showVarFileImportModal()" style="display:none" title="Importar variables desde archivo">↓ Importar</button>
           <button class="btn small" id="btnNewVar" onclick="event.stopPropagation();showVarForm()" style="display:none">+ Nueva</button>
           <span id="varChevron" style="font-size:10px;color:var(--text-muted)">▲</span>
         </div>
@@ -723,8 +724,7 @@
         <label>Modo de Evaluación</label>
         <select id="rs_evalMode" onchange="toggleThresholdField()">
           <option value="ALL">ALL — Todas deben pasar</option>
-          <option value="FIRST_MATCH">FIRST_MATCH — Para en la primera que pasa</option>
-          <option value="FIRST_VALID">FIRST_VALID — Alias de FIRST_MATCH</option>
+          <option value="FIRST_VALID">FIRST_VALID — Para en la primera que pasa</option>
           <option value="ANY">ANY — Al menos una debe pasar</option>
           <option value="MAJORITY">MAJORITY — Más de la mitad deben pasar</option>
           <option value="WEIGHTED">WEIGHTED — Suma ponderada ≥ umbral</option>
@@ -810,6 +810,77 @@
   </div>
 </div>
 
+<!-- ─── MODAL: EXPORT ─── -->
+<div class="modal-overlay hidden" id="exportModal">
+  <div class="modal" style="width:440px">
+    <div class="modal-header">
+      <h2>Exportar</h2>
+      <button class="btn small icon-only" onclick="closeModal('exportModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>¿Qué exportar?</label>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:6px">
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:400">
+            <input type="radio" name="exp_scope" value="current" id="exp_scope_current" checked>
+            RuleSet actual (<span id="exp_current_name" style="color:var(--accent-blue);font-style:italic">ninguno</span>)
+          </label>
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:400">
+            <input type="radio" name="exp_scope" value="all" id="exp_scope_all">
+            Todos los RuleSets
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>¿Incluir variables?</label>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:6px">
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:400">
+            <input type="radio" name="exp_vars" value="yes" id="exp_vars_yes" checked>
+            Sí — incluir variables del/los RuleSet(s) en el archivo
+          </label>
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:400">
+            <input type="radio" name="exp_vars" value="no" id="exp_vars_no">
+            No — solo reglas
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('exportModal')">Cancelar</button>
+      <button class="btn primary" onclick="doExport()">Exportar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── MODAL: IMPORT VARIABLES ─── -->
+<div class="modal-overlay hidden" id="varFileImportModal">
+  <div class="modal" style="width:480px">
+    <div class="modal-header">
+      <h2>Importar Variables</h2>
+      <button class="btn small icon-only" onclick="closeModal('varFileImportModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>RuleSet destino</label>
+        <select id="varImport_rsTarget" style="margin-top:6px;width:100%" onchange="if(varFileImportData) renderVarImportPreview(varFileImportData)"></select>
+      </div>
+      <div class="form-group">
+        <label>Archivo <code>.json</code> de variables</label>
+        <input type="file" id="varImport_file" accept=".json,application/json" style="margin-top:8px;width:100%" onchange="onVarImportFileChange()">
+        <span id="varImport_filename" style="display:block;margin-top:6px;font-size:12px;color:var(--text-muted)"></span>
+      </div>
+      <div id="varImport_preview" style="display:none;margin-top:8px">
+        <div class="var-import-section-title" style="margin-bottom:6px">Vista previa</div>
+        <div id="varImport_previewList" style="max-height:200px;overflow-y:auto"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('varFileImportModal')">Cancelar</button>
+      <button class="btn primary" id="btnDoVarImport" onclick="doVarFileImport()" disabled>Importar variables</button>
+    </div>
+  </div>
+</div>
+
 <!-- ─── MODAL: VARIABLES PRE-IMPORT ─── -->
 <div class="modal-overlay hidden" id="varImportModal">
   <div class="modal" style="width:520px">
@@ -823,10 +894,12 @@
       </p>
       <div id="varImportList"></div>
     </div>
-    <div class="modal-footer">
-      <button class="btn" onclick="cancelVarImport()">Cancelar importación</button>
-      <button class="btn" onclick="skipVarImport()">Importar sin guardar variables</button>
-      <button class="btn primary" id="btnConfirmVarImport" onclick="confirmVarImport()">Guardar variables e Importar</button>
+    <div class="modal-footer" style="display:flex;flex-direction:row;align-items:center;justify-content:space-between;gap:8px">
+      <button class="btn" style="color:var(--accent-red);border-color:var(--accent-red)" onclick="cancelVarImport()">✕ Cancelar</button>
+      <div style="display:flex;gap:8px">
+        <button class="btn" onclick="skipVarImport()">Sin variables</button>
+        <button class="btn primary" id="btnConfirmVarImport" onclick="confirmVarImport()">Guardar e importar</button>
+      </div>
     </div>
   </div>
 </div>
@@ -1098,6 +1171,7 @@ async function selectRuleSet(id) {
   clearGraph();
   renderRuleSetList();
   document.getElementById('btnNewRule').style.display = '';
+  document.getElementById('btnImportVars').style.display = '';
   updateBreadcrumb();
   renderVarList();
   await loadRules();
@@ -2386,29 +2460,157 @@ async function executeImport() {
     toast(`Importadas: ${result.successful}/${result.total} reglas`, result.failed > 0 ? 'warning' : 'success');
     await loadRules();
   } catch (e) {
-    toast('Error importando: ' + e.message, 'error');
+    const detail = e.details ? JSON.stringify(e.details).slice(0, 300) : '';
+    console.error('Import error details:', e.details);
+    toast('Error importando: ' + e.message + (detail ? ' | ' + detail : ''), 'error');
   }
 }
 
-async function exportRuleSet() {
-  if (!state.currentRuleSet) {
-    toast('Selecciona un RuleSet primero', 'warning');
-    return;
+// ════════════════════════════════════════════
+// EXPORT
+// ════════════════════════════════════════════
+function showExportModal() {
+  const nameEl = document.getElementById('exp_current_name');
+  if (state.currentRuleSet) {
+    nameEl.textContent = state.currentRuleSet.name;
+    document.getElementById('exp_scope_current').disabled = false;
+    document.getElementById('exp_scope_current').checked = true;
+  } else {
+    nameEl.textContent = 'ninguno seleccionado';
+    document.getElementById('exp_scope_current').disabled = true;
+    document.getElementById('exp_scope_all').checked = true;
   }
+  showModal('exportModal');
+}
+
+async function doExport() {
+  const scope = document.querySelector('input[name="exp_scope"]:checked').value;
+  const includeVars = document.querySelector('input[name="exp_vars"]:checked').value === 'yes';
+  closeModal('exportModal');
   try {
-    const result = await api('GET', `/GraphRule/ruleset/${state.currentRuleSet.id}/export`);
-    const blob = new Blob([JSON.stringify(result, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${state.currentRuleSet.name.replace(/\s+/g, '_')}_export.json`;
-    a.click();
-    URL.revokeObjectURL(url);
+    if (scope === 'current') {
+      const rs = state.currentRuleSet;
+      const rules = await api('GET', `/GraphRule/ruleset/${rs.id}/export`);
+      const payload = { ruleset: rs, rules };
+      if (includeVars) payload.variables = loadVarsForId(rs.id);
+      triggerDownload(payload, `${rs.name.replace(/\s+/g, '_')}_export.json`);
+    } else {
+      // All ruleSets
+      const all = [];
+      for (const rs of state.ruleSets) {
+        const rules = await api('GET', `/GraphRule/ruleset/${rs.id}/export`);
+        const entry = { ruleset: rs, rules };
+        if (includeVars) entry.variables = loadVarsForId(rs.id);
+        all.push(entry);
+      }
+      triggerDownload(all, `all_rulesets_export.json`);
+    }
     toast('Exportado correctamente', 'success');
   } catch (e) {
     toast('Error exportando: ' + e.message, 'error');
   }
 }
+
+function loadVarsForId(id) {
+  try { return JSON.parse(localStorage.getItem(`vars_rs_${id}`) || '[]'); } catch { return []; }
+}
+
+function triggerDownload(data, filename) {
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ════════════════════════════════════════════
+// IMPORT VARIABLES FROM FILE
+// ════════════════════════════════════════════
+let varFileImportData = null;
+
+function showVarFileImportModal() {
+  // Populate RuleSet combobox
+  const sel = document.getElementById('varImport_rsTarget');
+  sel.innerHTML = state.ruleSets.map(rs =>
+    `<option value="${rs.id}" ${state.currentRuleSet?.id === rs.id ? 'selected' : ''}>${rs.name} (${rs.documentType})</option>`
+  ).join('');
+  // Reset file input
+  document.getElementById('varImport_file').value = '';
+  document.getElementById('varImport_filename').textContent = '';
+  document.getElementById('varImport_preview').style.display = 'none';
+  document.getElementById('btnDoVarImport').disabled = true;
+  varFileImportData = null;
+  showModal('varFileImportModal');
+}
+
+function onVarImportFileChange() {
+  const file = document.getElementById('varImport_file').files[0];
+  document.getElementById('varImport_filename').textContent = file ? `Archivo: ${file.name}` : '';
+  document.getElementById('varImport_preview').style.display = 'none';
+  document.getElementById('btnDoVarImport').disabled = true;
+  varFileImportData = null;
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const parsed = JSON.parse(e.target.result);
+      // Accept: array of {name,type} OR export wrapper with .variables
+      let vars = [];
+      if (Array.isArray(parsed)) {
+        vars = parsed;
+      } else if (parsed.variables && Array.isArray(parsed.variables)) {
+        vars = parsed.variables;
+      } else {
+        toast('Formato no reconocido. Debe ser un array de variables o un export con .variables', 'error');
+        return;
+      }
+      // Validate entries
+      vars = vars.filter(v => v && typeof v.name === 'string' && v.name.trim());
+      if (vars.length === 0) { toast('No se encontraron variables válidas en el archivo', 'warning'); return; }
+      varFileImportData = vars;
+      renderVarImportPreview(vars);
+      document.getElementById('varImport_preview').style.display = '';
+      document.getElementById('btnDoVarImport').disabled = false;
+    } catch {
+      toast('Error leyendo el archivo JSON', 'error');
+    }
+  };
+  reader.readAsText(file);
+}
+
+function renderVarImportPreview(vars) {
+  const targetId = parseInt(document.getElementById('varImport_rsTarget').value);
+  const existing = loadVarsForId(targetId);
+  const existingNames = new Set(existing.map(v => v.name));
+  const list = document.getElementById('varImport_previewList');
+  list.innerHTML = vars.map(v => {
+    const isNew = !existingNames.has(v.name);
+    return `<div class="var-import-row ${isNew ? '' : 'is-existing'}" style="margin-bottom:4px">
+      <span class="vi-name">${v.name}</span>
+      <span class="vi-badge ${isNew ? '' : 'existing'}">${isNew ? 'NUEVA' : 'YA EXISTE'}</span>
+      <span style="font-size:11px;color:var(--text-muted)">${v.type || 'STRING'}</span>
+    </div>`;
+  }).join('');
+}
+
+function doVarFileImport() {
+  if (!varFileImportData) return;
+  const targetId = parseInt(document.getElementById('varImport_rsTarget').value);
+  const existing = loadVarsForId(targetId);
+  const existingNames = new Set(existing.map(v => v.name));
+  const toAdd = varFileImportData.filter(v => !existingNames.has(v.name));
+  const merged = [...existing, ...toAdd.map(v => ({ name: v.name.trim(), type: (v.type || 'STRING').toUpperCase() }))];
+  localStorage.setItem(`vars_rs_${targetId}`, JSON.stringify(merged));
+  closeModal('varFileImportModal');
+  // Refresh var list if target is current RuleSet
+  if (state.currentRuleSet?.id === targetId) renderVarList();
+  toast(`${toAdd.length} variable(s) importada(s)${toAdd.length < varFileImportData.length ? `, ${varFileImportData.length - toAdd.length} omitida(s) por duplicado` : ''}`, 'success');
+}
+
+// Legacy — kept for compatibility with old export button wiring
+async function exportRuleSet() { showExportModal(); }
 
 // ════════════════════════════════════════════
 // KEYBOARD SHORTCUTS
