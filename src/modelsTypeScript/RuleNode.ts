@@ -36,6 +36,21 @@ export interface ParameterConfig {
     param_type: 'STRING' | 'NUMBER' | 'ENUM' | 'DATE' | 'RANGE' | 'ARRAY' | 'BOOLEAN';
     required?: boolean;
     constraints: Record<string, any>;
+    /**
+     * Referencia opcional a una LookupTable.
+     * Cuando está presente, los constraints se resuelven dinámicamente
+     * desde la fila de la LookupTable cuyo keyValue coincida con
+     * el valor del campo keyField en el dato evaluado.
+     *
+     * Los constraints de la fila se MEZCLAN con los constraints estáticos:
+     * los valores de la LookupTable sobreescriben los estáticos.
+     */
+    lookupRef?: {
+        /** UUID o ID de la LookupTable */
+        tableId: string;
+        /** Nombre de la LookupTable (alternativa a tableId, resuelto por nombre + ruleSetId) */
+        tableName?: string;
+    };
 }
 
 export type NodeConfig = ConditionConfig | GateConfig | ParameterConfig;

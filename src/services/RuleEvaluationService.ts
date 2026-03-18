@@ -2,6 +2,7 @@ import { z } from "zod";
 import GraphRuleService from "./GraphRuleService";
 import RuleService from "./RuleService";
 import RuleSetService from "./RuleSetService";
+import LookupTableService from "./LookupTableService";
 import {
     evaluateRule,
     EvalGraph,
@@ -9,6 +10,7 @@ import {
     EvalEdge,
     RuleEvalResult,
     RuleSetEvalResult,
+    LookupResolver,
 } from "../utils/ruleEvaluator";
 
 // ── Zod Schemas ──
@@ -60,13 +62,19 @@ class RuleEvaluationService {
         // Construir EvalGraph
         const graph = this.buildEvalGraph(fullRule);
 
+        // Construir lookup resolver si algún nodo PARAMETER referencia una LookupTable
+        const hasLookups = graph.nodes.some(n => n.nodeType === 'PARAMETER' && n.config.lookupRef);
+        const resolver: LookupResolver | undefined = hasLookups
+            ? this.buildLookupResolver()
+            : undefined;
+
         // Evaluar
-        const result = evaluateRule(graph, parsed.data, {
+        const result = await evaluateRule(graph, parsed.data, {
             ruleId: String(fullRule.id),
             ruleUUID: fullRule.uuid,
             ruleName: fullRule.name,
             ruleNumber: fullRule.ruleNumber,
-        });
+        }, resolver);
 
         return result;
     }
@@ -200,6 +208,28 @@ class RuleEvaluationService {
             skippedRules,
             ruleResults,
             executionTimeMs,
+        };
+    }
+
+    /**
+     * Construye un LookupResolver que consulta la DB para resolver
+     * constraints dinámicos de PARAMETERs con lookupRef.
+     */
+    private buildLookupResolver(): LookupResolver {
+        return async (lookupRef) => {
+            const tableIdOrName = lookupRef.tableId || lookupRef.tableName;
+            if (!tableIdOrName) return null;
+
+            const table = await LookupTableService.getByIdOrUUID(tableIdOrName);
+            const tableId = table.get('id') as number;
+            const keyField = table.get('keyField') as string;
+
+            return {
+                keyField,
+                resolve: async (keyValue: string) => {
+                    return await LookupTableService.resolveConstraints(tableId, keyValue);
+                },
+            };
         };
     }
 

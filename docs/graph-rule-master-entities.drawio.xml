@@ -1,0 +1,665 @@
+<mxfile host="app.diagrams.net" modified="2026-03-18" agent="Claude Code" version="24.0.0" type="device">
+  <diagram id="graph-rule-master-erd" name="Entity Relationship Diagram">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1200" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- ═══════════════════════════════════════ -->
+        <!-- TITLE                                    -->
+        <!-- ═══════════════════════════════════════ -->
+        <mxCell id="title" value="Graph Rule Master - Entity Relationship Diagram" style="text;html=1;fontSize=22;fontStyle=1;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;fontColor=#1A1A2E;" vertex="1" parent="1">
+          <mxGeometry x="400" y="20" width="600" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="subtitle" value="Sistema de validación basado en grafos DAG (Directed Acyclic Graph)" style="text;html=1;fontSize=13;fontStyle=2;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;fontColor=#555555;" vertex="1" parent="1">
+          <mxGeometry x="400" y="55" width="600" height="30" as="geometry"/>
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════ -->
+        <!-- BASE ENTITY (Abstract)                  -->
+        <!-- ═══════════════════════════════════════ -->
+        <mxCell id="base_header" value="&lt;b&gt;«abstract»&lt;br&gt;BaseEntity&lt;/b&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;fontSize=13;rounded=1;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="580" y="100" width="250" height="280" as="geometry"/>
+        </mxCell>
+        <mxCell id="base_pk" value="🔑 id: number (PK)" style="text;strokeColor=none;fillColor=#E8EAF6;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;fontStyle=1;" vertex="1" parent="base_header">
+          <mxGeometry y="40" width="250" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="base_uuid" value="  uuid: string (UNIQUE)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="base_header">
+          <mxGeometry y="64" width="250" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="base_createdat" value="  createdAt: Date" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="base_header">
+          <mxGeometry y="88" width="250" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="base_createdby" value="  createdBy: string" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="base_header">
+          <mxGeometry y="112" width="250" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="base_updatedat" value="  updatedAt?: Date" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;fontColor=#888888;" vertex="1" parent="base_header">
+          <mxGeometry y="136" width="250" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="base_updatedby" value="  updatedBy?: string" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;fontColor=#888888;" vertex="1" parent="base_header">
+          <mxGeometry y="160" width="250" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="base_active" value="  active: boolean" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="base_header">
+          <mxGeometry y="184" width="250" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="base_inactiveby" value="  inactiveBy?: string" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;fontColor=#888888;" vertex="1" parent="base_header">
+          <mxGeometry y="208" width="250" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="base_inactiveat" value="  inactiveAt?: Date" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;fontColor=#888888;" vertex="1" parent="base_header">
+          <mxGeometry y="232" width="250" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="base_inactivereason" value="  inactiveReason?: string" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;fontColor=#888888;" vertex="1" parent="base_header">
+          <mxGeometry y="256" width="250" height="24" as="geometry"/>
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════ -->
+        <!-- RULESET ENTITY                           -->
+        <!-- ═══════════════════════════════════════ -->
+        <mxCell id="ruleset_header" value="&lt;b&gt;RuleSet&lt;/b&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=14;rounded=1;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="100" y="460" width="280" height="168" as="geometry"/>
+        </mxCell>
+        <mxCell id="rs_pk" value="🔑 id: number (PK)" style="text;strokeColor=none;fillColor=#BBDEFB;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;fontStyle=1;" vertex="1" parent="ruleset_header">
+          <mxGeometry y="30" width="280" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="rs_sep" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=0;spacingRight=0;rotatable=0;labelPosition=left;points=[];portConstraint=eastwest;strokeColor=#6c8ebf;" vertex="1" parent="ruleset_header">
+          <mxGeometry y="54" width="280" height="6" as="geometry"/>
+        </mxCell>
+        <mxCell id="rs_name" value="  name: string" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="ruleset_header">
+          <mxGeometry y="60" width="280" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="rs_desc" value="  description?: string" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;fontColor=#888888;" vertex="1" parent="ruleset_header">
+          <mxGeometry y="84" width="280" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="rs_doctype" value="  documentType: string" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="ruleset_header">
+          <mxGeometry y="108" width="280" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="rs_evalmode" value="  evaluationMode: 'ALL' | 'FIRST_MATCH'" style="text;strokeColor=none;fillColor=#FFF9C4;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;fontStyle=0;" vertex="1" parent="ruleset_header">
+          <mxGeometry y="132" width="280" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="rs_inherit" value="  + BaseEntity fields" style="text;strokeColor=none;fillColor=#E8EAF6;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=10;fontStyle=2;fontColor=#666666;" vertex="1" parent="ruleset_header">
+          <mxGeometry y="156" width="280" height="12" as="geometry"/>
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════ -->
+        <!-- RULE ENTITY                              -->
+        <!-- ═══════════════════════════════════════ -->
+        <mxCell id="rule_header" value="&lt;b&gt;Rule&lt;/b&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=14;rounded=1;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="560" y="460" width="290" height="228" as="geometry"/>
+        </mxCell>
+        <mxCell id="r_pk" value="🔑 id: number (PK)" style="text;strokeColor=none;fillColor=#C8E6C9;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;fontStyle=1;" vertex="1" parent="rule_header">
+          <mxGeometry y="30" width="290" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="r_fk" value="🔗 ruleSetId: number (FK → RuleSet)" style="text;strokeColor=none;fillColor=#FFECB3;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;fontStyle=1;" vertex="1" parent="rule_header">
+          <mxGeometry y="54" width="290" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="r_sep" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=0;spacingRight=0;rotatable=0;labelPosition=left;points=[];portConstraint=eastwest;strokeColor=#82b366;" vertex="1" parent="rule_header">
+          <mxGeometry y="78" width="290" height="6" as="geometry"/>
+        </mxCell>
+        <mxCell id="r_rulenum" value="  ruleNumber: string" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="rule_header">
+          <mxGeometry y="84" width="290" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="r_name" value="  name: string" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="rule_header">
+          <mxGeometry y="108" width="290" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="r_desc" value="  description?: string" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;fontColor=#888888;" vertex="1" parent="rule_header">
+          <mxGeometry y="132" width="290" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="r_type" value="  ruleType: 'CONSISTENCY'|'VALIDATION'|'FORMAT'|'BUSINESS'" style="text;strokeColor=none;fillColor=#FFF9C4;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=10;" vertex="1" parent="rule_header">
+          <mxGeometry y="156" width="290" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="r_enabled" value="  enabled: boolean (default: true)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="rule_header">
+          <mxGeometry y="180" width="290" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="r_priority" value="  priority: number (min: 1)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="rule_header">
+          <mxGeometry y="204" width="290" height="24" as="geometry"/>
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════ -->
+        <!-- RULENODE ENTITY                          -->
+        <!-- ═══════════════════════════════════════ -->
+        <mxCell id="node_header" value="&lt;b&gt;RuleNode&lt;/b&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=14;rounded=1;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="320" y="780" width="280" height="228" as="geometry"/>
+        </mxCell>
+        <mxCell id="n_pk" value="🔑 id: number (PK)" style="text;strokeColor=none;fillColor=#FFF9C4;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;fontStyle=1;" vertex="1" parent="node_header">
+          <mxGeometry y="30" width="280" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="n_fk" value="🔗 ruleId: number (FK → Rule)" style="text;strokeColor=none;fillColor=#FFECB3;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;fontStyle=1;" vertex="1" parent="node_header">
+          <mxGeometry y="54" width="280" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="n_sep" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=0;spacingRight=0;rotatable=0;labelPosition=left;points=[];portConstraint=eastwest;strokeColor=#d6b656;" vertex="1" parent="node_header">
+          <mxGeometry y="78" width="280" height="6" as="geometry"/>
+        </mxCell>
+        <mxCell id="n_nodeid" value="  nodeId: string (UK con ruleId)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="node_header">
+          <mxGeometry y="84" width="280" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="n_nodetype" value="  nodeType: 'CONDITION' | 'GATE' | 'PARAMETER'" style="text;strokeColor=none;fillColor=#FFF9C4;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=10;" vertex="1" parent="node_header">
+          <mxGeometry y="108" width="280" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="n_config" value="  config: JSONB (NodeConfig)" style="text;strokeColor=none;fillColor=#E1BEE7;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="node_header">
+          <mxGeometry y="132" width="280" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="n_label" value="  label?: string" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;fontColor=#888888;" vertex="1" parent="node_header">
+          <mxGeometry y="156" width="280" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="n_isentry" value="  isEntry: boolean" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="node_header">
+          <mxGeometry y="180" width="280" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="n_isdefault" value="  isDefault: boolean" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="node_header">
+          <mxGeometry y="204" width="280" height="24" as="geometry"/>
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════ -->
+        <!-- RULEEDGE ENTITY                          -->
+        <!-- ═══════════════════════════════════════ -->
+        <mxCell id="edge_header" value="&lt;b&gt;RuleEdge&lt;/b&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=14;rounded=1;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="740" y="780" width="310" height="192" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_pk" value="🔑 id: number (PK)" style="text;strokeColor=none;fillColor=#FFCDD2;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;fontStyle=1;" vertex="1" parent="edge_header">
+          <mxGeometry y="30" width="310" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_fk" value="🔗 ruleId: number (FK → Rule)" style="text;strokeColor=none;fillColor=#FFECB3;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;fontStyle=1;" vertex="1" parent="edge_header">
+          <mxGeometry y="54" width="310" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_sep" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=0;spacingRight=0;rotatable=0;labelPosition=left;points=[];portConstraint=eastwest;strokeColor=#b85450;" vertex="1" parent="edge_header">
+          <mxGeometry y="78" width="310" height="6" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_source" value="  sourceNodeId: string (UK con targetNodeId, ruleId)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="edge_header">
+          <mxGeometry y="84" width="310" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_target" value="  targetNodeId: string" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="edge_header">
+          <mxGeometry y="108" width="310" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_order" value="  edgeOrder: number (min: 1)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="edge_header">
+          <mxGeometry y="132" width="310" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_label" value="  label?: string" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;fontColor=#888888;" vertex="1" parent="edge_header">
+          <mxGeometry y="156" width="310" height="24" as="geometry"/>
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════ -->
+        <!-- RELATIONSHIPS (Arrows)                   -->
+        <!-- ═══════════════════════════════════════ -->
+
+        <!-- RuleSet 1──N Rule -->
+        <mxCell id="rel_rs_r" value="" style="endArrow=ERmany;startArrow=ERmandOne;endFill=0;startFill=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=2;strokeColor=#333333;" edge="1" parent="1" source="ruleset_header" target="rule_header">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="rel_rs_r_label" value="&lt;b&gt;1 : N&lt;/b&gt;&lt;br&gt;hasMany" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=11;fontColor=#333333;labelBackgroundColor=#FFFFFF;" vertex="1" connectable="0" parent="rel_rs_r">
+          <mxGeometry x="-0.1" y="0" relative="1" as="geometry">
+            <mxPoint y="-18" as="offset"/>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Rule 1──N RuleNode -->
+        <mxCell id="rel_r_n" value="" style="endArrow=ERmany;startArrow=ERmandOne;endFill=0;startFill=0;exitX=0.3;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeWidth=2;strokeColor=#333333;" edge="1" parent="1" source="rule_header" target="node_header">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="rel_r_n_label" value="&lt;b&gt;1 : N&lt;/b&gt;&lt;br&gt;hasMany" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=11;fontColor=#333333;labelBackgroundColor=#FFFFFF;" vertex="1" connectable="0" parent="rel_r_n">
+          <mxGeometry x="-0.1" y="0" relative="1" as="geometry">
+            <mxPoint x="-30" as="offset"/>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Rule 1──N RuleEdge -->
+        <mxCell id="rel_r_e" value="" style="endArrow=ERmany;startArrow=ERmandOne;endFill=0;startFill=0;exitX=0.7;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeWidth=2;strokeColor=#333333;" edge="1" parent="1" source="rule_header" target="edge_header">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="rel_r_e_label" value="&lt;b&gt;1 : N&lt;/b&gt;&lt;br&gt;hasMany" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=11;fontColor=#333333;labelBackgroundColor=#FFFFFF;" vertex="1" connectable="0" parent="rel_r_e">
+          <mxGeometry x="-0.1" y="0" relative="1" as="geometry">
+            <mxPoint x="30" as="offset"/>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Inheritance arrows (BaseEntity) -->
+        <mxCell id="inh_rs" value="" style="endArrow=block;endSize=16;endFill=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=1.5;strokeColor=#999999;dashed=1;dashPattern=8 4;" edge="1" parent="1" source="ruleset_header" target="base_header">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="inh_rs_label" value="extends" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontColor=#999999;fontStyle=2;labelBackgroundColor=#FFFFFF;" vertex="1" connectable="0" parent="inh_rs">
+          <mxGeometry x="-0.3" y="0" relative="1" as="geometry">
+            <mxPoint y="-10" as="offset"/>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="inh_r" value="" style="endArrow=block;endSize=16;endFill=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeWidth=1.5;strokeColor=#999999;dashed=1;dashPattern=8 4;" edge="1" parent="1" source="rule_header" target="base_header">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="inh_r_label" value="extends" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontColor=#999999;fontStyle=2;labelBackgroundColor=#FFFFFF;" vertex="1" connectable="0" parent="inh_r">
+          <mxGeometry x="-0.3" y="0" relative="1" as="geometry">
+            <mxPoint x="20" as="offset"/>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="inh_n" value="" style="endArrow=block;endSize=16;endFill=0;exitX=0;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=1;entryDx=0;entryDy=0;strokeWidth=1.5;strokeColor=#999999;dashed=1;dashPattern=8 4;curved=1;" edge="1" parent="1" source="node_header" target="base_header">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="60" y="680"/>
+              <mxPoint x="60" y="380"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="inh_e" value="" style="endArrow=block;endSize=16;endFill=0;exitX=1;exitY=0;exitDx=0;exitDy=0;entryX=1;entryY=1;entryDx=0;entryDy=0;strokeWidth=1.5;strokeColor=#999999;dashed=1;dashPattern=8 4;curved=1;" edge="1" parent="1" source="edge_header" target="base_header">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1120" y="680"/>
+              <mxPoint x="1120" y="380"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════ -->
+        <!-- NODE CONFIG TYPES (Discriminated Union)  -->
+        <!-- ═══════════════════════════════════════ -->
+
+        <!-- SimpleConditionConfig -->
+        <mxCell id="scc_header" value="&lt;b&gt;«interface»&lt;br&gt;SimpleConditionConfig&lt;/b&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#E8EAF6;strokeColor=#7E57C2;fontSize=12;rounded=1;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1080" width="260" height="160" as="geometry"/>
+        </mxCell>
+        <mxCell id="scc_field" value="  field: string" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="scc_header">
+          <mxGeometry y="40" width="260" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="scc_op" value="  operator: string" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="scc_header">
+          <mxGeometry y="64" width="260" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="scc_val" value="  value?: any" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;fontColor=#888888;" vertex="1" parent="scc_header">
+          <mxGeometry y="88" width="260" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="scc_dtype" value="  data_type: 'STRING'|'NUMBER'|'DATE'|'BOOLEAN'|'ENUM'" style="text;strokeColor=none;fillColor=#FFF9C4;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=9;" vertex="1" parent="scc_header">
+          <mxGeometry y="112" width="260" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="scc_vtype" value="  value_type?: 'LITERAL' | 'FIELD_REF'" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=10;fontColor=#888888;" vertex="1" parent="scc_header">
+          <mxGeometry y="136" width="260" height="24" as="geometry"/>
+        </mxCell>
+
+        <!-- GateConfig -->
+        <mxCell id="gc_header" value="&lt;b&gt;«interface»&lt;br&gt;GateConfig&lt;/b&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#E8EAF6;strokeColor=#7E57C2;fontSize=12;rounded=1;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="340" y="1080" width="260" height="88" as="geometry"/>
+        </mxCell>
+        <mxCell id="gc_logic" value="  logic: 'AND' | 'OR' | 'NOT' | 'XOR'" style="text;strokeColor=none;fillColor=#FFF9C4;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="gc_header">
+          <mxGeometry y="40" width="260" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="gc_sc" value="  short_circuit?: boolean" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;fontColor=#888888;" vertex="1" parent="gc_header">
+          <mxGeometry y="64" width="260" height="24" as="geometry"/>
+        </mxCell>
+
+        <!-- ParameterConfig -->
+        <mxCell id="pc_header" value="&lt;b&gt;«interface»&lt;br&gt;ParameterConfig&lt;/b&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#E8EAF6;strokeColor=#7E57C2;fontSize=12;rounded=1;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="640" y="1080" width="280" height="136" as="geometry"/>
+        </mxCell>
+        <mxCell id="pc_target" value="  target_field: string" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="pc_header">
+          <mxGeometry y="40" width="280" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="pc_ptype" value="  param_type: 'STRING'|'NUMBER'|'ENUM'|'DATE'|..." style="text;strokeColor=none;fillColor=#FFF9C4;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=10;" vertex="1" parent="pc_header">
+          <mxGeometry y="64" width="280" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="pc_req" value="  required?: boolean" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;fontColor=#888888;" vertex="1" parent="pc_header">
+          <mxGeometry y="88" width="280" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="pc_const" value="  constraints: Record&lt;string, any&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="pc_header">
+          <mxGeometry y="112" width="280" height="24" as="geometry"/>
+        </mxCell>
+
+        <!-- ComputedConditionConfig -->
+        <mxCell id="ccc_header" value="&lt;b&gt;«interface»&lt;br&gt;ComputedConditionConfig&lt;/b&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#E8EAF6;strokeColor=#7E57C2;fontSize=12;rounded=1;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="960" y="1080" width="270" height="160" as="geometry"/>
+        </mxCell>
+        <mxCell id="ccc_expr" value="  expression: string" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="ccc_header">
+          <mxGeometry y="40" width="270" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="ccc_op" value="  operator: string" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="ccc_header">
+          <mxGeometry y="64" width="270" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="ccc_val" value="  value: any" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="ccc_header">
+          <mxGeometry y="88" width="270" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="ccc_tol" value="  tolerance?: number" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;fontColor=#888888;" vertex="1" parent="ccc_header">
+          <mxGeometry y="112" width="270" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="ccc_vtype" value="  value_type?: 'LITERAL' | 'FIELD_REF'" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=10;fontColor=#888888;" vertex="1" parent="ccc_header">
+          <mxGeometry y="136" width="270" height="24" as="geometry"/>
+        </mxCell>
+
+        <!-- Config union arrows -->
+        <mxCell id="cfg_union_scc" value="" style="endArrow=diamondThin;endSize=14;endFill=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=1;entryDx=0;entryDy=0;strokeWidth=1.5;strokeColor=#7E57C2;dashed=1;" edge="1" parent="1" source="scc_header" target="node_header">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="cfg_union_scc_l" value="nodeType=CONDITION" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;fontColor=#7E57C2;fontStyle=2;labelBackgroundColor=#FFFFFF;" vertex="1" connectable="0" parent="cfg_union_scc">
+          <mxGeometry x="0.2" y="0" relative="1" as="geometry">
+            <mxPoint x="-40" y="5" as="offset"/>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="cfg_union_gc" value="" style="endArrow=diamondThin;endSize=14;endFill=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.4;entryY=1;entryDx=0;entryDy=0;strokeWidth=1.5;strokeColor=#7E57C2;dashed=1;" edge="1" parent="1" source="gc_header" target="node_header">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="cfg_union_gc_l" value="nodeType=GATE" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;fontColor=#7E57C2;fontStyle=2;labelBackgroundColor=#FFFFFF;" vertex="1" connectable="0" parent="cfg_union_gc">
+          <mxGeometry x="0.3" y="0" relative="1" as="geometry">
+            <mxPoint y="5" as="offset"/>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="cfg_union_pc" value="" style="endArrow=diamondThin;endSize=14;endFill=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.7;entryY=1;entryDx=0;entryDy=0;strokeWidth=1.5;strokeColor=#7E57C2;dashed=1;" edge="1" parent="1" source="pc_header" target="node_header">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="cfg_union_pc_l" value="nodeType=PARAMETER" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;fontColor=#7E57C2;fontStyle=2;labelBackgroundColor=#FFFFFF;" vertex="1" connectable="0" parent="cfg_union_pc">
+          <mxGeometry x="0.3" y="0" relative="1" as="geometry">
+            <mxPoint y="5" as="offset"/>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="cfg_union_ccc" value="" style="endArrow=diamondThin;endSize=14;endFill=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=1;entryY=1;entryDx=0;entryDy=0;strokeWidth=1.5;strokeColor=#7E57C2;dashed=1;" edge="1" parent="1" source="ccc_header" target="node_header">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="cfg_union_ccc_l" value="nodeType=CONDITION (computed)" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;fontColor=#7E57C2;fontStyle=2;labelBackgroundColor=#FFFFFF;" vertex="1" connectable="0" parent="cfg_union_ccc">
+          <mxGeometry x="0.3" y="0" relative="1" as="geometry">
+            <mxPoint x="40" y="5" as="offset"/>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════ -->
+        <!-- DAG FLOW EXAMPLE (right side)            -->
+        <!-- ═══════════════════════════════════════ -->
+        <mxCell id="dag_title" value="&lt;b&gt;Flujo DAG - Ejemplo de evaluación&lt;/b&gt;" style="text;html=1;fontSize=14;fontStyle=0;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;fontColor=#1A1A2E;" vertex="1" parent="1">
+          <mxGeometry x="1180" y="100" width="320" height="30" as="geometry"/>
+        </mxCell>
+
+        <!-- CONDITION nodes -->
+        <mxCell id="dag_c1" value="&lt;b&gt;C1&lt;/b&gt;&lt;br&gt;CONDITION&lt;br&gt;&lt;i&gt;campo == valor&lt;/i&gt;" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1140" y="160" width="120" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="dag_c2" value="&lt;b&gt;C2&lt;/b&gt;&lt;br&gt;CONDITION&lt;br&gt;&lt;i&gt;campo &gt; valor&lt;/i&gt;" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1400" y="160" width="120" height="70" as="geometry"/>
+        </mxCell>
+
+        <!-- GATE node -->
+        <mxCell id="dag_g1" value="&lt;b&gt;G1&lt;/b&gt;&lt;br&gt;GATE&lt;br&gt;&lt;i&gt;AND&lt;/i&gt;" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1260" y="280" width="100" height="80" as="geometry"/>
+        </mxCell>
+
+        <!-- PARAMETER node -->
+        <mxCell id="dag_p1" value="&lt;b&gt;P1&lt;/b&gt;&lt;br&gt;PARAMETER&lt;br&gt;&lt;i&gt;target_field&lt;/i&gt;" style="shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1245" y="410" width="130" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- DAG edges -->
+        <mxCell id="dag_e1" value="" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#333333;" edge="1" parent="1" source="dag_c1" target="dag_g1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="dag_e2" value="" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#333333;" edge="1" parent="1" source="dag_c2" target="dag_g1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="dag_e3" value="" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#333333;" edge="1" parent="1" source="dag_g1" target="dag_p1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- DAG Legend -->
+        <mxCell id="dag_legend_box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#CCCCCC;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1140" y="510" width="380" height="140" as="geometry"/>
+        </mxCell>
+        <mxCell id="dag_legend_title" value="&lt;b&gt;Reglas de conexión válidas&lt;/b&gt;" style="text;html=1;fontSize=11;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="1240" y="515" width="180" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="dag_legend1" value="CONDITION → GATE | PARAMETER" style="text;html=1;fontSize=10;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;fontColor=#555555;spacingLeft=15;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="540" width="250" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="dag_legend2" value="GATE → GATE | PARAMETER" style="text;html=1;fontSize=10;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;fontColor=#555555;spacingLeft=15;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="560" width="250" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="dag_legend3" value="PARAMETER → (terminal, sin salida)" style="text;html=1;fontSize=10;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;fontColor=#555555;spacingLeft=15;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="580" width="250" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="dag_legend4" value="CONDITION no puede ser destino de edges" style="text;html=1;fontSize=10;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;fontColor=#555555;spacingLeft=15;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="600" width="280" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="dag_legend5" value="Grafo debe ser DAG (sin ciclos - Kahn's algorithm)" style="text;html=1;fontSize=10;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;fontColor=#555555;spacingLeft=15;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="620" width="350" height="20" as="geometry"/>
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════ -->
+        <!-- VALIDATION RULES BOX                     -->
+        <!-- ═══════════════════════════════════════ -->
+        <mxCell id="val_box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FCE4EC;strokeColor=#E91E63;arcSize=6;" vertex="1" parent="1">
+          <mxGeometry x="1140" y="690" width="380" height="310" as="geometry"/>
+        </mxCell>
+        <mxCell id="val_title" value="&lt;b&gt;graphValidator.ts - 13 validaciones&lt;/b&gt;" style="text;html=1;fontSize=12;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;fontColor=#C62828;" vertex="1" parent="1">
+          <mxGeometry x="1200" y="695" width="260" height="25" as="geometry"/>
+        </mxCell>
+        <mxCell id="val_1" value="1. NodeIds únicos dentro de la regla" style="text;html=1;fontSize=9;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;fontColor=#333;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="720" width="350" height="18" as="geometry"/>
+        </mxCell>
+        <mxCell id="val_2" value="2. Edges referencian nodos existentes" style="text;html=1;fontSize=9;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;fontColor=#333;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="738" width="350" height="18" as="geometry"/>
+        </mxCell>
+        <mxCell id="val_3" value="3. Sin auto-referencias (nodo → sí mismo)" style="text;html=1;fontSize=9;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;fontColor=#333;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="756" width="350" height="18" as="geometry"/>
+        </mxCell>
+        <mxCell id="val_4" value="4. Sin edges duplicados" style="text;html=1;fontSize=9;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;fontColor=#333;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="774" width="350" height="18" as="geometry"/>
+        </mxCell>
+        <mxCell id="val_5" value="5. Tipos de conexión válidos (reglas del DAG)" style="text;html=1;fontSize=9;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;fontColor=#333;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="792" width="350" height="18" as="geometry"/>
+        </mxCell>
+        <mxCell id="val_6" value="6. PARAMETER no puede ser source" style="text;html=1;fontSize=9;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;fontColor=#333;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="810" width="350" height="18" as="geometry"/>
+        </mxCell>
+        <mxCell id="val_7" value="7. CONDITION no puede ser target" style="text;html=1;fontSize=9;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;fontColor=#333;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="828" width="350" height="18" as="geometry"/>
+        </mxCell>
+        <mxCell id="val_8" value="8. Sin ciclos (DAG - Kahn's algorithm)" style="text;html=1;fontSize=9;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;fontColor=#C62828;spacingLeft=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="846" width="350" height="18" as="geometry"/>
+        </mxCell>
+        <mxCell id="val_9" value="9. Integridad de GATE (inputs mínimos por tipo lógico)" style="text;html=1;fontSize=9;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;fontColor=#333;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="864" width="350" height="18" as="geometry"/>
+        </mxCell>
+        <mxCell id="val_10" value="10. Al menos un PARAMETER por regla" style="text;html=1;fontSize=9;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;fontColor=#333;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="882" width="350" height="18" as="geometry"/>
+        </mxCell>
+        <mxCell id="val_11" value="11. Todos los nodos participan en edges (o isDefault)" style="text;html=1;fontSize=9;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;fontColor=#333;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="900" width="350" height="18" as="geometry"/>
+        </mxCell>
+        <mxCell id="val_12" value="12. Camino completo: CONDITION → ... → PARAMETER" style="text;html=1;fontSize=9;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;fontColor=#333;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="918" width="350" height="18" as="geometry"/>
+        </mxCell>
+        <mxCell id="val_13" value="13. Config schema válido por tipo de nodo" style="text;html=1;fontSize=9;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;fontColor=#333;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="936" width="350" height="18" as="geometry"/>
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════ -->
+        <!-- UNIQUE CONSTRAINTS BOX                   -->
+        <!-- ═══════════════════════════════════════ -->
+        <mxCell id="uk_box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#1565C0;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="690" width="260" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="uk_title" value="&lt;b&gt;Unique Constraints&lt;/b&gt;" style="text;html=1;fontSize=11;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;fontColor=#1565C0;" vertex="1" parent="1">
+          <mxGeometry x="90" y="695" width="160" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="uk_1" value="RuleNode: (nodeId, ruleId)" style="text;html=1;fontSize=10;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;fontColor=#333;spacingLeft=15;" vertex="1" parent="1">
+          <mxGeometry x="50" y="718" width="240" height="18" as="geometry"/>
+        </mxCell>
+        <mxCell id="uk_2" value="RuleEdge: (sourceNodeId, targetNodeId, ruleId)" style="text;html=1;fontSize=10;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;fontColor=#333;spacingLeft=15;" vertex="1" parent="1">
+          <mxGeometry x="50" y="738" width="240" height="18" as="geometry"/>
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════ -->
+        <!-- LOOKUP TABLE ENTITY (NEW)                -->
+        <!-- ═══════════════════════════════════════ -->
+        <mxCell id="lt_header" value="&lt;b&gt;LookupTable&lt;/b&gt;&lt;br&gt;&lt;i style=&quot;color:#7E57C2&quot;&gt;NEW&lt;/i&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#E1BEE7;strokeColor=#7E57C2;fontSize=14;rounded=1;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="100" y="1340" width="300" height="204" as="geometry"/>
+        </mxCell>
+        <mxCell id="lt_pk" value="🔑 id: number (PK)" style="text;strokeColor=none;fillColor=#CE93D8;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;fontStyle=1;" vertex="1" parent="lt_header">
+          <mxGeometry y="40" width="300" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="lt_fk" value="🔗 RuleSetId: number (FK → RuleSet)" style="text;strokeColor=none;fillColor=#FFECB3;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;fontStyle=1;" vertex="1" parent="lt_header">
+          <mxGeometry y="64" width="300" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="lt_sep" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=0;spacingRight=0;rotatable=0;labelPosition=left;points=[];portConstraint=eastwest;strokeColor=#7E57C2;" vertex="1" parent="lt_header">
+          <mxGeometry y="88" width="300" height="6" as="geometry"/>
+        </mxCell>
+        <mxCell id="lt_name" value="  name: string (UK con RuleSetId)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="lt_header">
+          <mxGeometry y="94" width="300" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="lt_desc" value="  description?: string" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;fontColor=#888888;" vertex="1" parent="lt_header">
+          <mxGeometry y="118" width="300" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="lt_keyfield" value="  keyField: string (campo discriminador)" style="text;strokeColor=none;fillColor=#FFF9C4;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="lt_header">
+          <mxGeometry y="142" width="300" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="lt_columns" value="  columns: JSONB (LookupColumnDef[])" style="text;strokeColor=none;fillColor=#E1BEE7;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="lt_header">
+          <mxGeometry y="166" width="300" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="lt_inherit" value="  + BaseEntity fields" style="text;strokeColor=none;fillColor=#E8EAF6;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=10;fontStyle=2;fontColor=#666666;" vertex="1" parent="lt_header">
+          <mxGeometry y="190" width="300" height="14" as="geometry"/>
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════ -->
+        <!-- LOOKUP TABLE ROW ENTITY (NEW)            -->
+        <!-- ═══════════════════════════════════════ -->
+        <mxCell id="ltr_header" value="&lt;b&gt;LookupTableRow&lt;/b&gt;&lt;br&gt;&lt;i style=&quot;color:#7E57C2&quot;&gt;NEW&lt;/i&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#E1BEE7;strokeColor=#7E57C2;fontSize=14;rounded=1;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="500" y="1340" width="300" height="168" as="geometry"/>
+        </mxCell>
+        <mxCell id="ltr_pk" value="🔑 id: number (PK)" style="text;strokeColor=none;fillColor=#CE93D8;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;fontStyle=1;" vertex="1" parent="ltr_header">
+          <mxGeometry y="40" width="300" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="ltr_fk" value="🔗 LookupTableId: number (FK → LookupTable)" style="text;strokeColor=none;fillColor=#FFECB3;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;fontStyle=1;" vertex="1" parent="ltr_header">
+          <mxGeometry y="64" width="300" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="ltr_sep" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=0;spacingRight=0;rotatable=0;labelPosition=left;points=[];portConstraint=eastwest;strokeColor=#7E57C2;" vertex="1" parent="ltr_header">
+          <mxGeometry y="88" width="300" height="6" as="geometry"/>
+        </mxCell>
+        <mxCell id="ltr_keyval" value="  keyValue: string (UK con LookupTableId)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="ltr_header">
+          <mxGeometry y="94" width="300" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="ltr_values" value="  values: JSONB (Record&lt;string, any&gt;)" style="text;strokeColor=none;fillColor=#E1BEE7;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="ltr_header">
+          <mxGeometry y="118" width="300" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="ltr_inherit" value="  + BaseEntity fields" style="text;strokeColor=none;fillColor=#E8EAF6;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=10;fontStyle=2;fontColor=#666666;" vertex="1" parent="ltr_header">
+          <mxGeometry y="142" width="300" height="14" as="geometry"/>
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════ -->
+        <!-- LOOKUP COLUMN DEF (Interface)            -->
+        <!-- ═══════════════════════════════════════ -->
+        <mxCell id="lcd_header" value="&lt;b&gt;«interface»&lt;br&gt;LookupColumnDef&lt;/b&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#E8EAF6;strokeColor=#7E57C2;fontSize=12;rounded=1;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="100" y="1600" width="300" height="136" as="geometry"/>
+        </mxCell>
+        <mxCell id="lcd_colname" value="  columnName: string" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="lcd_header">
+          <mxGeometry y="40" width="300" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="lcd_target" value="  targetField: string (campo del dato destino)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="lcd_header">
+          <mxGeometry y="64" width="300" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="lcd_constkey" value="  constraintKey: string (ej: minValue, maxValue)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="lcd_header">
+          <mxGeometry y="88" width="300" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="lcd_dtype" value="  dataType: 'STRING' | 'NUMBER' | 'BOOLEAN' | 'DATE'" style="text;strokeColor=none;fillColor=#FFF9C4;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;whiteSpace=wrap;html=1;fontSize=10;" vertex="1" parent="lcd_header">
+          <mxGeometry y="112" width="300" height="24" as="geometry"/>
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════ -->
+        <!-- LOOKUP RELATIONSHIPS                     -->
+        <!-- ═══════════════════════════════════════ -->
+
+        <!-- RuleSet 1──N LookupTable -->
+        <mxCell id="rel_rs_lt" value="" style="endArrow=ERmany;startArrow=ERmandOne;endFill=0;startFill=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeWidth=2;strokeColor=#7E57C2;" edge="1" parent="1" source="ruleset_header" target="lt_header">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="240" y="680"/>
+              <mxPoint x="240" y="1300"/>
+              <mxPoint x="250" y="1300"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel_rs_lt_label" value="&lt;b&gt;1 : N&lt;/b&gt;&lt;br&gt;hasMany" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=11;fontColor=#7E57C2;labelBackgroundColor=#FFFFFF;" vertex="1" connectable="0" parent="rel_rs_lt">
+          <mxGeometry x="-0.1" y="0" relative="1" as="geometry">
+            <mxPoint x="-40" as="offset"/>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- LookupTable 1──N LookupTableRow -->
+        <mxCell id="rel_lt_ltr" value="" style="endArrow=ERmany;startArrow=ERmandOne;endFill=0;startFill=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=2;strokeColor=#7E57C2;" edge="1" parent="1" source="lt_header" target="ltr_header">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="rel_lt_ltr_label" value="&lt;b&gt;1 : N&lt;/b&gt;&lt;br&gt;hasMany" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=11;fontColor=#7E57C2;labelBackgroundColor=#FFFFFF;" vertex="1" connectable="0" parent="rel_lt_ltr">
+          <mxGeometry x="-0.1" y="0" relative="1" as="geometry">
+            <mxPoint y="-18" as="offset"/>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- LookupColumnDef composition arrow to LookupTable.columns -->
+        <mxCell id="rel_lcd_lt" value="" style="endArrow=diamondThin;endSize=14;endFill=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeWidth=1.5;strokeColor=#7E57C2;dashed=1;" edge="1" parent="1" source="lcd_header" target="lt_header">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="rel_lcd_lt_label" value="columns JSONB" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;fontColor=#7E57C2;fontStyle=2;labelBackgroundColor=#FFFFFF;" vertex="1" connectable="0" parent="rel_lcd_lt">
+          <mxGeometry x="0.2" y="0" relative="1" as="geometry">
+            <mxPoint x="-50" as="offset"/>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- PARAMETER lookupRef dashed arrow to LookupTable -->
+        <mxCell id="rel_param_lt" value="" style="endArrow=open;endSize=12;exitX=0;exitY=0.7;exitDx=0;exitDy=0;entryX=1;entryY=0.3;entryDx=0;entryDy=0;strokeWidth=2;strokeColor=#E91E63;dashed=1;dashPattern=12 4;" edge="1" parent="1" source="node_header" target="lt_header">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="250" y="940"/>
+              <mxPoint x="450" y="1150"/>
+              <mxPoint x="450" y="1400"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel_param_lt_label" value="&lt;b&gt;lookupRef&lt;/b&gt;&lt;br&gt;&lt;i&gt;PARAMETER.config.lookupRef&lt;br&gt;→ resuelve constraints&lt;br&gt;dinámicamente&lt;/i&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;fontColor=#E91E63;labelBackgroundColor=#FFFFFF;" vertex="1" connectable="0" parent="rel_param_lt">
+          <mxGeometry x="0.1" y="0" relative="1" as="geometry">
+            <mxPoint x="-60" y="10" as="offset"/>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════ -->
+        <!-- BEFORE vs AFTER comparison box           -->
+        <!-- ═══════════════════════════════════════ -->
+        <mxCell id="compare_box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#7E57C2;arcSize=6;" vertex="1" parent="1">
+          <mxGeometry x="880" y="1340" width="420" height="280" as="geometry"/>
+        </mxCell>
+        <mxCell id="compare_title" value="&lt;b&gt;Antes vs Después — Lookup Table&lt;/b&gt;" style="text;html=1;fontSize=13;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;fontColor=#7E57C2;" vertex="1" parent="1">
+          <mxGeometry x="950" y="1345" width="280" height="25" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="compare_before_title" value="&lt;b&gt;ANTES (20 reglas):&lt;/b&gt;" style="text;html=1;fontSize=10;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;fontColor=#C62828;spacingLeft=15;" vertex="1" parent="1">
+          <mxGeometry x="890" y="1375" width="200" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="compare_b1" value="Regla 1: IF cod==301 → P(min:0, max:4374)" style="text;html=1;fontSize=9;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;fontColor=#555;spacingLeft=20;" vertex="1" parent="1">
+          <mxGeometry x="890" y="1395" width="390" height="16" as="geometry"/>
+        </mxCell>
+        <mxCell id="compare_b2" value="Regla 2: IF cod==302 → P(min:0, max:29200)" style="text;html=1;fontSize=9;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;fontColor=#555;spacingLeft=20;" vertex="1" parent="1">
+          <mxGeometry x="890" y="1411" width="390" height="16" as="geometry"/>
+        </mxCell>
+        <mxCell id="compare_b3" value="Regla 3: IF cod==303 → P(min:0, max:6570)" style="text;html=1;fontSize=9;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;fontColor=#555;spacingLeft=20;" vertex="1" parent="1">
+          <mxGeometry x="890" y="1427" width="390" height="16" as="geometry"/>
+        </mxCell>
+        <mxCell id="compare_b4" value="... x20 reglas con nodos CONDITION + GATE + PARAMETERs cada una" style="text;html=1;fontSize=9;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;fontColor=#C62828;spacingLeft=20;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="890" y="1443" width="390" height="16" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="compare_after_title" value="&lt;b&gt;DESPUÉS (1 regla + 1 tabla):&lt;/b&gt;" style="text;html=1;fontSize=10;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;fontColor=#2E7D32;spacingLeft=15;" vertex="1" parent="1">
+          <mxGeometry x="890" y="1475" width="250" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="compare_a1" value="Regla 1: CONDITION(cod IN tabla) → GATE → PARAMETERs(lookupRef)" style="text;html=1;fontSize=9;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;fontColor=#555;spacingLeft=20;" vertex="1" parent="1">
+          <mxGeometry x="890" y="1495" width="400" height="16" as="geometry"/>
+        </mxCell>
+        <mxCell id="compare_a2" value="LookupTable &quot;rangos_prestacionales&quot;:" style="text;html=1;fontSize=9;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;fontColor=#555;spacingLeft=20;" vertex="1" parent="1">
+          <mxGeometry x="890" y="1515" width="250" height="16" as="geometry"/>
+        </mxCell>
+        <mxCell id="compare_a3" value="| keyValue | edad_min | edad_max | hospitalizado |" style="text;html=1;fontSize=8;fillColor=#E8F5E9;align=left;verticalAlign=middle;whiteSpace=wrap;fontColor=#333;spacingLeft=25;fontFamily=monospace;" vertex="1" parent="1">
+          <mxGeometry x="890" y="1535" width="400" height="16" as="geometry"/>
+        </mxCell>
+        <mxCell id="compare_a4" value="|   301    |    0     |   4374   |     false      |" style="text;html=1;fontSize=8;fillColor=#E8F5E9;align=left;verticalAlign=middle;whiteSpace=wrap;fontColor=#333;spacingLeft=25;fontFamily=monospace;" vertex="1" parent="1">
+          <mxGeometry x="890" y="1551" width="400" height="16" as="geometry"/>
+        </mxCell>
+        <mxCell id="compare_a5" value="|   302    |    0     |  29200   |     false      |" style="text;html=1;fontSize=8;fillColor=#E8F5E9;align=left;verticalAlign=middle;whiteSpace=wrap;fontColor=#333;spacingLeft=25;fontFamily=monospace;" vertex="1" parent="1">
+          <mxGeometry x="890" y="1567" width="400" height="16" as="geometry"/>
+        </mxCell>
+        <mxCell id="compare_a6" value="... solo agregar filas para nuevos códigos" style="text;html=1;fontSize=9;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;fontColor=#2E7D32;spacingLeft=20;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="890" y="1587" width="300" height="16" as="geometry"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

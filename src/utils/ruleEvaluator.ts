@@ -34,6 +34,19 @@ export interface EvalGraph {
     edges: EvalEdge[];
 }
 
+/**
+ * Resolver de LookupTable.
+ * Dado un lookupRef y un keyValue del dato, retorna los constraints
+ * resueltos por targetField: { targetField → { constraintKey: value } }
+ * Retorna null si no se encuentra la fila.
+ *
+ * También retorna el keyField de la LookupTable para saber qué campo
+ * del dato usar como discriminador.
+ */
+export type LookupResolver = (
+    lookupRef: { tableId?: string; tableName?: string },
+) => Promise<{ keyField: string; resolve: (keyValue: string) => Promise<Record<string, Record<string, any>> | null> } | null>;
+
 export interface NodeEvalDetail {
     nodeId: string;
     nodeType: string;
@@ -126,11 +139,12 @@ function getNestedValue(obj: Record<string, any>, path: string): any {
 // Evaluación principal de una regla
 // ────────────────────────────────────────────
 
-export function evaluateRule(
+export async function evaluateRule(
     graph: EvalGraph,
     data: Record<string, any>,
     ruleMeta?: { ruleId?: string; ruleUUID?: string; ruleName?: string; ruleNumber?: string },
-): RuleEvalResult {
+    lookupResolver?: LookupResolver,
+): Promise<RuleEvalResult> {
     const startTime = performance.now();
 
     const nodeMap = new Map<string, EvalNode>();
@@ -283,12 +297,63 @@ export function evaluateRule(
         }
     }
 
-    // ── Fase 3: Validar los PARAMETERs activados contra el dato ──
-    let allParametersValid = true;
+    // ── Fase 3: Resolver lookups y validar PARAMETERs activados contra el dato ──
+    //
+    // Si hay lookupResolver, se resuelven dinámicamente los constraints de
+    // PARAMETERs que referencian una LookupTable. Los constraints de la fila
+    // se mezclan (override) con los constraints estáticos del nodo.
+
+    const resolvedParams: Array<{ param: EvalNode; resolvedConstraints?: Record<string, any> }> = [];
+
+    // Cache de resolvers por tableId para evitar queries repetidas
+    const resolverCache = new Map<string, { keyField: string; resolve: (kv: string) => Promise<Record<string, Record<string, any>> | null> }>();
 
     for (const paramId of activatedParameters) {
         const param = nodeMap.get(paramId)!;
-        const validation = validateParameter(param, data);
+        let resolvedConstraints: Record<string, any> | undefined;
+
+        if (lookupResolver && param.config.lookupRef) {
+            try {
+                const refKey = param.config.lookupRef.tableId || param.config.lookupRef.tableName || '';
+
+                // Obtener o cachear el resolver para esta tabla
+                if (!resolverCache.has(refKey)) {
+                    const tableResolver = await lookupResolver(param.config.lookupRef);
+                    if (tableResolver) {
+                        resolverCache.set(refKey, tableResolver);
+                    }
+                }
+
+                const cached = resolverCache.get(refKey);
+                if (cached) {
+                    // Usar el keyField de la LookupTable para buscar el valor en el dato
+                    const keyValue = getNestedValue(data, cached.keyField);
+
+                    if (keyValue !== undefined && keyValue !== null) {
+                        const lookupResult = await cached.resolve(String(keyValue));
+                        if (lookupResult && lookupResult[param.config.target_field]) {
+                            resolvedConstraints = lookupResult[param.config.target_field];
+                        }
+                    }
+                }
+            } catch {
+                // Si falla la resolución, se usan los constraints estáticos
+            }
+        }
+
+        resolvedParams.push({ param, resolvedConstraints });
+    }
+
+    let allParametersValid = true;
+
+    for (const { param, resolvedConstraints } of resolvedParams) {
+        // Mezclar constraints: estáticos + lookup (lookup sobreescribe)
+        const effectiveConfig = resolvedConstraints
+            ? { ...param.config, constraints: { ...param.config.constraints, ...resolvedConstraints } }
+            : param.config;
+
+        const effectiveNode = { ...param, config: effectiveConfig };
+        const validation = validateParameter(effectiveNode, data);
 
         const paramDetail: NodeEvalDetail = {
             nodeId: param.nodeId,
@@ -299,11 +364,11 @@ export function evaluateRule(
         };
 
         // Actualizar o agregar al nodeDetails
-        const existingIdx = nodeDetails.findIndex(d => d.nodeId === paramId);
+        const existingIdx = nodeDetails.findIndex(d => d.nodeId === param.nodeId);
         if (existingIdx >= 0) {
             nodeDetails[existingIdx] = paramDetail;
         } else {
-            evaluatedPath.push(paramId);
+            evaluatedPath.push(param.nodeId);
             nodeDetails.push(paramDetail);
         }
 
@@ -311,7 +376,7 @@ export function evaluateRule(
             allParametersValid = false;
             validation.errors.forEach(errMsg => {
                 errors.push({
-                    nodeId: paramId,
+                    nodeId: param.nodeId,
                     field: validation.targetField,
                     message: errMsg,
                     actualValue: validation.actualValue,
@@ -890,6 +955,8 @@ function validateArray(value: any, c: Record<string, any>, field: string, errors
 // ────────────────────────────────────────────
 // Export
 // ────────────────────────────────────────────
+
+export { getNestedValue };
 
 export default {
     evaluateRule,

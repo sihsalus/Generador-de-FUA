@@ -376,6 +376,275 @@
   }
   .form-row .form-group { flex: 1; }
 
+  /* ─── CONSTRAINTS MODAL ─── */
+  .cmodal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.65);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    backdrop-filter: blur(6px);
+    animation: cmodal-fadein 0.15s ease;
+  }
+  @keyframes cmodal-fadein { from { opacity: 0; } to { opacity: 1; } }
+  .cmodal-overlay.hidden { display: none; }
+  .cmodal {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    width: 560px;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 8px 48px rgba(0,0,0,0.5);
+    animation: cmodal-slidein 0.2s ease;
+  }
+  @keyframes cmodal-slidein { from { transform: translateY(12px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  .cmodal-head {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+  .cmodal-head h2 { font-size: 14px; font-weight: 600; flex: 1; }
+  .cmodal-head .cm-badge {
+    font-size: 10px; font-weight: 700; padding: 3px 8px;
+    border-radius: 10px; text-transform: uppercase; letter-spacing: 0.5px;
+    background: rgba(52,211,153,0.15); color: var(--accent-green);
+  }
+  .cmodal-body {
+    padding: 16px 20px;
+    overflow-y: auto;
+    flex: 1;
+  }
+  .cmodal-foot {
+    padding: 12px 20px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .cmodal-foot .cm-spacer { flex: 1; }
+
+  /* Constraint rows */
+  .c-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: var(--radius);
+    background: var(--bg-tertiary);
+    margin-bottom: 6px;
+    transition: background 0.1s;
+  }
+  .c-row:hover { background: var(--bg-hover); }
+  .c-row .c-key {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    min-width: 110px;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+  .c-row .c-key .c-hint {
+    font-weight: 400;
+    font-size: 10px;
+    color: var(--text-muted);
+    display: block;
+    margin-top: 1px;
+  }
+  .c-row .c-val {
+    flex: 1;
+    min-width: 0;
+  }
+  .c-row .c-val input,
+  .c-row .c-val select {
+    width: 100%;
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .c-row .c-val input:focus,
+  .c-row .c-val select:focus { border-color: var(--accent-green); }
+  .c-row .c-val input[type="checkbox"] {
+    width: auto; padding: 0; cursor: pointer;
+    accent-color: var(--accent-green);
+    width: 16px; height: 16px;
+  }
+  .c-row .c-toggle {
+    display: flex; align-items: center; gap: 8px; height: 32px;
+  }
+  .c-row .c-toggle label { font-size: 12px; color: var(--text-secondary); margin: 0; text-transform: none; letter-spacing: 0; }
+
+  /* Section titles in modal */
+  .cm-section {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.8px; color: var(--text-muted);
+    padding: 12px 0 6px; border-bottom: 1px solid var(--border);
+    margin-bottom: 8px;
+  }
+  .cm-section:first-child { padding-top: 0; }
+
+  /* JSON fallback toggle */
+  .cm-raw-toggle {
+    font-size: 11px; color: var(--text-muted); cursor: pointer;
+    display: flex; align-items: center; gap: 4px;
+    transition: color 0.15s;
+  }
+  .cm-raw-toggle:hover { color: var(--text-primary); }
+  .cm-raw-editor {
+    width: 100%; padding: 10px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: var(--bg-primary);
+    color: var(--accent-cyan);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; line-height: 1.5;
+    min-height: 150px; resize: vertical;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .cm-raw-editor:focus { border-color: var(--accent-cyan); }
+
+  /* Constraints summary button */
+  .constraints-btn {
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    font-size: 12px;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.15s;
+    text-align: left;
+  }
+  .constraints-btn:hover { background: var(--bg-hover); border-color: var(--accent-green); }
+  .constraints-btn .cb-icon { font-size: 16px; flex-shrink: 0; }
+  .constraints-btn .cb-summary { flex: 1; color: var(--text-secondary); font-size: 11px; }
+  .constraints-btn .cb-count {
+    font-size: 10px; font-weight: 700; padding: 2px 7px;
+    border-radius: 10px; background: rgba(52,211,153,0.15);
+    color: var(--accent-green); font-family: 'JetBrains Mono', monospace;
+  }
+  .constraints-btn .cb-arrow { color: var(--text-muted); font-size: 14px; }
+
+  /* ─── BARA output ─── */
+  .bara-ok { color: var(--accent-green); }
+  .bara-err { color: var(--accent-red); }
+  .bara-warn { color: var(--accent-orange); }
+  .bara-result-item { padding: 3px 0; display: flex; gap: 6px; align-items: baseline; }
+  .bara-result-item .bara-line { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-muted); min-width: 40px; }
+
+  /* ─── LOOKUP REF in constraints modal ─── */
+  .cm-lookup-section {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 10px 12px;
+    margin-bottom: 12px;
+    background: rgba(167,139,250,0.06);
+  }
+  .cm-lookup-header {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
+    font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.5px; color: var(--accent-purple);
+  }
+  .cm-lookup-header svg { width: 14px; height: 14px; stroke: var(--accent-purple); }
+  .cm-lookup-link {
+    margin-left: auto; font-size: 11px; color: var(--accent-blue);
+    cursor: pointer; text-transform: none; letter-spacing: 0; font-weight: 500;
+  }
+  .cm-lookup-link:hover { text-decoration: underline; }
+  .cm-lookup-info {
+    font-size: 11px; color: var(--text-muted); margin-top: 4px;
+    line-height: 1.4;
+  }
+
+  /* ─── LOOKUP SPREADSHEET ─── */
+  .lt-table-wrap {
+    overflow: auto;
+    max-height: calc(90vh - 120px);
+  }
+  .lt-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    min-width: 500px;
+  }
+  .lt-table th {
+    background: var(--bg-tertiary);
+    padding: 8px 10px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 11px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    border-bottom: 2px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    white-space: nowrap;
+  }
+  .lt-table th .lt-col-sub {
+    font-weight: 400; font-size: 9px; text-transform: none;
+    color: var(--text-muted); letter-spacing: 0; display: block;
+  }
+  .lt-table td {
+    padding: 2px 3px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+  .lt-table td input {
+    width: 100%;
+    padding: 6px 8px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    background: transparent;
+    color: var(--text-primary);
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    outline: none;
+    transition: all 0.15s;
+  }
+  .lt-table td input:hover { background: var(--bg-tertiary); }
+  .lt-table td input:focus {
+    background: var(--bg-primary);
+    border-color: var(--accent-green);
+  }
+  .lt-table td.lt-key-cell input {
+    font-weight: 600;
+    color: var(--accent-cyan);
+  }
+  .lt-table .lt-del-btn {
+    background: none; border: none; color: var(--text-muted);
+    cursor: pointer; font-size: 14px; padding: 4px 6px;
+    border-radius: 4px; transition: all 0.15s;
+  }
+  .lt-table .lt-del-btn:hover { color: var(--accent-red); background: rgba(239,68,68,0.1); }
+  .lt-table th .lt-del-col {
+    background: none; border: none; color: var(--text-muted);
+    cursor: pointer; font-size: 10px; padding: 2px 4px;
+    border-radius: 4px; transition: all 0.15s;
+  }
+  .lt-table th .lt-del-col:hover { color: var(--accent-red); }
+  .lt-table tr:hover td { background: rgba(255,255,255,0.02); }
+
   /* ─── MODAL ─── */
   .modal-overlay {
     position: fixed;
@@ -541,13 +810,13 @@
     <span class="current">Selecciona un RuleSet</span>
   </div>
   <div class="topbar-actions">
-    <button class="btn small" onclick="showImportModal()">
+    <button class="btn small" onclick="showBaraImportModal()" style="border-color:var(--accent-orange);color:var(--accent-orange)">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-      Importar JSON
+      Importar .bara
     </button>
-    <button class="btn small" onclick="showExportModal()">
+    <button class="btn small" onclick="doBaraExport()" style="border-color:var(--accent-orange);color:var(--accent-orange)">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-      Exportar
+      Exportar .bara
     </button>
     <button class="btn small" onclick="showEvalRuleSetModal()" id="btnEvalRuleSet">
       <svg viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
@@ -581,12 +850,27 @@
       </div>
     </div>
 
+    <!-- Lookup Tables -->
+    <div class="sidebar-section" id="lookupSection" style="flex:0 0 auto;overflow:hidden;min-height:40px">
+      <div class="sidebar-header" style="cursor:pointer" onclick="toggleLookupSection()">
+        Lookup Tables
+        <div style="display:flex;gap:6px;align-items:center">
+          <button class="btn small" id="btnNewLookup" onclick="event.stopPropagation();showLookupTableModal()" style="display:none">+ Nueva</button>
+          <span id="lookupChevron" style="font-size:10px;color:var(--text-muted)">▲</span>
+        </div>
+      </div>
+      <div id="lookupSectionBody">
+        <div class="sidebar-list" id="lookupList" style="max-height:120px">
+          <div class="sidebar-empty" id="lookupEmpty">Sin lookup tables</div>
+        </div>
+      </div>
+    </div>
+
     <!-- Variables -->
     <div class="sidebar-section" style="flex:1;overflow:hidden;min-height:120px" id="varSection">
       <div class="sidebar-header" style="cursor:pointer" onclick="toggleVarSection()">
         Variables
         <div style="display:flex;gap:6px;align-items:center">
-          <button class="btn small" id="btnImportVars" onclick="event.stopPropagation();showVarFileImportModal()" style="display:none" title="Importar variables desde archivo">↓ Importar</button>
           <button class="btn small" id="btnNewVar" onclick="event.stopPropagation();showVarForm()" style="display:none">+ Nueva</button>
           <span id="varChevron" style="font-size:10px;color:var(--text-muted)">▲</span>
         </div>
@@ -789,121 +1073,6 @@
   </div>
 </div>
 
-<!-- ─── MODAL: IMPORT ─── -->
-<div class="modal-overlay hidden" id="importModal">
-  <div class="modal" style="width:460px">
-    <div class="modal-header">
-      <h2>Importar Reglas (JSON)</h2>
-      <button class="btn small icon-only" onclick="closeModal('importModal')">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="form-group">
-        <label>Selecciona un archivo <code>.json</code></label>
-        <input type="file" id="import_file" accept=".json,application/json" style="margin-top:8px;width:100%">
-        <span id="import_filename" style="display:block;margin-top:6px;font-size:12px;color:var(--text-muted)"></span>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn" onclick="closeModal('importModal')">Cancelar</button>
-      <button class="btn primary" id="btnDoImport" onclick="doImport()" disabled>Importar</button>
-    </div>
-  </div>
-</div>
-
-<!-- ─── MODAL: EXPORT ─── -->
-<div class="modal-overlay hidden" id="exportModal">
-  <div class="modal" style="width:440px">
-    <div class="modal-header">
-      <h2>Exportar</h2>
-      <button class="btn small icon-only" onclick="closeModal('exportModal')">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="form-group">
-        <label>¿Qué exportar?</label>
-        <div style="display:flex;flex-direction:column;gap:8px;margin-top:6px">
-          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:400">
-            <input type="radio" name="exp_scope" value="current" id="exp_scope_current" checked>
-            RuleSet actual (<span id="exp_current_name" style="color:var(--accent-blue);font-style:italic">ninguno</span>)
-          </label>
-          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:400">
-            <input type="radio" name="exp_scope" value="all" id="exp_scope_all">
-            Todos los RuleSets
-          </label>
-        </div>
-      </div>
-      <div class="form-group">
-        <label>¿Incluir variables?</label>
-        <div style="display:flex;flex-direction:column;gap:8px;margin-top:6px">
-          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:400">
-            <input type="radio" name="exp_vars" value="yes" id="exp_vars_yes" checked>
-            Sí — incluir variables del/los RuleSet(s) en el archivo
-          </label>
-          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:400">
-            <input type="radio" name="exp_vars" value="no" id="exp_vars_no">
-            No — solo reglas
-          </label>
-        </div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn" onclick="closeModal('exportModal')">Cancelar</button>
-      <button class="btn primary" onclick="doExport()">Exportar</button>
-    </div>
-  </div>
-</div>
-
-<!-- ─── MODAL: IMPORT VARIABLES ─── -->
-<div class="modal-overlay hidden" id="varFileImportModal">
-  <div class="modal" style="width:480px">
-    <div class="modal-header">
-      <h2>Importar Variables</h2>
-      <button class="btn small icon-only" onclick="closeModal('varFileImportModal')">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="form-group">
-        <label>RuleSet destino</label>
-        <select id="varImport_rsTarget" style="margin-top:6px;width:100%" onchange="if(varFileImportData) renderVarImportPreview(varFileImportData)"></select>
-      </div>
-      <div class="form-group">
-        <label>Archivo <code>.json</code> de variables</label>
-        <input type="file" id="varImport_file" accept=".json,application/json" style="margin-top:8px;width:100%" onchange="onVarImportFileChange()">
-        <span id="varImport_filename" style="display:block;margin-top:6px;font-size:12px;color:var(--text-muted)"></span>
-      </div>
-      <div id="varImport_preview" style="display:none;margin-top:8px">
-        <div class="var-import-section-title" style="margin-bottom:6px">Vista previa</div>
-        <div id="varImport_previewList" style="max-height:200px;overflow-y:auto"></div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn" onclick="closeModal('varFileImportModal')">Cancelar</button>
-      <button class="btn primary" id="btnDoVarImport" onclick="doVarFileImport()" disabled>Importar variables</button>
-    </div>
-  </div>
-</div>
-
-<!-- ─── MODAL: VARIABLES PRE-IMPORT ─── -->
-<div class="modal-overlay hidden" id="varImportModal">
-  <div class="modal" style="width:520px">
-    <div class="modal-header">
-      <h2>Variables detectadas en el JSON</h2>
-      <button class="btn small icon-only" onclick="closeModal('varImportModal')">✕</button>
-    </div>
-    <div class="modal-body">
-      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px">
-        Se extrajeron los siguientes campos del JSON importado. Revisa los tipos y desmarca los que no quieras guardar como variables. Las variables ya existentes se muestran atenuadas y no se duplicarán.
-      </p>
-      <div id="varImportList"></div>
-    </div>
-    <div class="modal-footer" style="display:flex;flex-direction:row;align-items:center;justify-content:space-between;gap:8px">
-      <button class="btn" style="color:var(--accent-red);border-color:var(--accent-red)" onclick="cancelVarImport()">✕ Cancelar</button>
-      <div style="display:flex;gap:8px">
-        <button class="btn" onclick="skipVarImport()">Sin variables</button>
-        <button class="btn primary" id="btnConfirmVarImport" onclick="confirmVarImport()">Guardar e importar</button>
-      </div>
-    </div>
-  </div>
-</div>
-
 <!-- ─── MODAL: EVALUAR ─── -->
 <div class="modal-overlay hidden" id="evalModal">
   <div class="modal" style="width:560px">
@@ -920,6 +1089,120 @@
     <div class="modal-footer">
       <button class="btn" onclick="closeModal('evalModal')">Cancelar</button>
       <button class="btn primary" id="evalModalBtn" onclick="">Evaluar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ BARA IMPORT MODAL ═══════ -->
+<div class="cmodal-overlay hidden" id="baraModal" onclick="if(event.target===this)closeBaraModal()">
+  <div class="cmodal" style="width:85vw;max-width:960px;max-height:90vh">
+    <div class="cmodal-head">
+      <h2>BARA</h2>
+      <span class="cm-badge" style="background:rgba(245,158,11,0.2);color:var(--accent-orange)">.bara</span>
+      <span style="flex:1"></span>
+      <label class="btn small" style="cursor:pointer;margin-right:4px">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Archivo
+        <input type="file" accept=".bara,.txt" id="bara_file" style="display:none" onchange="onBaraFileLoad(this)">
+      </label>
+      <button class="btn small icon-only" onclick="closeBaraModal()">✕</button>
+    </div>
+    <div class="cmodal-body" style="padding:0;display:flex;flex-direction:column;overflow:hidden">
+      <textarea id="bara_editor" spellcheck="false" style="
+        flex:1;min-height:400px;padding:16px 20px;
+        background:var(--bg-primary);color:var(--accent-orange);
+        font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.6;
+        border:none;outline:none;resize:none;
+        tab-size:2;
+      " placeholder="// Escribe tu código BARA aquí o carga un archivo .bara
+
+vars {
+  codigo_prestacional: STRING
+  edad_en_dias: NUMBER
+}
+
+rule &quot;Mi Regla&quot; #001 VALIDATION {
+  C1: codigo_prestacional == &quot;301&quot;
+  G1: AND(C1)
+  P1: PARAM edad_en_dias NUMBER required { minValue: 0, maxValue: 4374 }
+  G1 -> P1
+}"></textarea>
+      <div id="bara_output" style="display:none;padding:12px 20px;border-top:1px solid var(--border);max-height:180px;overflow-y:auto;font-size:12px"></div>
+    </div>
+    <div class="cmodal-foot">
+      <span style="font-size:11px;color:var(--text-muted)" id="bara_status">Listo</span>
+      <span class="cm-spacer"></span>
+      <button class="btn" onclick="closeBaraModal()">Cerrar</button>
+      <button class="btn primary" onclick="doBaraParse()" style="background:var(--accent-orange);border-color:var(--accent-orange)">Parsear e Importar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ LOOKUP TABLE CREATE/EDIT MODAL ═══════ -->
+<div class="modal-overlay hidden" id="lookupCreateModal" onclick="if(event.target===this)closeModal('lookupCreateModal')">
+  <div class="modal" style="width:500px">
+    <div class="modal-header">
+      <h2 id="lookupCreateTitle">Nueva Lookup Table</h2>
+      <button class="btn small icon-only" onclick="closeModal('lookupCreateModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Nombre</label>
+        <input id="lt_name" placeholder="Ej: rangos_prestacionales">
+      </div>
+      <div class="form-group">
+        <label>Key Field <small style="color:var(--text-muted)">campo del dato que sirve como clave</small></label>
+        <input id="lt_keyField" placeholder="Ej: codigo_prestacional">
+      </div>
+      <div class="form-group">
+        <label>Descripción</label>
+        <textarea id="lt_desc" placeholder="Descripción opcional..." style="min-height:50px"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('lookupCreateModal')">Cancelar</button>
+      <button class="btn primary" onclick="saveLookupTable()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ LOOKUP TABLE EDITOR MODAL (spreadsheet) ═══════ -->
+<div class="cmodal-overlay hidden" id="lookupEditorModal" onclick="if(event.target===this)closeLookupEditor()">
+  <div class="cmodal" style="width:90vw;max-width:900px;max-height:90vh">
+    <div class="cmodal-head">
+      <h2 id="lte_title">Lookup Table</h2>
+      <span class="cm-badge" id="lte_keyField">key</span>
+      <button class="btn small icon-only" onclick="closeLookupEditor()">✕</button>
+    </div>
+    <div class="cmodal-body" id="lte_body" style="padding:0;overflow:auto"></div>
+    <div class="cmodal-foot">
+      <button class="btn small" onclick="addLookupColumn()">+ Columna</button>
+      <button class="btn small" onclick="addLookupRow()">+ Fila</button>
+      <span class="cm-spacer"></span>
+      <button class="btn danger small" onclick="confirmDeleteLookupTable()">Eliminar Tabla</button>
+      <button class="btn" onclick="closeLookupEditor()">Cerrar</button>
+      <button class="btn success" onclick="saveLookupEditorChanges()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ CONSTRAINTS MODAL ═══════ -->
+<div class="cmodal-overlay hidden" id="constraintsModal" onclick="if(event.target===this)closeConstraintsModal()">
+  <div class="cmodal">
+    <div class="cmodal-head">
+      <h2 id="cm_title">Constraints</h2>
+      <span class="cm-badge" id="cm_paramType">STRING</span>
+      <button class="btn small icon-only" onclick="closeConstraintsModal()">✕</button>
+    </div>
+    <div class="cmodal-body" id="cm_body"></div>
+    <div class="cmodal-foot">
+      <span class="cm-raw-toggle" onclick="toggleConstraintsRawMode()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        JSON
+      </span>
+      <span class="cm-spacer"></span>
+      <button class="btn" onclick="closeConstraintsModal()">Cancelar</button>
+      <button class="btn success" onclick="applyConstraints()">Aplicar</button>
     </div>
   </div>
 </div>
@@ -957,6 +1240,9 @@ const state = {
   isDirty: false,
   // RuleSet edit mode
   ruleSetEditingId: null,
+  // Lookup tables
+  lookupTables: [],       // [{id, uuid, name, keyField, columns, rows?}, ...]
+  currentLookupTable: null,
 };
 
 // ════════════════════════════════════════════
@@ -1171,10 +1457,11 @@ async function selectRuleSet(id) {
   clearGraph();
   renderRuleSetList();
   document.getElementById('btnNewRule').style.display = '';
-  document.getElementById('btnImportVars').style.display = '';
+  // btnImportVars removed — variables now imported via .bara
   updateBreadcrumb();
   renderVarList();
   await loadRules();
+  await loadLookupTables();
 }
 
 // ════════════════════════════════════════════
@@ -1793,6 +2080,9 @@ function showNodeProps(nodeId) {
     `;
   } else if (node.nodeType === 'PARAMETER') {
     const cfg = node.config;
+    const cCount = Object.keys(cfg.constraints || {}).length;
+    const hasLookup = !!cfg.lookupRef;
+    const cSummary = constraintsSummary(cfg.param_type, cfg.constraints, hasLookup);
     html += `
       <div class="form-group">
         <label>Target Field</label>
@@ -1804,23 +2094,30 @@ function showNodeProps(nodeId) {
           ${['STRING','NUMBER','ENUM','DATE','RANGE','ARRAY','BOOLEAN'].map(t => `<option ${cfg.param_type===t?'selected':''}>${t}</option>`).join('')}
         </select>
       </div>
-      <div class="form-group">
-        <label>Required</label>
-        <select onchange="updateNodeConfig('${nodeId}', 'required', this.value==='true')">
-          <option value="true" ${cfg.required!==false?'selected':''}>Sí</option>
-          <option value="false" ${cfg.required===false?'selected':''}>No</option>
-        </select>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Required</label>
+          <select onchange="updateNodeConfig('${nodeId}', 'required', this.value==='true')">
+            <option value="true" ${cfg.required!==false?'selected':''}>Sí</option>
+            <option value="false" ${cfg.required===false?'selected':''}>No</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Is Default</label>
+          <select onchange="updateNodeProp('${nodeId}', 'isDefault', this.value==='true')">
+            <option value="false" ${!node.isDefault?'selected':''}>No</option>
+            <option value="true" ${node.isDefault?'selected':''}>Sí</option>
+          </select>
+        </div>
       </div>
       <div class="form-group">
-        <label>Is Default</label>
-        <select onchange="updateNodeProp('${nodeId}', 'isDefault', this.value==='true')">
-          <option value="false" ${!node.isDefault?'selected':''}>No</option>
-          <option value="true" ${node.isDefault?'selected':''}>Sí</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Constraints (JSON)</label>
-        <textarea class="json-editor" onchange="updateNodeConstraints('${nodeId}', this.value)">${JSON.stringify(cfg.constraints || {}, null, 2)}</textarea>
+        <label>Constraints</label>
+        <button class="constraints-btn" onclick="openConstraintsModal('${nodeId}')">
+          <span class="cb-icon">${hasLookup ? '⊞' : '⚙'}</span>
+          <span class="cb-summary">${cSummary}</span>
+          <span class="cb-count">${cCount}${hasLookup ? '+L' : ''}</span>
+          <span class="cb-arrow">›</span>
+        </button>
       </div>
     `;
   }
@@ -1925,6 +2222,621 @@ function updateNodeConstraints(nodeId, jsonStr) {
   } catch {
     toast('JSON inválido en constraints', 'error');
   }
+}
+
+// ════════════════════════════════════════════
+// CONSTRAINTS MODAL
+// ════════════════════════════════════════════
+
+let _cmNodeId = null;
+let _cmRawMode = false;
+
+/**
+ * Constraint field definitions per param_type.
+ * Each field: { key, label, hint, type, default?, options?, show? }
+ */
+const CONSTRAINT_DEFS = {
+  STRING: [
+    { key: 'minLength', label: 'Min Length',     hint: 'caracteres mínimos',     type: 'number', default: undefined },
+    { key: 'maxLength', label: 'Max Length',     hint: 'caracteres máximos',     type: 'number', default: undefined },
+    { key: 'pattern',   label: 'Regex Pattern',  hint: 'ej: ^[A-Z]{3}$',        type: 'text',   default: '' },
+    { key: 'allowEmpty',label: 'Permitir vacío', hint: '',                       type: 'bool',   default: true },
+    { key: 'case',      label: 'Forzar Case',    hint: '',                       type: 'select', options: ['','UPPER','LOWER'], default: '' },
+    { key: 'trim',      label: 'Trim',           hint: 'limpiar espacios',       type: 'bool',   default: false },
+  ],
+  NUMBER: [
+    { key: 'minValue',     label: 'Min Value',      hint: 'valor mínimo',           type: 'number', default: undefined },
+    { key: 'maxValue',     label: 'Max Value',      hint: 'valor máximo',           type: 'number', default: undefined },
+    { key: 'isInteger',    label: 'Solo enteros',   hint: '',                       type: 'bool',   default: false },
+    { key: 'allowNegative',label: 'Permitir negativos',hint: '',                    type: 'bool',   default: true },
+    { key: 'allowZero',    label: 'Permitir cero',  hint: '',                       type: 'bool',   default: true },
+    { key: 'decimals',     label: 'Max decimales',  hint: 'límite de decimales',    type: 'number', default: undefined },
+  ],
+  ENUM: [
+    { key: 'values',        label: 'Valores',         hint: 'separados por coma',     type: 'tags',   default: [] },
+    { key: 'caseSensitive', label: 'Case sensitive',   hint: '',                       type: 'bool',   default: true },
+    { key: 'allowMultiple', label: 'Permitir múltiples',hint: '',                      type: 'bool',   default: false },
+  ],
+  DATE: [
+    { key: 'minDate',    label: 'Fecha mínima',   hint: 'YYYY-MM-DD o TODAY±N',   type: 'text',   default: '' },
+    { key: 'maxDate',    label: 'Fecha máxima',   hint: 'YYYY-MM-DD o TODAY±N',   type: 'text',   default: '' },
+    { key: 'allowFuture',label: 'Permitir futuro',hint: '',                       type: 'bool',   default: true },
+    { key: 'allowPast',  label: 'Permitir pasado',hint: '',                       type: 'bool',   default: true },
+  ],
+  RANGE: [
+    { key: 'minValueLower',           label: 'Lower mín',     hint: '',   type: 'number', default: undefined },
+    { key: 'maxValueLower',           label: 'Lower máx',     hint: '',   type: 'number', default: undefined },
+    { key: 'minValueUpper',           label: 'Upper mín',     hint: '',   type: 'number', default: undefined },
+    { key: 'maxValueUpper',           label: 'Upper máx',     hint: '',   type: 'number', default: undefined },
+    { key: 'lowerMustBeLessThanUpper',label: 'Lower < Upper', hint: '',   type: 'bool',   default: true },
+  ],
+  ARRAY: [
+    { key: 'minItems',   label: 'Min items',     hint: '',   type: 'number', default: undefined },
+    { key: 'maxItems',   label: 'Max items',     hint: '',   type: 'number', default: undefined },
+    { key: 'uniqueItems',label: 'Items únicos',  hint: '',   type: 'bool',   default: false },
+  ],
+  BOOLEAN: [
+    { key: 'allowNull', label: 'Permitir null', hint: '', type: 'bool', default: true },
+  ],
+};
+
+function constraintsSummary(paramType, constraints, hasLookup) {
+  const parts = [];
+  if (hasLookup) parts.push('⊞ Lookup');
+  if (constraints) {
+    const defs = CONSTRAINT_DEFS[paramType] || [];
+    for (const k of Object.keys(constraints)) {
+      const def = defs.find(d => d.key === k);
+      const v = constraints[k];
+      if (v === undefined || v === '' || v === null) continue;
+      const label = def ? def.label : k;
+      if (typeof v === 'boolean') {
+        parts.push(`${label}: ${v ? 'Sí' : 'No'}`);
+      } else if (Array.isArray(v)) {
+        parts.push(`${label}: [${v.length}]`);
+      } else {
+        parts.push(`${label}: ${v}`);
+      }
+    }
+  }
+  return parts.length ? parts.slice(0, 3).join(' · ') + (parts.length > 3 ? ' …' : '') : 'Sin restricciones';
+}
+
+function openConstraintsModal(nodeId) {
+  _cmNodeId = nodeId;
+  _cmRawMode = false;
+  const node = state.nodes.find(n => n.nodeId === nodeId);
+  if (!node) return;
+
+  document.getElementById('cm_title').textContent = `Constraints — ${node.config.target_field || nodeId}`;
+  document.getElementById('cm_paramType').textContent = node.config.param_type || 'STRING';
+  renderConstraintsForm(node);
+  document.getElementById('constraintsModal').classList.remove('hidden');
+}
+
+function closeConstraintsModal() {
+  document.getElementById('constraintsModal').classList.add('hidden');
+  _cmNodeId = null;
+}
+
+function renderConstraintsForm(node) {
+  const body = document.getElementById('cm_body');
+  const paramType = node.config.param_type || 'STRING';
+  const constraints = { ...(node.config.constraints || {}) };
+  const defs = CONSTRAINT_DEFS[paramType] || [];
+
+  if (_cmRawMode) {
+    const fullConfig = { constraints };
+    if (node.config.lookupRef) fullConfig.lookupRef = node.config.lookupRef;
+    body.innerHTML = `<textarea class="cm-raw-editor" id="cm_raw_json">${JSON.stringify(fullConfig, null, 2)}</textarea>`;
+    return;
+  }
+
+  // Lookup ref section
+  let html = renderLookupRefSection(node.nodeId, node.config);
+
+  if (defs.length === 0) {
+    html = `<div style="text-align:center;padding:20px;color:var(--text-muted);font-size:13px">
+      No hay constraints predefinidos para tipo <b>${paramType}</b>.<br>
+      Usa el modo JSON para editar manualmente.
+    </div>`;
+    body.innerHTML = html;
+    return;
+  }
+
+  for (const def of defs) {
+    const val = constraints[def.key];
+    const hasValue = val !== undefined && val !== null && val !== '';
+    html += `<div class="c-row">`;
+    html += `<div class="c-key">${def.label}${def.hint ? `<span class="c-hint">${def.hint}</span>` : ''}</div>`;
+    html += `<div class="c-val">`;
+
+    switch (def.type) {
+      case 'number':
+        html += `<input type="number" step="any" data-ck="${def.key}" value="${hasValue ? val : ''}" placeholder="${def.default !== undefined ? def.default : '—'}">`;
+        break;
+      case 'text':
+        html += `<input type="text" data-ck="${def.key}" value="${hasValue ? val : ''}" placeholder="${def.default || '—'}">`;
+        break;
+      case 'bool': {
+        const checked = hasValue ? !!val : !!def.default;
+        html += `<div class="c-toggle">
+          <input type="checkbox" data-ck="${def.key}" ${checked ? 'checked' : ''}>
+          <label>${checked ? 'Sí' : 'No'}</label>
+        </div>`;
+        break;
+      }
+      case 'select':
+        html += `<select data-ck="${def.key}">
+          ${(def.options || []).map(o => `<option value="${o}" ${val === o ? 'selected' : ''}>${o || '(ninguno)'}</option>`).join('')}
+        </select>`;
+        break;
+      case 'tags': {
+        const items = Array.isArray(val) ? val : (typeof val === 'string' && val ? val.split(',').map(s => s.trim()) : []);
+        html += `<input type="text" data-ck="${def.key}" data-type="tags" value="${items.join(', ')}" placeholder="val1, val2, val3">`;
+        break;
+      }
+    }
+    html += `</div></div>`;
+  }
+
+  // Extra constraints not in defs (custom keys from JSON)
+  const defKeys = new Set(defs.map(d => d.key));
+  const extraKeys = Object.keys(constraints).filter(k => !defKeys.has(k));
+  if (extraKeys.length > 0) {
+    html += `<div class="cm-section">Constraints adicionales</div>`;
+    for (const k of extraKeys) {
+      const v = constraints[k];
+      html += `<div class="c-row">
+        <div class="c-key">${k}<span class="c-hint">personalizado</span></div>
+        <div class="c-val"><input type="text" data-ck="${k}" data-custom="true" value="${typeof v === 'object' ? JSON.stringify(v) : v}"></div>
+      </div>`;
+    }
+  }
+
+  body.innerHTML = html;
+
+  // Live toggle labels for checkboxes
+  body.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+    cb.addEventListener('change', () => {
+      const lbl = cb.parentElement.querySelector('label');
+      if (lbl) lbl.textContent = cb.checked ? 'Sí' : 'No';
+    });
+  });
+}
+
+function toggleConstraintsRawMode() {
+  if (!_cmNodeId) return;
+  const node = state.nodes.find(n => n.nodeId === _cmNodeId);
+  if (!node) return;
+
+  if (!_cmRawMode) {
+    // Switch to raw: collect current form values first
+    const collected = collectConstraintsFromForm(node);
+    if (collected) node.config.constraints = collected;
+  } else {
+    // Switch from raw: try parse
+    const rawEl = document.getElementById('cm_raw_json');
+    if (rawEl) {
+      try {
+        const parsed = JSON.parse(rawEl.value);
+        if (parsed.constraints) {
+          node.config.constraints = parsed.constraints;
+          if (parsed.lookupRef) node.config.lookupRef = parsed.lookupRef;
+          else delete node.config.lookupRef;
+        } else {
+          node.config.constraints = parsed;
+        }
+      } catch {
+        toast('JSON inválido', 'error');
+        return;
+      }
+    }
+  }
+
+  _cmRawMode = !_cmRawMode;
+  renderConstraintsForm(node);
+}
+
+function collectConstraintsFromForm(node) {
+  const body = document.getElementById('cm_body');
+  if (!body) return null;
+
+  // If in raw mode, parse the textarea
+  const rawEl = document.getElementById('cm_raw_json');
+  if (rawEl) {
+    try {
+      const parsed = JSON.parse(rawEl.value);
+      // Handle { constraints: {...}, lookupRef: {...} } format
+      if (parsed.constraints) {
+        if (parsed.lookupRef) node.config.lookupRef = parsed.lookupRef;
+        else delete node.config.lookupRef;
+        return parsed.constraints;
+      }
+      return parsed;
+    }
+    catch { toast('JSON inválido', 'error'); return null; }
+  }
+
+  const result = {};
+  const paramType = node.config.param_type || 'STRING';
+  const defs = CONSTRAINT_DEFS[paramType] || [];
+
+  body.querySelectorAll('[data-ck]').forEach(el => {
+    const key = el.dataset.ck;
+    const def = defs.find(d => d.key === key);
+
+    if (el.type === 'checkbox') {
+      const checked = el.checked;
+      // Only include if different from default
+      if (def && checked !== !!def.default) {
+        result[key] = checked;
+      } else if (!def) {
+        result[key] = checked;
+      }
+    } else if (el.type === 'number') {
+      if (el.value !== '') result[key] = parseFloat(el.value);
+    } else if (el.dataset.type === 'tags') {
+      const raw = el.value.trim();
+      if (raw) result[key] = raw.split(',').map(s => s.trim()).filter(Boolean);
+    } else if (el.dataset.custom === 'true') {
+      if (el.value !== '') {
+        try { result[key] = JSON.parse(el.value); }
+        catch { result[key] = el.value; }
+      }
+    } else {
+      if (el.value !== '') result[key] = el.value;
+    }
+  });
+
+  return result;
+}
+
+function applyConstraints() {
+  if (!_cmNodeId) return;
+  const node = state.nodes.find(n => n.nodeId === _cmNodeId);
+  if (!node) return;
+
+  const collected = collectConstraintsFromForm(node);
+  if (collected === null) return;
+
+  node.config.constraints = collected;
+  state.isDirty = true;
+  closeConstraintsModal();
+  showNodeProps(_cmNodeId);
+  renderGraph();
+  toast('Constraints aplicados', 'success');
+}
+
+// ════════════════════════════════════════════
+// LOOKUP TABLES — CRUD & SIDEBAR
+// ════════════════════════════════════════════
+
+let _lookupSectionOpen = true;
+function toggleLookupSection() {
+  _lookupSectionOpen = !_lookupSectionOpen;
+  document.getElementById('lookupSectionBody').style.display = _lookupSectionOpen ? '' : 'none';
+  document.getElementById('lookupChevron').textContent = _lookupSectionOpen ? '▲' : '▼';
+}
+
+async function loadLookupTables() {
+  if (!state.currentRuleSet) { state.lookupTables = []; renderLookupList(); return; }
+  try {
+    state.lookupTables = await api('GET', `/LookupTable/ruleset/${state.currentRuleSet.id}/tables`);
+    renderLookupList();
+  } catch (e) {
+    state.lookupTables = [];
+    renderLookupList();
+  }
+}
+
+function renderLookupList() {
+  const list = document.getElementById('lookupList');
+  const empty = document.getElementById('lookupEmpty');
+  const btn = document.getElementById('btnNewLookup');
+  if (btn) btn.style.display = state.currentRuleSet ? '' : 'none';
+
+  if (!state.lookupTables.length) {
+    list.innerHTML = '';
+    empty.style.display = '';
+    list.appendChild(empty);
+    return;
+  }
+  empty.style.display = 'none';
+  list.innerHTML = state.lookupTables.map(lt => `
+    <div class="sidebar-item" onclick="openLookupEditor('${lt.uuid}')" title="${lt.description || lt.name}">
+      <span style="color:var(--accent-purple);font-size:14px;flex-shrink:0">⊞</span>
+      <span style="flex:1;overflow:hidden;text-overflow:ellipsis;font-size:12px">${lt.name}</span>
+      <span class="badge blue" style="font-size:9px">${lt.keyField}</span>
+    </div>
+  `).join('');
+}
+
+function showLookupTableModal(editId) {
+  document.getElementById('lt_name').value = '';
+  document.getElementById('lt_keyField').value = '';
+  document.getElementById('lt_desc').value = '';
+  document.getElementById('lookupCreateTitle').textContent = editId ? 'Editar Lookup Table' : 'Nueva Lookup Table';
+  document.getElementById('lookupCreateModal').dataset.editId = editId || '';
+
+  if (editId) {
+    const lt = state.lookupTables.find(t => t.uuid === editId || t.id === editId);
+    if (lt) {
+      document.getElementById('lt_name').value = lt.name;
+      document.getElementById('lt_keyField').value = lt.keyField;
+      document.getElementById('lt_desc').value = lt.description || '';
+    }
+  }
+  showModal('lookupCreateModal');
+}
+
+async function saveLookupTable() {
+  const name = document.getElementById('lt_name').value.trim();
+  const keyField = document.getElementById('lt_keyField').value.trim();
+  const desc = document.getElementById('lt_desc').value.trim();
+  if (!name || !keyField) { toast('Nombre y Key Field son requeridos', 'error'); return; }
+
+  const editId = document.getElementById('lookupCreateModal').dataset.editId;
+
+  try {
+    if (editId) {
+      await api('PUT', `/LookupTable/table/${editId}`, { name, keyField, description: desc || undefined });
+      toast('Lookup Table actualizada', 'success');
+    } else {
+      // Create with a default column
+      await api('POST', `/LookupTable/ruleset/${state.currentRuleSet.id}/import`, {
+        name,
+        keyField,
+        description: desc || undefined,
+        columns: [{ columnName: 'valor_1', targetField: 'campo_destino', constraintKey: 'minValue', dataType: 'NUMBER' }],
+        rows: [{ keyValue: 'ejemplo', values: { valor_1: 0 } }],
+      });
+      toast('Lookup Table creada', 'success');
+    }
+    closeModal('lookupCreateModal');
+    await loadLookupTables();
+  } catch (e) {
+    toast('Error: ' + e.message, 'error');
+  }
+}
+
+// ════════════════════════════════════════════
+// LOOKUP TABLE EDITOR (spreadsheet)
+// ════════════════════════════════════════════
+
+let _lteData = null; // { id, uuid, name, keyField, columns, rows }
+
+async function openLookupEditor(idOrUUID) {
+  try {
+    _lteData = await api('GET', `/LookupTable/table/${idOrUUID}`);
+    document.getElementById('lte_title').textContent = _lteData.name;
+    document.getElementById('lte_keyField').textContent = _lteData.keyField;
+    renderLookupSpreadsheet();
+    document.getElementById('lookupEditorModal').classList.remove('hidden');
+  } catch (e) {
+    toast('Error cargando tabla: ' + e.message, 'error');
+  }
+}
+
+function closeLookupEditor() {
+  document.getElementById('lookupEditorModal').classList.add('hidden');
+  _lteData = null;
+}
+
+function renderLookupSpreadsheet() {
+  if (!_lteData) return;
+  const body = document.getElementById('lte_body');
+  const cols = _lteData.columns || [];
+  const rows = _lteData.rows || [];
+
+  let html = `<div class="lt-table-wrap"><table class="lt-table"><thead><tr>`;
+  // Key column header
+  html += `<th style="min-width:100px">${_lteData.keyField}<span class="lt-col-sub">clave de búsqueda</span></th>`;
+  // Data columns
+  cols.forEach((col, ci) => {
+    html += `<th style="min-width:120px">
+      <div style="display:flex;align-items:center;gap:4px">
+        <span style="flex:1">${col.columnName}<span class="lt-col-sub">${col.targetField}.${col.constraintKey} (${col.dataType})</span></span>
+        <button class="lt-del-col" onclick="removeLookupColumn(${ci})" title="Eliminar columna">✕</button>
+      </div>
+    </th>`;
+  });
+  html += `<th style="width:40px"></th></tr></thead><tbody>`;
+
+  // Data rows
+  rows.forEach((row, ri) => {
+    html += `<tr>`;
+    html += `<td class="lt-key-cell"><input value="${row.keyValue}" data-ri="${ri}" data-col="__key" onchange="onLteCell(this)"></td>`;
+    cols.forEach((col) => {
+      const val = row.values[col.columnName];
+      html += `<td><input value="${val !== undefined && val !== null ? val : ''}" data-ri="${ri}" data-col="${col.columnName}" onchange="onLteCell(this)"></td>`;
+    });
+    html += `<td><button class="lt-del-btn" onclick="removeLookupRow(${ri})" title="Eliminar fila">✕</button></td>`;
+    html += `</tr>`;
+  });
+
+  html += `</tbody></table></div>`;
+  body.innerHTML = html;
+}
+
+function onLteCell(input) {
+  if (!_lteData) return;
+  const ri = parseInt(input.dataset.ri);
+  const col = input.dataset.col;
+  const row = _lteData.rows[ri];
+  if (!row) return;
+
+  if (col === '__key') {
+    row.keyValue = input.value;
+  } else {
+    // Try to parse as number if the column dataType is NUMBER
+    const colDef = _lteData.columns.find(c => c.columnName === col);
+    let val = input.value;
+    if (colDef && colDef.dataType === 'NUMBER' && val !== '') {
+      val = parseFloat(val);
+      if (isNaN(val)) val = input.value;
+    } else if (colDef && colDef.dataType === 'BOOLEAN') {
+      val = val === 'true' || val === '1' || val === 'si';
+    }
+    row.values[col] = val;
+  }
+}
+
+function addLookupRow() {
+  if (!_lteData) return;
+  const newRow = { keyValue: '', values: {} };
+  (_lteData.columns || []).forEach(col => {
+    newRow.values[col.columnName] = col.dataType === 'NUMBER' ? 0 : '';
+  });
+  _lteData.rows.push(newRow);
+  renderLookupSpreadsheet();
+  // Focus last row key cell
+  setTimeout(() => {
+    const inputs = document.querySelectorAll('.lt-key-cell input');
+    if (inputs.length) inputs[inputs.length - 1].focus();
+  }, 50);
+}
+
+function removeLookupRow(ri) {
+  if (!_lteData) return;
+  _lteData.rows.splice(ri, 1);
+  renderLookupSpreadsheet();
+}
+
+function addLookupColumn() {
+  if (!_lteData) return;
+  const name = prompt('Nombre de columna (ej: edad_max):');
+  if (!name || !name.trim()) return;
+  const targetField = prompt('Target field del dato (ej: edad_en_dias):') || '';
+  const constraintKey = prompt('Constraint key (ej: maxValue, minValue, pattern):') || 'minValue';
+  const dataType = prompt('Data type (STRING, NUMBER, BOOLEAN, DATE):') || 'NUMBER';
+
+  _lteData.columns.push({
+    columnName: name.trim(),
+    targetField: targetField.trim(),
+    constraintKey: constraintKey.trim(),
+    dataType: dataType.toUpperCase(),
+  });
+  // Add default value to all existing rows
+  _lteData.rows.forEach(row => {
+    row.values[name.trim()] = dataType === 'NUMBER' ? 0 : '';
+  });
+  renderLookupSpreadsheet();
+}
+
+function removeLookupColumn(ci) {
+  if (!_lteData) return;
+  const col = _lteData.columns[ci];
+  if (!col) return;
+  _lteData.columns.splice(ci, 1);
+  _lteData.rows.forEach(row => { delete row.values[col.columnName]; });
+  renderLookupSpreadsheet();
+}
+
+async function saveLookupEditorChanges() {
+  if (!_lteData) return;
+
+  // Validate
+  const keyValues = _lteData.rows.map(r => r.keyValue);
+  const dupes = keyValues.filter((v, i) => v && keyValues.indexOf(v) !== i);
+  if (dupes.length) { toast(`KeyValues duplicados: ${[...new Set(dupes)].join(', ')}`, 'error'); return; }
+  const empties = _lteData.rows.filter(r => !r.keyValue.trim());
+  if (empties.length) { toast('Hay filas sin keyValue', 'error'); return; }
+  if (!_lteData.columns.length) { toast('Debe haber al menos una columna', 'error'); return; }
+
+  try {
+    // Update table metadata (columns)
+    await api('PUT', `/LookupTable/table/${_lteData.uuid}`, {
+      columns: _lteData.columns,
+    });
+
+    // Delete all existing rows and recreate (simplest approach for spreadsheet save)
+    const existingRows = await api('GET', `/LookupTable/table/${_lteData.uuid}`);
+    for (const row of (existingRows.rows || [])) {
+      await api('DELETE', `/LookupTable/table/${_lteData.uuid}/row/${row.id}`, { inactiveBy: 'system' });
+    }
+    for (const row of _lteData.rows) {
+      await api('POST', `/LookupTable/table/${_lteData.uuid}/row`, {
+        keyValue: row.keyValue,
+        values: row.values,
+      });
+    }
+
+    toast(`Tabla guardada (${_lteData.rows.length} filas)`, 'success');
+    await loadLookupTables();
+  } catch (e) {
+    toast('Error guardando: ' + e.message, 'error');
+  }
+}
+
+async function confirmDeleteLookupTable() {
+  if (!_lteData) return;
+  if (!confirm(`¿Eliminar la tabla "${_lteData.name}" y todas sus filas?`)) return;
+  try {
+    await api('DELETE', `/LookupTable/table/${_lteData.uuid}`, { inactiveBy: 'system' });
+    toast('Tabla eliminada', 'success');
+    closeLookupEditor();
+    await loadLookupTables();
+  } catch (e) {
+    toast('Error: ' + e.message, 'error');
+  }
+}
+
+// ════════════════════════════════════════════
+// LOOKUP REF — in constraints modal
+// ════════════════════════════════════════════
+
+function renderLookupRefSection(nodeId, cfg) {
+  const tables = state.lookupTables || [];
+  const ref = cfg.lookupRef;
+  const currentTableId = ref ? (ref.tableId || ref.tableName || '') : '';
+
+  let html = `<div class="cm-lookup-section">`;
+  html += `<div class="cm-lookup-header">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+    Lookup Table
+    ${currentTableId ? `<span class="cm-lookup-link" onclick="openLookupEditorFromConstraints('${currentTableId}')">Editar tabla</span>` : ''}
+  </div>`;
+
+  if (tables.length === 0) {
+    html += `<div class="cm-lookup-info">No hay Lookup Tables en este RuleSet.<br>Crea una desde el sidebar izquierdo.</div>`;
+  } else {
+    html += `<div class="c-row" style="margin-bottom:0">
+      <div class="c-key">Tabla<span class="c-hint">resolver constraints dinámicos</span></div>
+      <div class="c-val">
+        <select id="cm_lookupRef" onchange="onLookupRefChange('${nodeId}', this.value)">
+          <option value="">(ninguna — constraints estáticos)</option>
+          ${tables.map(t => `<option value="${t.uuid}" ${currentTableId === t.uuid || currentTableId === t.name ? 'selected' : ''}>${t.name} (${t.keyField})</option>`).join('')}
+        </select>
+      </div>
+    </div>`;
+    if (currentTableId) {
+      const table = tables.find(t => t.uuid === currentTableId || t.name === currentTableId);
+      if (table) {
+        html += `<div class="cm-lookup-info" style="margin-top:8px">
+          Los constraints de la fila que coincida con <b>${table.keyField}</b> se mezclan con los estáticos de arriba (lookup sobreescribe).
+        </div>`;
+      }
+    }
+  }
+  html += `</div>`;
+  return html;
+}
+
+function onLookupRefChange(nodeId, tableUUID) {
+  const node = state.nodes.find(n => n.nodeId === nodeId);
+  if (!node) return;
+  if (tableUUID) {
+    node.config.lookupRef = { tableId: tableUUID };
+  } else {
+    delete node.config.lookupRef;
+  }
+  state.isDirty = true;
+}
+
+function openLookupEditorFromConstraints(tableIdOrUUID) {
+  closeConstraintsModal();
+  openLookupEditor(tableIdOrUUID);
 }
 
 function toggleConditionMode(nodeId, mode) {
@@ -2275,344 +3187,6 @@ function autoLayout() {
 }
 
 // ════════════════════════════════════════════
-// IMPORT / EXPORT
-// ════════════════════════════════════════════
-function showImportModal() {
-  if (!state.currentRuleSet) {
-    toast('Selecciona un RuleSet primero', 'warning');
-    return;
-  }
-  const fileInput = document.getElementById('import_file');
-  fileInput.value = '';
-  document.getElementById('import_filename').textContent = '';
-  document.getElementById('btnDoImport').disabled = true;
-  fileInput.onchange = () => {
-    const name = fileInput.files[0]?.name || '';
-    document.getElementById('import_filename').textContent = name ? `Archivo: ${name}` : '';
-    document.getElementById('btnDoImport').disabled = !fileInput.files[0];
-  };
-  showModal('importModal');
-}
-
-// ── VAR IMPORT STATE ──
-const varImportState = {
-  pendingJson: null,
-  detectedVars: [],   // { name, type, remove: false }
-};
-
-async function doImport() {
-  if (!state.currentRuleSet) return;
-  const file = document.getElementById('import_file').files[0];
-  if (!file) return;
-  let json;
-  try {
-    const text = await file.text();
-    json = JSON.parse(text);
-  } catch (e) {
-    toast('Error leyendo archivo: ' + e.message, 'error');
-    return;
-  }
-
-  // Extract fields from the JSON rules
-  const rules = Array.isArray(json) ? json : (json.rules || []);
-  const fieldMap = new Map(); // name → inferred type
-
-  rules.forEach(rule => {
-    const nodes = rule.graph?.nodes || [];
-    nodes.forEach(node => {
-      if (node.nodeType === 'CONDITION' && node.config?.field) {
-        const f = node.config.field;
-        if (!fieldMap.has(f)) {
-          // Infer type from data_type if available
-          const dt = node.config.data_type || 'STRING';
-          fieldMap.set(f, dt);
-        }
-      }
-      if (node.nodeType === 'PARAMETER' && node.config?.target_field) {
-        const f = node.config.target_field;
-        if (!fieldMap.has(f)) {
-          const pt = node.config.param_type || 'STRING';
-          fieldMap.set(f, pt);
-        }
-      }
-    });
-  });
-
-  if (fieldMap.size === 0) {
-    // No fields detected — proceed directly
-    varImportState.pendingJson = json;
-    await executeImport();
-    return;
-  }
-
-  const existing = loadVars();
-  const existingNames = new Set(existing.map(v => v.name));
-
-  varImportState.pendingJson = json;
-  varImportState.detectedVars = [];
-  fieldMap.forEach((type, name) => {
-    varImportState.detectedVars.push({
-      name,
-      type,
-      isExisting: existingNames.has(name),
-      remove: existingNames.has(name), // pre-mark existing ones as "skip"
-    });
-  });
-
-  renderVarImportModal();
-  closeModal('importModal');
-  showModal('varImportModal');
-}
-
-function renderVarImportModal() {
-  const list = document.getElementById('varImportList');
-  const newVars = varImportState.detectedVars.filter(v => !v.isExisting);
-  const existingVars = varImportState.detectedVars.filter(v => v.isExisting);
-
-  let html = '';
-
-  if (newVars.length) {
-    html += `<div class="var-import-section-title">Nuevas variables (${newVars.length})</div>`;
-    newVars.forEach((v, idx) => {
-      const globalIdx = varImportState.detectedVars.indexOf(v);
-      html += `
-        <div class="var-import-row" id="virow_${globalIdx}">
-          <span class="vi-name">${v.name}</span>
-          <select onchange="varImportSetType(${globalIdx}, this.value)">
-            ${['STRING','NUMBER','ENUM','DATE','BOOLEAN','RANGE','ARRAY'].map(t =>
-              `<option ${v.type === t ? 'selected' : ''}>${t}</option>`
-            ).join('')}
-          </select>
-          <span class="vi-badge">nueva</span>
-          <button class="vi-remove" title="No importar esta variable" onclick="varImportToggleRemove(${globalIdx})">×</button>
-        </div>
-      `;
-    });
-  }
-
-  if (existingVars.length) {
-    html += `<div class="var-import-section-title">Ya existen (se omitirán)</div>`;
-    existingVars.forEach(v => {
-      html += `
-        <div class="var-import-row is-existing">
-          <span class="vi-name">${v.name}</span>
-          <span class="vi-badge existing">existente</span>
-        </div>
-      `;
-    });
-  }
-
-  if (!html) {
-    html = '<div style="color:var(--text-muted);font-size:13px">No se detectaron campos en las reglas del JSON.</div>';
-  }
-
-  list.innerHTML = html;
-}
-
-function varImportSetType(idx, type) {
-  varImportState.detectedVars[idx].type = type;
-}
-
-function varImportToggleRemove(idx) {
-  const v = varImportState.detectedVars[idx];
-  v.remove = !v.remove;
-  const row = document.getElementById(`virow_${idx}`);
-  if (row) {
-    row.style.opacity = v.remove ? '0.4' : '';
-    row.style.textDecoration = v.remove ? 'line-through' : '';
-  }
-}
-
-async function confirmVarImport() {
-  // Save selected new vars
-  const toAdd = varImportState.detectedVars.filter(v => !v.isExisting && !v.remove);
-  if (toAdd.length > 0) {
-    const vars = loadVars();
-    toAdd.forEach(v => {
-      if (!vars.find(ev => ev.name === v.name)) {
-        vars.push({ name: v.name, type: v.type });
-      }
-    });
-    saveVars(vars);
-    renderVarList();
-  }
-  closeModal('varImportModal');
-  await executeImport();
-}
-
-async function skipVarImport() {
-  closeModal('varImportModal');
-  await executeImport();
-}
-
-function cancelVarImport() {
-  varImportState.pendingJson = null;
-  varImportState.detectedVars = [];
-  closeModal('varImportModal');
-}
-
-async function executeImport() {
-  if (!state.currentRuleSet || !varImportState.pendingJson) return;
-  const json = varImportState.pendingJson;
-  varImportState.pendingJson = null;
-  try {
-    const result = await api('POST', `/GraphRule/ruleset/${state.currentRuleSet.id}/import`, json);
-    toast(`Importadas: ${result.successful}/${result.total} reglas`, result.failed > 0 ? 'warning' : 'success');
-    await loadRules();
-  } catch (e) {
-    const detail = e.details ? JSON.stringify(e.details).slice(0, 300) : '';
-    console.error('Import error details:', e.details);
-    toast('Error importando: ' + e.message + (detail ? ' | ' + detail : ''), 'error');
-  }
-}
-
-// ════════════════════════════════════════════
-// EXPORT
-// ════════════════════════════════════════════
-function showExportModal() {
-  const nameEl = document.getElementById('exp_current_name');
-  if (state.currentRuleSet) {
-    nameEl.textContent = state.currentRuleSet.name;
-    document.getElementById('exp_scope_current').disabled = false;
-    document.getElementById('exp_scope_current').checked = true;
-  } else {
-    nameEl.textContent = 'ninguno seleccionado';
-    document.getElementById('exp_scope_current').disabled = true;
-    document.getElementById('exp_scope_all').checked = true;
-  }
-  showModal('exportModal');
-}
-
-async function doExport() {
-  const scope = document.querySelector('input[name="exp_scope"]:checked').value;
-  const includeVars = document.querySelector('input[name="exp_vars"]:checked').value === 'yes';
-  closeModal('exportModal');
-  try {
-    if (scope === 'current') {
-      const rs = state.currentRuleSet;
-      const rules = await api('GET', `/GraphRule/ruleset/${rs.id}/export`);
-      const payload = { ruleset: rs, rules };
-      if (includeVars) payload.variables = loadVarsForId(rs.id);
-      triggerDownload(payload, `${rs.name.replace(/\s+/g, '_')}_export.json`);
-    } else {
-      // All ruleSets
-      const all = [];
-      for (const rs of state.ruleSets) {
-        const rules = await api('GET', `/GraphRule/ruleset/${rs.id}/export`);
-        const entry = { ruleset: rs, rules };
-        if (includeVars) entry.variables = loadVarsForId(rs.id);
-        all.push(entry);
-      }
-      triggerDownload(all, `all_rulesets_export.json`);
-    }
-    toast('Exportado correctamente', 'success');
-  } catch (e) {
-    toast('Error exportando: ' + e.message, 'error');
-  }
-}
-
-function loadVarsForId(id) {
-  try { return JSON.parse(localStorage.getItem(`vars_rs_${id}`) || '[]'); } catch { return []; }
-}
-
-function triggerDownload(data, filename) {
-  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  a.click();
-  URL.revokeObjectURL(url);
-}
-
-// ════════════════════════════════════════════
-// IMPORT VARIABLES FROM FILE
-// ════════════════════════════════════════════
-let varFileImportData = null;
-
-function showVarFileImportModal() {
-  // Populate RuleSet combobox
-  const sel = document.getElementById('varImport_rsTarget');
-  sel.innerHTML = state.ruleSets.map(rs =>
-    `<option value="${rs.id}" ${state.currentRuleSet?.id === rs.id ? 'selected' : ''}>${rs.name} (${rs.documentType})</option>`
-  ).join('');
-  // Reset file input
-  document.getElementById('varImport_file').value = '';
-  document.getElementById('varImport_filename').textContent = '';
-  document.getElementById('varImport_preview').style.display = 'none';
-  document.getElementById('btnDoVarImport').disabled = true;
-  varFileImportData = null;
-  showModal('varFileImportModal');
-}
-
-function onVarImportFileChange() {
-  const file = document.getElementById('varImport_file').files[0];
-  document.getElementById('varImport_filename').textContent = file ? `Archivo: ${file.name}` : '';
-  document.getElementById('varImport_preview').style.display = 'none';
-  document.getElementById('btnDoVarImport').disabled = true;
-  varFileImportData = null;
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    try {
-      const parsed = JSON.parse(e.target.result);
-      // Accept: array of {name,type} OR export wrapper with .variables
-      let vars = [];
-      if (Array.isArray(parsed)) {
-        vars = parsed;
-      } else if (parsed.variables && Array.isArray(parsed.variables)) {
-        vars = parsed.variables;
-      } else {
-        toast('Formato no reconocido. Debe ser un array de variables o un export con .variables', 'error');
-        return;
-      }
-      // Validate entries
-      vars = vars.filter(v => v && typeof v.name === 'string' && v.name.trim());
-      if (vars.length === 0) { toast('No se encontraron variables válidas en el archivo', 'warning'); return; }
-      varFileImportData = vars;
-      renderVarImportPreview(vars);
-      document.getElementById('varImport_preview').style.display = '';
-      document.getElementById('btnDoVarImport').disabled = false;
-    } catch {
-      toast('Error leyendo el archivo JSON', 'error');
-    }
-  };
-  reader.readAsText(file);
-}
-
-function renderVarImportPreview(vars) {
-  const targetId = parseInt(document.getElementById('varImport_rsTarget').value);
-  const existing = loadVarsForId(targetId);
-  const existingNames = new Set(existing.map(v => v.name));
-  const list = document.getElementById('varImport_previewList');
-  list.innerHTML = vars.map(v => {
-    const isNew = !existingNames.has(v.name);
-    return `<div class="var-import-row ${isNew ? '' : 'is-existing'}" style="margin-bottom:4px">
-      <span class="vi-name">${v.name}</span>
-      <span class="vi-badge ${isNew ? '' : 'existing'}">${isNew ? 'NUEVA' : 'YA EXISTE'}</span>
-      <span style="font-size:11px;color:var(--text-muted)">${v.type || 'STRING'}</span>
-    </div>`;
-  }).join('');
-}
-
-function doVarFileImport() {
-  if (!varFileImportData) return;
-  const targetId = parseInt(document.getElementById('varImport_rsTarget').value);
-  const existing = loadVarsForId(targetId);
-  const existingNames = new Set(existing.map(v => v.name));
-  const toAdd = varFileImportData.filter(v => !existingNames.has(v.name));
-  const merged = [...existing, ...toAdd.map(v => ({ name: v.name.trim(), type: (v.type || 'STRING').toUpperCase() }))];
-  localStorage.setItem(`vars_rs_${targetId}`, JSON.stringify(merged));
-  closeModal('varFileImportModal');
-  // Refresh var list if target is current RuleSet
-  if (state.currentRuleSet?.id === targetId) renderVarList();
-  toast(`${toAdd.length} variable(s) importada(s)${toAdd.length < varFileImportData.length ? `, ${varFileImportData.length - toAdd.length} omitida(s) por duplicado` : ''}`, 'success');
-}
-
-// Legacy — kept for compatibility with old export button wiring
-async function exportRuleSet() { showExportModal(); }
-
-// ════════════════════════════════════════════
 // KEYBOARD SHORTCUTS
 // ════════════════════════════════════════════
 document.addEventListener('keydown', (e) => {
@@ -2631,6 +3205,505 @@ document.addEventListener('keydown', (e) => {
 });
 
 // ════════════════════════════════════════════
+// ════════════════════════════════════════════
+// BARA PARSER (inline — mirrors baraParser.ts)
+// ════════════════════════════════════════════
+
+const BARA_OP_MAP = {
+  '==':'EQUALS','!=':'NOT_EQUALS','>':'GREATER_THAN','>=':'GREATER_EQUAL',
+  '<':'LESS_THAN','<=':'LESS_EQUAL','IN':'IN','NOT_IN':'NOT_IN','BETWEEN':'BETWEEN',
+  'CONTAINS':'CONTAINS','STARTS_WITH':'STARTS_WITH','ENDS_WITH':'ENDS_WITH','REGEX':'REGEX',
+  'IS_NULL':'IS_NULL','IS_NOT_NULL':'IS_NOT_NULL','IS_EMPTY':'IS_EMPTY','IS_NOT_EMPTY':'IS_NOT_EMPTY',
+};
+const BARA_REVERSE_OP = { EQUALS:'==',NOT_EQUALS:'!=',GREATER_THAN:'>',GREATER_EQUAL:'>=',LESS_THAN:'<',LESS_EQUAL:'<=' };
+
+function baraParseInlineValue(s) {
+  s = s.trim();
+  if ((s[0]==='"'&&s.slice(-1)==='"')||(s[0]==="'"&&s.slice(-1)==="'")) return s.slice(1,-1);
+  if (s.toLowerCase()==='true') return true;
+  if (s.toLowerCase()==='false') return false;
+  if (s.toLowerCase()==='null') return null;
+  const n = Number(s);
+  if (!isNaN(n) && s!=='') return n;
+  if (s[0]==='['&&s.slice(-1)===']') return s.slice(1,-1).split(',').map(v=>baraParseInlineValue(v));
+  return s;
+}
+
+function baraParseInlineObj(str) {
+  let j = str.trim();
+  j = j.replace(/(\w+)\s*:/g, '"$1":');
+  j = j.replace(/:\s*([a-zA-Z_]\w*)\s*(?=[,}]|$)/g, (m,v) => {
+    if (['true','false','null'].includes(v.toLowerCase())) return `: ${v.toLowerCase()}`;
+    return `: "${v}"`;
+  });
+  if (j[0]!=='{') j = `{${j}}`;
+  try { return JSON.parse(j); }
+  catch {
+    // fallback manual
+    const r = {};
+    str.split(',').forEach(pair => {
+      const ci = pair.indexOf(':');
+      if (ci<0) return;
+      r[pair.slice(0,ci).trim()] = baraParseInlineValue(pair.slice(ci+1));
+    });
+    return r;
+  }
+}
+
+function baraInferType(v) {
+  if (typeof v==='number') return 'NUMBER';
+  if (typeof v==='boolean') return 'BOOLEAN';
+  return 'STRING';
+}
+
+function parseBARA(source) {
+  const res = { variables:[], lookupTables:[], rules:[], errors:[], warnings:[] };
+  const lines = source.split('\n');
+  let i = 0;
+
+  function skipBlock(si) {
+    let d=0;
+    for (let x=si;x<lines.length;x++) { for (const c of lines[x]) { if(c==='{')d++; if(c==='}'){d--;if(d<=0)return x+1;} } }
+    return lines.length;
+  }
+
+  while (i < lines.length) {
+    const ln = lines[i].trim();
+    if (!ln||ln.startsWith('//')) { i++; continue; }
+
+    // ── vars ──
+    if (ln.startsWith('vars')) {
+      if (!ln.includes('{')) { res.errors.push({line:i+1,message:'Se esperaba "{"'}); i++; continue; }
+      i++;
+      while (i<lines.length) {
+        const l=lines[i].trim();
+        if (l==='}') { i++; break; }
+        if (!l||l.startsWith('//')) { i++; continue; }
+        const m=l.match(/^(\w[\w.]*)\s*:\s*(STRING|NUMBER|BOOLEAN|DATE|ENUM|RANGE|ARRAY)\s*$/i);
+        if (m) res.variables.push({name:m[1],type:m[2].toUpperCase()});
+        else res.errors.push({line:i+1,message:`Variable inválida: "${l}"`});
+        i++;
+      }
+      continue;
+    }
+
+    // ── lookup ──
+    if (ln.startsWith('lookup')) {
+      const hm = ln.match(/^lookup\s+"([^"]+)"\s+on\s+(\w[\w.]*)\s*\{?\s*$/);
+      if (!hm) { res.errors.push({line:i+1,message:`Header lookup inválido`}); i=skipBlock(i); continue; }
+      const tbl = { name:hm[1], keyField:hm[2], columns:[], rows:[] };
+      if (!ln.includes('{')) { i++; if(i<lines.length&&lines[i].trim()==='{'){} else {res.errors.push({line:i+1,message:'Falta "{"'}); continue;} }
+      i++;
+      while (i<lines.length) {
+        const l=lines[i].trim();
+        if (l==='}') { res.lookupTables.push(tbl); i++; break; }
+        if (!l||l.startsWith('//')) { i++; continue; }
+        // columns sub-block
+        if (l.startsWith('columns')) {
+          if (!l.includes('{')) { i++; if(i<lines.length&&lines[i].trim()==='{'){} else {i++;continue;} }
+          i++;
+          while (i<lines.length) {
+            const cl=lines[i].trim();
+            if (cl==='}') { i++; break; }
+            if (!cl||cl.startsWith('//')) { i++; continue; }
+            const cm=cl.match(/^(\w+)\s*->\s*([\w.]+)\.([\w]+)\s+(STRING|NUMBER|BOOLEAN|DATE)\s*$/i);
+            if (cm) tbl.columns.push({columnName:cm[1],targetField:cm[2],constraintKey:cm[3],dataType:cm[4].toUpperCase()});
+            else res.errors.push({line:i+1,message:`Columna inválida: "${cl}"`});
+            i++;
+          }
+          continue;
+        }
+        // row
+        const rm=l.match(/^"([^"]+)"\s*=>\s*\{(.+)\}\s*$/);
+        if (rm) {
+          try { tbl.rows.push({keyValue:rm[1],values:baraParseInlineObj(rm[2])}); }
+          catch(e) { res.errors.push({line:i+1,message:`Error en fila: ${e.message}`}); }
+          i++; continue;
+        }
+        res.warnings.push({line:i+1,message:`Línea no reconocida en lookup`});
+        i++;
+      }
+      continue;
+    }
+
+    // ── rule ──
+    if (ln.startsWith('rule')) {
+      const hm = ln.match(/^rule\s+"([^"]+)"\s+#(\w+)\s+(VALIDATION|CONSISTENCY|FORMAT|BUSINESS)(?:\s+priority=(\d+))?(?:\s+enabled=(true|false))?\s*\{?\s*$/i);
+      if (!hm) { res.errors.push({line:i+1,message:`Header rule inválido: "${ln.slice(0,80)}"`}); i=skipBlock(i); continue; }
+      const rule = {
+        name:hm[1], ruleNumber:hm[2], ruleType:hm[3].toUpperCase(),
+        priority:hm[4]?parseInt(hm[4]):1, enabled:hm[5]!=='false',
+        graph:{nodes:[],edges:[]}
+      };
+      if (!ln.includes('{')) { i++; }
+      i++;
+      while (i<lines.length) {
+        const l=lines[i].trim();
+        if (l==='}') {
+          // auto-detect isEntry
+          const tgtIds=new Set(rule.graph.edges.map(e=>e.targetNodeId));
+          rule.graph.nodes.forEach(n=>{if(n.nodeType==='CONDITION')n.isEntry=!tgtIds.has(n.nodeId);});
+          res.rules.push(rule);
+          i++; break;
+        }
+        if (!l||l.startsWith('//')) { i++; continue; }
+
+        // Edge: X -> Y, Z
+        if (l.includes('->') && !l.includes(': ')) {
+          const parts=l.split('->');
+          if (parts.length===2) {
+            const src=parts[0].trim();
+            parts[1].split(',').map(s=>s.trim()).filter(Boolean).forEach((tgt,idx)=>{
+              rule.graph.edges.push({sourceNodeId:src,targetNodeId:tgt,edgeOrder:idx+1});
+            });
+          }
+          i++; continue;
+        }
+
+        // Node: ID: body
+        const np=l.match(/^([A-Za-z]\w*)\s*:\s*(.+)$/);
+        if (np) {
+          const nid=np[1], body=np[2].trim();
+
+          // GATE
+          const gm=body.match(/^(AND|OR|NOT|XOR)\s*\(([^)]*)\)\s*$/i);
+          if (gm) {
+            const inputs=gm[2].split(',').map(s=>s.trim()).filter(Boolean);
+            rule.graph.nodes.push({nodeId:nid,nodeType:'GATE',isEntry:false,isDefault:false,config:{logic:gm[1].toUpperCase(),short_circuit:true}});
+            inputs.forEach((inp,idx)=>rule.graph.edges.push({sourceNodeId:inp,targetNodeId:nid,edgeOrder:idx+1}));
+            i++; continue;
+          }
+
+          // PARAMETER
+          const pm=body.match(/^PARAM\s+([\w.]+)\s+(STRING|NUMBER|ENUM|DATE|RANGE|ARRAY|BOOLEAN)(?:\s+(required|optional))?(?:\s+(default))?(?:\s+lookup\("([^"]+)"\))?\s*(?:\{(.+)\})?\s*$/i);
+          if (pm) {
+            const cfg={target_field:pm[1],param_type:pm[2].toUpperCase(),required:pm[3]?pm[3].toLowerCase()==='required':true,constraints:{}};
+            if (pm[5]) cfg.lookupRef={tableName:pm[5]};
+            if (pm[6]) { try{cfg.constraints=baraParseInlineObj(pm[6]);}catch(e){res.errors.push({line:i+1,message:`Constraints error: ${e.message}`});} }
+            rule.graph.nodes.push({nodeId:nid,nodeType:'PARAMETER',isEntry:false,isDefault:!!pm[4],config:cfg});
+            i++; continue;
+          }
+
+          // CONDITION — unary
+          const um=body.match(/^([\w.]+)\s+(IS_NULL|IS_NOT_NULL|IS_EMPTY|IS_NOT_EMPTY)\s*$/i);
+          if (um) {
+            rule.graph.nodes.push({nodeId:nid,nodeType:'CONDITION',label:body,isEntry:false,isDefault:false,config:{field:um[1],operator:um[2].toUpperCase(),data_type:'STRING'}});
+            i++; continue;
+          }
+          // CONDITION — IN lookup
+          const lim=body.match(/^([\w.]+)\s+IN\s+lookup\("([^"]+)"\)\s*$/i);
+          if (lim) {
+            rule.graph.nodes.push({nodeId:nid,nodeType:'CONDITION',label:body,isEntry:false,isDefault:false,config:{field:lim[1],operator:'IN',value:`lookup:${lim[2]}`,data_type:'STRING',_lookupRef:lim[2]}});
+            i++; continue;
+          }
+          // CONDITION — IN array
+          const aim=body.match(/^([\w.]+)\s+(IN|NOT_IN)\s+\[(.+)\]\s*$/i);
+          if (aim) {
+            const vals=aim[3].split(',').map(s=>baraParseInlineValue(s));
+            rule.graph.nodes.push({nodeId:nid,nodeType:'CONDITION',label:body,isEntry:false,isDefault:false,config:{field:aim[1],operator:aim[2].toUpperCase(),value:vals,data_type:baraInferType(vals[0])}});
+            i++; continue;
+          }
+          // CONDITION — BETWEEN
+          const bm=body.match(/^([\w.]+)\s+BETWEEN\s+\[(.+),\s*(.+)\]\s*$/i);
+          if (bm) {
+            rule.graph.nodes.push({nodeId:nid,nodeType:'CONDITION',label:body,isEntry:false,isDefault:false,config:{field:bm[1],operator:'BETWEEN',value:[baraParseInlineValue(bm[2]),baraParseInlineValue(bm[3])],data_type:'NUMBER'}});
+            i++; continue;
+          }
+          // CONDITION — binary
+          const bim=body.match(/^([\w.]+)\s+(==|!=|>=|<=|>|<|CONTAINS|STARTS_WITH|ENDS_WITH|REGEX)\s+(.+)$/i);
+          if (bim) {
+            const val=baraParseInlineValue(bim[3]);
+            const op=BARA_OP_MAP[bim[2]]||BARA_OP_MAP[bim[2].toUpperCase()]||bim[2].toUpperCase();
+            rule.graph.nodes.push({nodeId:nid,nodeType:'CONDITION',label:body,isEntry:false,isDefault:false,config:{field:bim[1],operator:op,value:val,data_type:baraInferType(val)}});
+            i++; continue;
+          }
+
+          res.errors.push({line:i+1,message:`Nodo no reconocido: "${nid}: ${body.slice(0,50)}"`});
+          i++; continue;
+        }
+        res.warnings.push({line:i+1,message:`Línea no reconocida en rule`});
+        i++;
+      }
+      continue;
+    }
+
+    res.warnings.push({line:i+1,message:`Línea no reconocida: "${ln.slice(0,50)}"`});
+    i++;
+  }
+  return res;
+}
+
+// ════════════════════════════════════════════
+// BARA EMITTER — generate .bara from state
+// ════════════════════════════════════════════
+
+function emitBARA(data) {
+  const L = [];
+
+  // Variables
+  if (data.variables && data.variables.length) {
+    L.push('vars {');
+    data.variables.forEach(v => L.push(`  ${v.name}: ${v.type}`));
+    L.push('}');
+    L.push('');
+  }
+
+  // Lookup tables
+  if (data.lookupTables) {
+    data.lookupTables.forEach(lt => {
+      L.push(`lookup "${lt.name}" on ${lt.keyField} {`);
+      if (lt.columns && lt.columns.length) {
+        L.push('  columns {');
+        lt.columns.forEach(c => L.push(`    ${c.columnName} -> ${c.targetField}.${c.constraintKey} ${c.dataType}`));
+        L.push('  }');
+      }
+      (lt.rows||[]).forEach(r => {
+        const vals = Object.entries(r.values).map(([k,v]) => `${k}: ${fmtBara(v)}`).join(', ');
+        L.push(`  "${r.keyValue}" => { ${vals} }`);
+      });
+      L.push('}');
+      L.push('');
+    });
+  }
+
+  // Rules
+  if (data.rules) {
+    data.rules.forEach(rule => {
+      let h = `rule "${rule.name}" #${rule.ruleNumber} ${rule.ruleType}`;
+      if (rule.priority && rule.priority!==1) h += ` priority=${rule.priority}`;
+      if (rule.enabled===false) h += ` enabled=false`;
+      h += ' {';
+      L.push(h);
+
+      const nodes=rule.graph.nodes, edges=rule.graph.edges;
+      const conds=nodes.filter(n=>n.nodeType==='CONDITION');
+      const gates=nodes.filter(n=>n.nodeType==='GATE');
+      const params=nodes.filter(n=>n.nodeType==='PARAMETER');
+
+      conds.forEach(n => {
+        const c=n.config;
+        let line = `  ${n.nodeId}: `;
+        if (['IS_NULL','IS_NOT_NULL','IS_EMPTY','IS_NOT_EMPTY'].includes(c.operator)) { line+=`${c.field} ${c.operator}`; }
+        else if (c._lookupRef) { line+=`${c.field} IN lookup("${c._lookupRef}")`; }
+        else if ((c.operator==='IN'||c.operator==='NOT_IN')&&Array.isArray(c.value)) { line+=`${c.field} ${c.operator} [${c.value.map(fmtBara).join(', ')}]`; }
+        else if (c.operator==='BETWEEN'&&Array.isArray(c.value)) { line+=`${c.field} BETWEEN [${c.value.map(fmtBara).join(', ')}]`; }
+        else { line+=`${c.field} ${BARA_REVERSE_OP[c.operator]||c.operator} ${fmtBara(c.value)}`; }
+        L.push(line);
+      });
+
+      if (conds.length && gates.length) L.push('');
+      gates.forEach(n => {
+        const inputs=edges.filter(e=>e.targetNodeId===n.nodeId).sort((a,b)=>a.edgeOrder-b.edgeOrder).map(e=>e.sourceNodeId);
+        L.push(`  ${n.nodeId}: ${n.config.logic}(${inputs.join(', ')})`);
+      });
+
+      if (gates.length && params.length) L.push('');
+      params.forEach(n => {
+        const c=n.config;
+        let line=`  ${n.nodeId}: PARAM ${c.target_field} ${c.param_type}`;
+        line += c.required!==false ? ' required' : ' optional';
+        if (n.isDefault) line += ' default';
+        if (c.lookupRef) line += ` lookup("${c.lookupRef.tableName||c.lookupRef.tableId||''}")`;
+        if (c.constraints && Object.keys(c.constraints).length) {
+          const pairs=Object.entries(c.constraints).map(([k,v])=>`${k}: ${fmtBara(v)}`).join(', ');
+          line += ` { ${pairs} }`;
+        }
+        L.push(line);
+      });
+
+      // Edges to PARAMETERs
+      const pids=new Set(params.map(n=>n.nodeId));
+      const s2p=new Map();
+      edges.forEach(e=>{if(pids.has(e.targetNodeId)){if(!s2p.has(e.sourceNodeId))s2p.set(e.sourceNodeId,[]);s2p.get(e.sourceNodeId).push(e.targetNodeId);}});
+      if (s2p.size) {
+        L.push('');
+        s2p.forEach((tgts,src)=>L.push(`  ${src} -> ${tgts.join(', ')}`));
+      }
+
+      L.push('}');
+      L.push('');
+    });
+  }
+  return L.join('\n');
+}
+
+function fmtBara(v) {
+  if (v===null||v===undefined) return 'null';
+  if (typeof v==='string') return `"${v}"`;
+  if (typeof v==='boolean') return v.toString();
+  if (typeof v==='number') return v.toString();
+  if (Array.isArray(v)) return `[${v.map(fmtBara).join(', ')}]`;
+  return JSON.stringify(v);
+}
+
+// ════════════════════════════════════════════
+// BARA UI FUNCTIONS
+// ════════════════════════════════════════════
+
+function showBaraImportModal() {
+  if (!state.currentRuleSet) { toast('Selecciona un RuleSet primero', 'warning'); return; }
+  document.getElementById('bara_editor').value = '';
+  document.getElementById('bara_output').style.display = 'none';
+  document.getElementById('bara_output').innerHTML = '';
+  document.getElementById('bara_status').textContent = 'Listo';
+  document.getElementById('baraModal').classList.remove('hidden');
+  setTimeout(() => document.getElementById('bara_editor').focus(), 100);
+}
+
+function closeBaraModal() {
+  document.getElementById('baraModal').classList.add('hidden');
+}
+
+function onBaraFileLoad(input) {
+  const file = input.files[0];
+  if (!file) return;
+  file.text().then(text => {
+    document.getElementById('bara_editor').value = text;
+    document.getElementById('bara_status').textContent = `Archivo: ${file.name} (${text.split('\n').length} líneas)`;
+  });
+}
+
+async function doBaraParse() {
+  if (!state.currentRuleSet) { toast('Selecciona un RuleSet primero', 'warning'); return; }
+
+  const source = document.getElementById('bara_editor').value;
+  if (!source.trim()) { toast('Editor vacío', 'warning'); return; }
+
+  const result = parseBARA(source);
+  const outputEl = document.getElementById('bara_output');
+  outputEl.style.display = '';
+
+  // Show parse results
+  let html = '';
+
+  if (result.errors.length) {
+    html += result.errors.map(e => `<div class="bara-result-item"><span class="bara-line">L${e.line}</span><span class="bara-err">⛔ ${e.message}</span></div>`).join('');
+  }
+  if (result.warnings.length) {
+    html += result.warnings.map(w => `<div class="bara-result-item"><span class="bara-line">L${w.line}</span><span class="bara-warn">⚠ ${w.message}</span></div>`).join('');
+  }
+
+  if (result.errors.length) {
+    html = `<div class="bara-err" style="font-weight:600;margin-bottom:6px">Parse fallido — ${result.errors.length} error(es)</div>` + html;
+    outputEl.innerHTML = html;
+    document.getElementById('bara_status').textContent = `${result.errors.length} errores`;
+    return;
+  }
+
+  // Success — show summary
+  html += `<div class="bara-ok" style="font-weight:600;margin-bottom:6px">✓ Parse exitoso</div>`;
+  html += `<div class="bara-result-item"><span class="bara-ok">${result.variables.length} variables</span></div>`;
+  html += `<div class="bara-result-item"><span class="bara-ok">${result.lookupTables.length} lookup tables</span></div>`;
+  html += `<div class="bara-result-item"><span class="bara-ok">${result.rules.length} reglas</span></div>`;
+
+  outputEl.innerHTML = html;
+  document.getElementById('bara_status').textContent = 'Importando...';
+
+  // ── Apply variables ──
+  if (result.variables.length) {
+    const vars = loadVars();
+    const existing = new Set(vars.map(v => v.name));
+    let added = 0;
+    result.variables.forEach(v => {
+      if (!existing.has(v.name)) { vars.push(v); added++; }
+    });
+    saveVars(vars);
+    renderVarList();
+    if (added) html += `<div class="bara-result-item"><span class="bara-ok">→ ${added} variables nuevas guardadas</span></div>`;
+  }
+
+  // ── Import lookup tables ──
+  for (const lt of result.lookupTables) {
+    try {
+      await api('POST', `/LookupTable/ruleset/${state.currentRuleSet.id}/import`, lt);
+      html += `<div class="bara-result-item"><span class="bara-ok">→ Lookup "${lt.name}" importada (${lt.rows.length} filas)</span></div>`;
+    } catch (e) {
+      html += `<div class="bara-result-item"><span class="bara-err">→ Error lookup "${lt.name}": ${e.message}</span></div>`;
+    }
+  }
+
+  // ── Import rules ──
+  if (result.rules.length) {
+    try {
+      const importResult = await api('POST', `/GraphRule/ruleset/${state.currentRuleSet.id}/import`, { rules: result.rules });
+      html += `<div class="bara-result-item"><span class="bara-ok">→ ${importResult.successful}/${importResult.total} reglas importadas</span></div>`;
+      if (importResult.failed > 0) {
+        importResult.results.filter(r => !r.success).forEach(r => {
+          html += `<div class="bara-result-item"><span class="bara-err">  #${r.ruleNumber}: ${r.error}</span></div>`;
+        });
+      }
+    } catch (e) {
+      html += `<div class="bara-result-item"><span class="bara-err">→ Error importando reglas: ${e.message}</span></div>`;
+    }
+  }
+
+  outputEl.innerHTML = html;
+  document.getElementById('bara_status').textContent = 'Importación completa';
+
+  // Reload
+  await loadRules();
+  await loadLookupTables();
+  toast('BARA importado', 'success');
+}
+
+// ── BARA Export ──
+async function doBaraExport() {
+  if (!state.currentRuleSet) { toast('Selecciona un RuleSet primero', 'warning'); return; }
+
+  try {
+    // Gather variables
+    const variables = loadVars();
+
+    // Gather lookup tables (full data)
+    const lookupTables = [];
+    for (const lt of state.lookupTables) {
+      try {
+        const full = await api('GET', `/LookupTable/table/${lt.uuid}`);
+        lookupTables.push(full);
+      } catch { /* skip */ }
+    }
+
+    // Gather rules (full graphs)
+    const rules = [];
+    for (const r of state.rules) {
+      try {
+        const full = await api('GET', `/GraphRule/rule/${r.uuid}`);
+        rules.push(full);
+      } catch { /* skip */ }
+    }
+
+    const bara = emitBARA({ variables, lookupTables, rules });
+
+    // Download as .bara file
+    const blob = new Blob([bara], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${state.currentRuleSet.name.replace(/[^a-zA-Z0-9_-]/g, '_')}.bara`;
+    a.click();
+    URL.revokeObjectURL(url);
+
+    toast(`Exportado: ${rules.length} reglas, ${lookupTables.length} lookups, ${variables.length} vars`, 'success');
+  } catch (e) {
+    toast('Error exportando: ' + e.message, 'error');
+  }
+}
+
+// Tab key support in BARA editor
+document.addEventListener('DOMContentLoaded', () => {
+  const ed = document.getElementById('bara_editor');
+  if (ed) {
+    ed.addEventListener('keydown', e => {
+      if (e.key === 'Tab') {
+        e.preventDefault();
+        const start = ed.selectionStart, end = ed.selectionEnd;
+        ed.value = ed.value.substring(0, start) + '  ' + ed.value.substring(end);
+        ed.selectionStart = ed.selectionEnd = start + 2;
+      }
+    });
+  }
+});
+
 // INIT
 // ════════════════════════════════════════════
 (async function init() {

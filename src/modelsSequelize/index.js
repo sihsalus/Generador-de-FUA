@@ -18,6 +18,9 @@ import Rule     from './RuleModel';
 import RuleNode from './RuleNodeModel';
 import RuleEdge from './RuleEdgeModel';
 
+import LookupTable    from './LookupTableModel';
+import LookupTableRow from './LookupTableRowModel';
+
 // ── Relaciones FK de Validacion──
 
 // RuleSet 1:N Rule
@@ -46,6 +49,24 @@ Rule.hasMany(RuleEdge, {
     } 
 });
 RuleEdge.belongsTo(Rule);
+
+// RuleSet 1:N LookupTable
+RuleSet.hasMany(LookupTable, {
+    foreignKey: {
+        name: 'RuleSetId',
+        allowNull: false
+    }
+});
+LookupTable.belongsTo(RuleSet);
+
+// LookupTable 1:N LookupTableRow
+LookupTable.hasMany(LookupTableRow, {
+    foreignKey: {
+        name: 'LookupTableId',
+        allowNull: false
+    }
+});
+LookupTableRow.belongsTo(LookupTable);
 
 // Foreign keys
 /*
@@ -148,7 +169,9 @@ export {
     RuleSet,
     Rule,
     RuleNode,
-    RuleEdge,    
+    RuleEdge,
+    LookupTable,
+    LookupTableRow,
     User,
     Visit,
     FUAFromVisitModel,
