@@ -24,7 +24,7 @@ import { getPatient } from './services/fhirService';
 // Import Routes
 import globalRouter from './routes/indexRoutes';
 import { createDemoFormat } from './utils/utils';
-import { Logger, loggerInstance } from './middleware/logger/models/typescript/Logger';
+import { loggerInstance } from './middleware/logger/models/typescript/Logger';
 import { Log } from './middleware/logger/models/typescript/Log';
 import { Logger_LogLevel } from './utils/LegLevelEnum';
 import { Logger_SecurityLevel } from './middleware/logger/models/typescript/SecurityLevel';

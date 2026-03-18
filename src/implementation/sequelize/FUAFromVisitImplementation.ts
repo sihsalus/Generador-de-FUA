@@ -1,5 +1,8 @@
-import { raw } from "express";
+
 import { FUAFromVisitModel } from "../../modelsSequelize";
+import { encryptBuffer } from "../../middleware/dataEncryption";
+
+const ENCRYPTION_KEY = process.env.ENCRYPTION_KEY ?? '123456789012';
 
 class FUAFromVisitImplementation {
 
@@ -16,8 +19,12 @@ class FUAFromVisitImplementation {
         createdBy: string;
     }) {
         let returnedFUA = null;
+        // Pass payload to Buffer
+        //const encryptedPayload = encryptBuffer(ENCRYPTION_KEY, Buffer.from(data.payload));
         try {
-            returnedFUA = await FUAFromVisitModel.create({...data, checksum: "-"});
+            returnedFUA = await FUAFromVisitModel.create({
+                ...data, 
+                checksum: "-"});
         } catch (err: unknown){
             console.error('Error in FUA From Visit Sequelize Implementation: Couldnt create FUA From Visit in database using Sequelize. ', err);
             (err as Error).message =  'Error in FUA From Visit Sequelize Implementation: Couldnt create FUA From Visit in database using Sequelize: ' + (err as Error).message;

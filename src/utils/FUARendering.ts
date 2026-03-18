@@ -1,15 +1,10 @@
 import * as fs from "fs";
 import * as path from "path";
-import dedent from 'dedent';
-import { inspect } from "util";
+
 
 // Services
-import FUAFieldService from "../services/FUAFieldService";
-import FUAPageService from "../services/FUAPageService";
-import FUASectionService from "../services/FUASectionService";
+
 import { dedentCustom, removeBackgroundColor } from "./utils";
-import FUAFieldColumnService from "../services/FUAFieldColumnService";
-import { col } from "sequelize";
 import FUAField from "../modelsTypeScript/FUAField";
 import FUAFormat from "../modelsTypeScript/FUAFormat";
 import FUAPage from "../modelsTypeScript/FUAPage";
