@@ -30,6 +30,13 @@
     --node-gate-border: #a78bfa;
     --node-parameter: #1a3d2e;
     --node-parameter-border: #34d399;
+    --node-validation: #3d2e1a;
+    --node-validation-border: #f59e0b;
+    --node-subrule: #1a3d3d;
+    --node-subrule-border: #22d3ee;
+    --edge-true: #34d399;
+    --edge-false: #ef4444;
+    --edge-default: var(--text-muted);
     --radius: 8px;
     --radius-lg: 12px;
     --shadow: 0 4px 24px rgba(0,0,0,0.4);
@@ -184,6 +191,33 @@
   }
   .field-dropdown-item:hover { background: var(--bg-hover); color: var(--text-primary); }
   .field-dropdown-item .fdi-type { font-size: 10px; padding: 1px 5px; border-radius: 8px; background: rgba(74,158,255,0.12); color: var(--accent-blue); }
+
+  /* ─── CONTEXT MENU ─── */
+  .ctx-menu {
+    position: fixed;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+    z-index: 1000;
+    min-width: 140px;
+    padding: 4px 0;
+    display: none;
+  }
+  .ctx-menu.show { display: block; }
+  .ctx-menu-item {
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .ctx-menu-item:hover { background: var(--bg-hover); }
+  .ctx-menu-item.danger { color: var(--accent-red); }
+  .ctx-menu-item.danger:hover { background: rgba(239,68,68,0.1); }
+  .ctx-menu-backdrop { position: fixed; top:0; left:0; width:100%; height:100%; z-index: 999; }
 
   /* ─── MAIN AREA ─── */
   .main-area {
@@ -912,6 +946,21 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2" width="14" height="14"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
           Parameter
         </button>
+        <button class="btn small" onclick="addNodeToCanvas('VALIDATION')" id="btnAddValidation" disabled>
+          <svg viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" width="14" height="14"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+          Validation
+        </button>
+        <button class="btn small" onclick="addNodeToCanvas('SUB_RULE')" id="btnAddSubRule" disabled>
+          <svg viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2" width="14" height="14"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          Sub-Rule
+        </button>
+      </div>
+      <div class="toolbar-sep"></div>
+      <div class="toolbar-group">
+        <button class="btn small" onclick="showBatchConditionModal()" id="btnBatchCond" disabled title="Crear múltiples condiciones desde tabla">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#4a9eff" stroke-width="2" width="14" height="14"><path d="M3 10h18M3 14h18M3 6h18M3 18h18"/></svg>
+          Batch
+        </button>
       </div>
       <div class="toolbar-sep"></div>
       <button class="btn small" onclick="validateCurrentGraph()" id="btnValidate" disabled>
@@ -1027,6 +1076,24 @@
   </div>
 </div>
 
+<!-- ─── MODAL: CONFIRM DELETE RULESET ─── -->
+<div class="modal-overlay hidden" id="confirmDeleteRuleSetModal" onclick="if(event.target===this)closeModal('confirmDeleteRuleSetModal')">
+  <div class="modal" style="max-width:440px">
+    <div class="modal-header">
+      <h2 style="color:var(--accent-red)">Eliminar RuleSet</h2>
+      <button class="btn small icon-only" onclick="closeModal('confirmDeleteRuleSetModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p style="margin:0 0 12px">¿Estás seguro de eliminar el RuleSet <strong id="confirmDeleteRsName"></strong>?</p>
+      <p style="margin:0;color:var(--accent-orange);font-size:13px">Se eliminarán también todas las <strong>reglas</strong>, <strong>lookup tables</strong>, y <strong>templates</strong> asociados. Esta acción no se puede deshacer fácilmente.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('confirmDeleteRuleSetModal')">Cancelar</button>
+      <button class="btn" style="background:var(--accent-red);color:#fff" id="confirmDeleteRsBtn" onclick="">Eliminar</button>
+    </div>
+  </div>
+</div>
+
 <!-- ─── MODAL: RULE ─── -->
 <div class="modal-overlay hidden" id="ruleModal">
   <div class="modal">
@@ -1069,7 +1136,7 @@
     </div>
     <div class="modal-footer">
       <button class="btn" onclick="closeModal('ruleModal')">Cancelar</button>
-      <button class="btn primary" onclick="saveRule()">Crear Regla</button>
+      <button class="btn primary" onclick="saveRule()" id="btnSaveRule">Crear Regla</button>
     </div>
   </div>
 </div>
@@ -1221,7 +1288,7 @@ const state = {
   currentRule: null,
   // Graph state
   nodes: [],     // { nodeId, nodeType, config, label, isDefault, x, y }
-  edges: [],     // { id?, sourceNodeId, targetNodeId, edgeOrder, label }
+  edges: [],     // { id?, sourceNodeId, targetNodeId, edgeOrder, edgeType, label }
   selectedNode: null,
   selectedEdge: null,
   // Canvas
@@ -1236,11 +1303,13 @@ const state = {
   creatingEdge: false,
   edgeSourceNodeId: null,
   // Counters for auto-naming
-  nodeCounters: { CONDITION: 0, GATE: 0, PARAMETER: 0 },
+  nodeCounters: { CONDITION: 0, GATE: 0, PARAMETER: 0, VALIDATION: 0, SUB_RULE: 0 },
   // dirty flag
   isDirty: false,
   // RuleSet edit mode
   ruleSetEditingId: null,
+  // Rule edit mode
+  ruleEditingUUID: null,
   // Lookup tables
   lookupTables: [],       // [{id, uuid, name, keyField, columns, rows?}, ...]
   currentLookupTable: null,
@@ -1283,12 +1352,14 @@ function renderVarList() {
 }
 function showVarForm() {
   const form = document.getElementById('varAddForm');
+  if (!form) return;
   form.style.display = 'block';
   document.getElementById('varNameInput').value = '';
   document.getElementById('varNameInput').focus();
 }
 function hideVarForm() {
-  document.getElementById('varAddForm').style.display = 'none';
+  const form = document.getElementById('varAddForm');
+  if (form) form.style.display = 'none';
 }
 function saveVar() {
   const name = document.getElementById('varNameInput').value.trim();
@@ -1391,7 +1462,7 @@ function renderRuleSetList() {
       <div class="dot" style="background:var(--accent-blue)"></div>
       <span style="flex:1;overflow:hidden;text-overflow:ellipsis">${rs.name}</span>
       <span class="badge blue" title="${rs.evaluationMode || 'ALL'}">${rs.documentType}</span>
-      <button class="btn small icon-only" style="padding:2px 5px;font-size:11px;margin-left:2px" onclick="event.stopPropagation();editRuleSet(${rs.id})" title="Editar RuleSet">✏️</button>
+      <button class="btn small icon-only" style="padding:2px 5px;font-size:11px;margin-left:2px" onclick="event.stopPropagation();showCtxMenu(event,'ruleset',${rs.id})" title="Opciones"><svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg></button>
     </div>
   `).join('');
 }
@@ -1442,9 +1513,12 @@ async function saveRuleSet() {
       closeModal('ruleSetModal');
       toast('RuleSet actualizado', 'success');
     } else {
-      await api('POST', '/RuleSet/', payload);
+      const created = await api('POST', '/RuleSet/', payload);
       closeModal('ruleSetModal');
       toast('RuleSet creado', 'success');
+      await loadRuleSets();
+      if (created && created.id) await selectRuleSet(created.id);
+      return;
     }
     await loadRuleSets();
   } catch (e) {
@@ -1490,11 +1564,15 @@ function renderRuleList() {
       <span class="badge ${r.enabled ? 'green' : 'orange'}">#${r.ruleNumber}</span>
       <span style="flex:1;overflow:hidden;text-overflow:ellipsis">${r.name}</span>
       ${r.weight && r.weight !== 1 ? `<span class="badge blue" title="Peso">${r.weight}w</span>` : ''}
+      <button class="btn small icon-only" style="padding:2px 5px;font-size:11px;margin-left:2px" onclick="event.stopPropagation();showCtxMenu(event, 'rule', '${r.uuid}')" title="Opciones">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
+      </button>
     </div>
   `).join('');
 }
 
 function showRuleModal() {
+  state.ruleEditingUUID = null;
   // Auto-calculate next rule number
   let nextNum = 1;
   if (state.rules.length > 0) {
@@ -1510,34 +1588,87 @@ function showRuleModal() {
   document.getElementById('r_priority').value = String(nextNum);
   document.getElementById('r_weight').value = '1';
   document.getElementById('r_desc').value = '';
+  document.getElementById('ruleModalTitle').textContent = 'Nueva Regla';
+  document.getElementById('btnSaveRule').textContent = 'Crear Regla';
   showModal('ruleModal');
+}
+
+function editRule(uuid) {
+  const r = state.rules.find(r => r.uuid === uuid);
+  if (!r) return;
+  state.ruleEditingUUID = uuid;
+  document.getElementById('r_number').value = r.ruleNumber || '';
+  document.getElementById('r_name').value = r.name || '';
+  document.getElementById('r_type').value = r.ruleType || 'VALIDATION';
+  document.getElementById('r_priority').value = String(r.priority || 1);
+  document.getElementById('r_weight').value = String(r.weight ?? 1);
+  document.getElementById('r_desc').value = r.description || '';
+  document.getElementById('ruleModalTitle').textContent = 'Editar Regla';
+  document.getElementById('btnSaveRule').textContent = 'Guardar Cambios';
+  showModal('ruleModal');
+  closeCtxMenu();
+}
+
+async function deleteRule(uuid) {
+  closeCtxMenu();
+  if (!confirm('¿Eliminar esta regla? Esta acción no se puede deshacer.')) return;
+  try {
+    await api('DELETE', `/GraphRule/rule/${uuid}`, { inactiveBy: 'ui-user' });
+    toast('Regla eliminada', 'success');
+    if (state.currentRule?.uuid === uuid) {
+      state.currentRule = null;
+      clearGraph();
+    }
+    await loadRules();
+  } catch (e) {
+    toast('Error eliminando regla: ' + e.message, 'error');
+  }
 }
 
 async function saveRule() {
   if (!state.currentRuleSet) return;
   try {
-    const result = await api('POST', `/GraphRule/ruleset/${state.currentRuleSet.id}/rule`, {
-      ruleNumber: document.getElementById('r_number').value,
-      name: document.getElementById('r_name').value,
-      ruleType: document.getElementById('r_type').value,
-      priority: parseInt(document.getElementById('r_priority').value) || 1,
-      weight: parseFloat(document.getElementById('r_weight').value) || 1.0,
-      description: document.getElementById('r_desc').value || undefined,
-      graph: {
-        nodes: [{
-          nodeId: 'P1',
-          nodeType: 'PARAMETER',
-          config: { target_field: 'campo', param_type: 'STRING', constraints: {} },
-          label: 'Parámetro inicial',
-          isDefault: true,
-        }],
-        edges: [],
-      },
-    });
-    closeModal('ruleModal');
-    toast('Regla creada', 'success');
-    await loadRules();
-    await selectRule(result.uuid);
+    if (state.ruleEditingUUID) {
+      // ── Edit mode ──
+      const payload = {
+        ruleNumber: document.getElementById('r_number').value,
+        name: document.getElementById('r_name').value,
+        ruleType: document.getElementById('r_type').value,
+        priority: parseInt(document.getElementById('r_priority').value) || 1,
+        description: document.getElementById('r_desc').value || undefined,
+      };
+      await api('PUT', `/GraphRule/rule/${state.ruleEditingUUID}`, payload);
+      closeModal('ruleModal');
+      toast('Regla actualizada', 'success');
+      await loadRules();
+      if (state.currentRule?.uuid === state.ruleEditingUUID) {
+        await selectRule(state.ruleEditingUUID);
+      }
+    } else {
+      // ── Create mode ──
+      const result = await api('POST', `/GraphRule/ruleset/${state.currentRuleSet.id}/rule`, {
+        ruleNumber: document.getElementById('r_number').value,
+        name: document.getElementById('r_name').value,
+        ruleType: document.getElementById('r_type').value,
+        priority: parseInt(document.getElementById('r_priority').value) || 1,
+        weight: parseFloat(document.getElementById('r_weight').value) || 1.0,
+        description: document.getElementById('r_desc').value || undefined,
+        graph: {
+          nodes: [{
+            nodeId: 'P1',
+            nodeType: 'PARAMETER',
+            config: { target_field: 'campo', param_type: 'STRING', constraints: {} },
+            label: 'Parámetro inicial',
+            isDefault: true,
+          }],
+          edges: [],
+        },
+      });
+      closeModal('ruleModal');
+      toast('Regla creada', 'success');
+      await loadRules();
+      await selectRule(result.uuid);
+    }
   } catch (e) {
     toast('Error: ' + e.message, 'error');
   }
@@ -1577,8 +1708,9 @@ function updateBreadcrumb() {
 // TOOLBAR STATE
 // ════════════════════════════════════════════
 function enableToolbar(enabled) {
-  ['btnAddCondition', 'btnAddGate', 'btnAddParam', 'btnValidate', 'btnEvalRule', 'btnSave', 'btnAutoLayout'].forEach(id => {
-    document.getElementById(id).disabled = !enabled;
+  ['btnAddCondition', 'btnAddGate', 'btnAddParam', 'btnAddValidation', 'btnAddSubRule', 'btnBatchCond', 'btnValidate', 'btnEvalRule', 'btnSave', 'btnAutoLayout'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.disabled = !enabled;
   });
   document.getElementById('canvasHelp').style.opacity = enabled ? '0' : '1';
 }
@@ -1609,9 +1741,8 @@ function loadGraphFromRule(rule) {
   // Reset counters
   state.nodeCounters = { CONDITION: 0, GATE: 0, PARAMETER: 0 };
   state.nodes.forEach(n => {
-    const prefix = n.nodeType === 'CONDITION' ? 'N' : n.nodeType === 'GATE' ? 'G' : 'P';
     const num = parseInt(n.nodeId.replace(/\D/g, '')) || 0;
-    if (num >= state.nodeCounters[n.nodeType]) {
+    if (state.nodeCounters[n.nodeType] !== undefined && num >= state.nodeCounters[n.nodeType]) {
       state.nodeCounters[n.nodeType] = num + 1;
     }
   });
@@ -1624,8 +1755,8 @@ function loadGraphFromRule(rule) {
 // ADD NODE
 // ════════════════════════════════════════════
 function addNodeToCanvas(type) {
-  const prefixes = { CONDITION: 'N', GATE: 'G', PARAMETER: 'P' };
-  const prefix = prefixes[type];
+  const prefixes = { CONDITION: 'N', GATE: 'G', PARAMETER: 'P', VALIDATION: 'V', SUB_RULE: 'S' };
+  const prefix = prefixes[type] || type[0];
   const num = state.nodeCounters[type]++;
   const nodeId = `${prefix}${num + 1}`;
 
@@ -1637,6 +1768,8 @@ function addNodeToCanvas(type) {
     CONDITION: { field: '', operator: 'EQUALS', value: '', data_type: 'STRING' },
     GATE: { logic: 'AND' },
     PARAMETER: { target_field: '', param_type: 'STRING', constraints: {} },
+    VALIDATION: { field: '', operator: 'EQUALS', value: '', data_type: 'STRING', failureAction: 'STOP' },
+    SUB_RULE: { subRuleRef: { ruleUUID: '' } },
   };
 
   const node = {
@@ -1645,7 +1778,7 @@ function addNodeToCanvas(type) {
     config: defaultConfigs[type],
     label: nodeId,
     isDefault: false,
-    isEntry: type === 'CONDITION',
+    isEntry: ['CONDITION'].includes(type),
     x: cx + (Math.random() - 0.5) * 60,
     y: cy + (Math.random() - 0.5) * 60,
   };
@@ -1706,8 +1839,10 @@ function renderNodes() {
       CONDITION:  { bg: 'var(--node-condition)', border: 'var(--node-condition-border)', text: '#4a9eff' },
       GATE:       { bg: 'var(--node-gate)', border: 'var(--node-gate-border)', text: '#a78bfa' },
       PARAMETER:  { bg: 'var(--node-parameter)', border: 'var(--node-parameter-border)', text: '#34d399' },
+      VALIDATION: { bg: 'var(--node-validation)', border: 'var(--node-validation-border)', text: '#f59e0b' },
+      SUB_RULE:   { bg: 'var(--node-subrule)', border: 'var(--node-subrule-border)', text: '#22d3ee' },
     };
-    const c = colors[node.nodeType];
+    const c = colors[node.nodeType] || colors.CONDITION;
     const isSelected = state.selectedNode === node.nodeId;
 
     const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
@@ -1748,20 +1883,23 @@ function renderNodes() {
     descText.setAttribute('x', 12);
     descText.setAttribute('y', 52);
     let desc = node.label || '';
-    if (node.nodeType === 'CONDITION' && node.config.field) {
+    if ((node.nodeType === 'CONDITION' || node.nodeType === 'VALIDATION') && node.config.field) {
       const valDisplay = typeof node.config.value === 'string' && node.config.value.startsWith('lookup:')
         ? `lookup("${node.config.value.replace('lookup:','')}")`
         : (node.config.value ?? '');
-      desc = `${node.config.field} ${node.config.operator || ''} ${valDisplay}`.substring(0, 28);
+      const prefix = node.nodeType === 'VALIDATION' ? `[${node.config.failureAction || 'STOP'}] ` : '';
+      desc = `${prefix}${node.config.field} ${node.config.operator || ''} ${valDisplay}`.substring(0, 28);
     } else if (node.nodeType === 'GATE') {
       desc = node.config.logic || '';
     } else if (node.nodeType === 'PARAMETER' && node.config.target_field) {
       desc = node.config.target_field;
+    } else if (node.nodeType === 'SUB_RULE') {
+      desc = node.config.subRuleRef?.ruleUUID ? `→ ${node.config.subRuleRef.ruleUUID.substring(0,8)}...` : 'Sin ref';
     }
     descText.textContent = desc.substring(0, 25);
     group.appendChild(descText);
 
-    // Input port (left center) — not for CONDITION
+    // Input port (left center) — not for entry-only nodes (CONDITION)
     if (node.nodeType !== 'CONDITION') {
       const inPort = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
       inPort.setAttribute('class', 'node-port');
@@ -1814,7 +1952,9 @@ function renderEdges() {
     const d = `M ${x1} ${y1} C ${x1 + dx} ${y1}, ${x2 - dx} ${y2}, ${x2} ${y2}`;
     path.setAttribute('d', d);
     path.setAttribute('class', `graph-edge ${state.selectedEdge === `${edge.sourceNodeId}->${edge.targetNodeId}` ? 'selected' : ''}`);
-    path.setAttribute('stroke', 'var(--text-muted)');
+    const edgeColors = { DEFAULT: 'var(--edge-default)', TRUE: 'var(--edge-true)', FALSE: 'var(--edge-false)' };
+    path.setAttribute('stroke', edgeColors[edge.edgeType] || edgeColors.DEFAULT);
+    if (edge.edgeType === 'FALSE') path.setAttribute('stroke-dasharray', '6,3');
     path.setAttribute('marker-end', 'url(#arrowhead)');
     path.setAttribute('data-source', edge.sourceNodeId);
     path.setAttribute('data-target', edge.targetNodeId);
@@ -1953,6 +2093,7 @@ svg.addEventListener('mouseup', (e) => {
           sourceNodeId: state.edgeSourceNodeId,
           targetNodeId: targetNodeId,
           edgeOrder,
+          edgeType: 'DEFAULT',
         });
         state.isDirty = true;
         renderGraph();
@@ -1987,8 +2128,8 @@ function showNodeProps(nodeId) {
   if (!node) return;
 
   const panel = document.getElementById('propsBody');
-  const colors = { CONDITION: '#4a9eff', GATE: '#a78bfa', PARAMETER: '#34d399' };
-  document.getElementById('propsTitle').innerHTML = `<span style="color:${colors[node.nodeType]}">${node.nodeType}</span> ${node.nodeId}`;
+  const colors = { CONDITION: '#4a9eff', GATE: '#a78bfa', PARAMETER: '#34d399', VALIDATION: '#f59e0b', SUB_RULE: '#22d3ee' };
+  document.getElementById('propsTitle').innerHTML = `<span style="color:${colors[node.nodeType] || '#e8eaed'}">${node.nodeType}</span> ${node.nodeId}`;
 
   let html = `
     <div class="form-group">
@@ -2129,6 +2270,57 @@ function showNodeProps(nodeId) {
           <span class="cb-arrow">›</span>
         </button>
       </div>
+    `;
+  } else if (node.nodeType === 'VALIDATION') {
+    const cfg = node.config;
+    html += `
+      <div class="form-group">
+        <label>Failure Action</label>
+        <select onchange="updateNodeConfig('${nodeId}', 'failureAction', this.value)">
+          <option value="STOP" ${cfg.failureAction==='STOP'?'selected':''}>STOP (detiene evaluación)</option>
+          <option value="WARN" ${cfg.failureAction!=='STOP'?'selected':''}>WARN (registra warning, continúa)</option>
+        </select>
+        <span class="hint" style="font-size:11px;color:var(--text-muted)">STOP corta el flujo si falla. WARN solo registra el problema.</span>
+      </div>
+      <div class="form-group">
+        <label>Field</label>
+        ${fieldComboHtml(nodeId, 'field', cfg.field || '')}
+      </div>
+      <div class="form-group">
+        <label>Operator</label>
+        <select onchange="updateNodeConfig('${nodeId}', 'operator', this.value)">
+          ${conditionOperatorOptions(cfg.operator)}
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Value</label>
+        <input value="${cfg.value ?? ''}" onchange="updateNodeConfig('${nodeId}', 'value', parseConfigValue(this.value))">
+      </div>
+      <div class="form-group">
+        <label>Data Type</label>
+        <select onchange="updateNodeConfig('${nodeId}', 'data_type', this.value)">
+          ${['STRING','NUMBER','DATE','BOOLEAN','ENUM'].map(t => `<option ${cfg.data_type===t?'selected':''}>${t}</option>`).join('')}
+        </select>
+      </div>
+    `;
+  } else if (node.nodeType === 'SUB_RULE') {
+    const cfg = node.config;
+    const ref = cfg.subRuleRef || {};
+    // Build list of available rules for selection
+    const ruleOptions = (state.rules || [])
+      .filter(r => r.uuid !== state.currentRule?.uuid) // excluir la regla actual
+      .map(r => `<option value="${r.uuid}" ${ref.ruleUUID===r.uuid?'selected':''}>${r.ruleNumber} — ${r.name}</option>`)
+      .join('');
+    html += `
+      <div class="form-group">
+        <label>Sub-Rule Reference</label>
+        <select onchange="updateNodeConfig('${nodeId}', 'subRuleRef', {ruleUUID: this.value})">
+          <option value="">— Seleccionar regla —</option>
+          ${ruleOptions}
+        </select>
+        <span class="hint" style="font-size:11px;color:var(--text-muted)">La sub-regla se evalúa contra el mismo dato. Su resultado (valid/invalid) se propaga como true/false en el grafo.</span>
+      </div>
+      ${ref.ruleUUID ? `<div class="form-group"><label>UUID</label><input value="${ref.ruleUUID}" readonly style="opacity:0.5;font-size:11px"></div>` : ''}
     `;
   }
 
@@ -2867,6 +3059,7 @@ function showEdgeProps(srcId, tgtId) {
   if (!edge) return;
 
   document.getElementById('propsTitle').textContent = `Arista ${srcId} → ${tgtId}`;
+  const et = edge.edgeType || 'DEFAULT';
   document.getElementById('propsBody').innerHTML = `
     <div class="form-group">
       <label>Source</label>
@@ -2875,6 +3068,17 @@ function showEdgeProps(srcId, tgtId) {
     <div class="form-group">
       <label>Target</label>
       <input value="${edge.targetNodeId}" disabled>
+    </div>
+    <div class="form-group">
+      <label>Edge Type</label>
+      <select onchange="updateEdgeType('${srcId}','${tgtId}', this.value)">
+        <option value="DEFAULT" ${et==='DEFAULT'?'selected':''}>Default (incondicional)</option>
+        <option value="TRUE" ${et==='TRUE'?'selected':''}>TRUE (solo si source=true)</option>
+        <option value="FALSE" ${et==='FALSE'?'selected':''}>FALSE (solo si source=false)</option>
+      </select>
+      <span class="hint" style="font-size:11px;color:var(--text-muted)">
+        ${et==='TRUE'?'Verde: se activa cuando el nodo source es verdadero':et==='FALSE'?'Rojo punteado: se activa cuando el nodo source es falso':'Gris: siempre propaga el resultado'}
+      </span>
     </div>
     <div class="form-group">
       <label>Edge Order</label>
@@ -2897,6 +3101,10 @@ function updateEdgeOrder(src, tgt, val) {
 function updateEdgeLabel(src, tgt, val) {
   const edge = state.edges.find(e => e.sourceNodeId === src && e.targetNodeId === tgt);
   if (edge) { edge.label = val; state.isDirty = true; }
+}
+function updateEdgeType(src, tgt, val) {
+  const edge = state.edges.find(e => e.sourceNodeId === src && e.targetNodeId === tgt);
+  if (edge) { edge.edgeType = val; state.isDirty = true; renderGraph(); showEdgeProps(src, tgt); }
 }
 
 function closePropsPanel() { clearSelection(); }
@@ -3036,19 +3244,31 @@ function renderEvalResult(result, title) {
   html += `<div class="val-item" style="font-size:11px;color:var(--text-muted)">Regla #${result.ruleNumber} · ${result.ruleName} · ${result.executionTimeMs}ms</div>`;
 
   if (result.errors?.length) {
-    html += `<div style="margin-top:8px;font-weight:500;font-size:12px">Errores:</div>`;
+    html += `<div style="margin-top:8px;font-weight:500;font-size:12px;color:#ef4444">Errores:</div>`;
     result.errors.forEach(e => {
-      html += `<div class="val-item"><span class="val-icon">🔴</span><span>[${e.nodeId}] ${e.message}</span></div>`;
+      html += `<div class="val-item"><span class="val-icon" style="color:#ef4444">●</span><span style="color:#ef4444">[${e.nodeId}] ${e.message}</span></div>`;
+    });
+  }
+  if (result.failures?.length) {
+    html += `<div style="margin-top:8px;font-weight:500;font-size:12px;color:#f59e0b">Fallos:</div>`;
+    result.failures.forEach(e => {
+      html += `<div class="val-item"><span class="val-icon" style="color:#f59e0b">●</span><span style="color:#f59e0b">[${e.nodeId}] ${e.message}</span></div>`;
+    });
+  }
+  if (result.warnings?.length) {
+    html += `<div style="margin-top:8px;font-weight:500;font-size:12px;color:#eab308">Warnings:</div>`;
+    result.warnings.forEach(e => {
+      html += `<div class="val-item"><span class="val-icon" style="color:#eab308">●</span><span style="color:#eab308">[${e.nodeId}] ${e.message}</span></div>`;
     });
   }
   if (result.activatedParameters?.length) {
     html += `<div style="margin-top:8px;font-weight:500;font-size:12px">Parámetros activados:</div>`;
     result.activatedParameters.forEach(p => {
-      html += `<div class="val-item"><span class="val-icon">🟢</span><span>${p.field}: <code>${JSON.stringify(p.value)}</code></span></div>`;
+      html += `<div class="val-item"><span class="val-icon">🟢</span><span>${typeof p === 'string' ? p : `${p.field}: <code>${JSON.stringify(p.value)}</code>`}</span></div>`;
     });
   }
-  if (result.isValid && !result.errors?.length) {
-    html += '<div class="val-item"><span>Sin errores</span></div>';
+  if (result.isValid && !result.errors?.length && !result.failures?.length) {
+    html += '<div class="val-item"><span style="color:var(--accent-green)">Sin errores ni fallos</span></div>';
   }
   html += '</div>';
   panel.innerHTML = html;
@@ -3068,7 +3288,17 @@ function renderEvalRuleSetResult(result) {
       html += `<div class="val-item"><span class="val-icon">${r.isValid ? '✅' : '❌'}</span><span>#${r.ruleNumber} ${r.ruleName}</span></div>`;
       if (r.errors?.length) {
         r.errors.forEach(e => {
-          html += `<div class="val-item" style="padding-left:16px"><span class="val-icon">🔴</span><span style="font-size:11px">[${e.nodeId}] ${e.message}</span></div>`;
+          html += `<div class="val-item" style="padding-left:16px"><span class="val-icon" style="color:#ef4444">●</span><span style="font-size:11px;color:#ef4444">[${e.nodeId}] ${e.message}</span></div>`;
+        });
+      }
+      if (r.failures?.length) {
+        r.failures.forEach(e => {
+          html += `<div class="val-item" style="padding-left:16px"><span class="val-icon" style="color:#f59e0b">●</span><span style="font-size:11px;color:#f59e0b">[${e.nodeId}] ${e.message}</span></div>`;
+        });
+      }
+      if (r.warnings?.length) {
+        r.warnings.forEach(e => {
+          html += `<div class="val-item" style="padding-left:16px"><span class="val-icon" style="color:#eab308">●</span><span style="font-size:11px;color:#eab308">[${e.nodeId}] ${e.message}</span></div>`;
         });
       }
     });
@@ -3095,6 +3325,7 @@ async function saveCurrentGraph() {
       sourceNodeId: e.sourceNodeId,
       targetNodeId: e.targetNodeId,
       edgeOrder: e.edgeOrder || 1,
+      edgeType: e.edgeType || 'DEFAULT',
       label: e.label,
     })),
   };
@@ -3267,7 +3498,7 @@ function baraInferType(v) {
 }
 
 function parseBARA(source) {
-  const res = { variables:[], lookupTables:[], rules:[], errors:[], warnings:[] };
+  const res = { variables:[], lookupTables:[], templates:[], rules:[], errors:[], warnings:[] };
   const lines = source.split('\n');
   let i = 0;
 
@@ -3289,7 +3520,8 @@ function parseBARA(source) {
         const l=lines[i].trim();
         if (l==='}') { i++; break; }
         if (!l||l.startsWith('//')) { i++; continue; }
-        const m=l.match(/^(\w[\w.]*)\s*:\s*(STRING|NUMBER|BOOLEAN|DATE|ENUM|RANGE|ARRAY)\s*$/i);
+        const lClean = l.replace(/\/\/.*$/, '').trim();
+        const m=lClean.match(/^(\w[\w.]*)\s*:\s*(STRING|NUMBER|BOOLEAN|DATE|ENUM|RANGE|ARRAY)\s*$/i);
         if (m) res.variables.push({name:m[1],type:m[2].toUpperCase()});
         else res.errors.push({line:i+1,message:`Variable inválida: "${l}"`});
         i++;
@@ -3297,11 +3529,46 @@ function parseBARA(source) {
       continue;
     }
 
-    // ── lookup ──
+    // ── template ──
+    if (ln.startsWith('template')) {
+      // Single-line: template "name" TYPE required { ... }
+      const tmSingle = ln.match(/^template\s+"([^"]+)"\s+(STRING|NUMBER|ENUM|DATE|RANGE|ARRAY|BOOLEAN)(?:\s+(required|optional))?\s*\{(.+)\}\s*$/i);
+      if (tmSingle) {
+        try {
+          const constraints = baraParseInlineObj(tmSingle[4].trim());
+          res.templates.push({ name:tmSingle[1], paramType:tmSingle[2].toUpperCase(), required:tmSingle[3]?tmSingle[3].toLowerCase()==='required':true, constraints });
+        } catch(e) { res.errors.push({line:i+1,message:`Error en template: ${e.message}`}); }
+        i++; continue;
+      }
+      // Multi-line: template "name" TYPE required {
+      const tmMulti = ln.match(/^template\s+"([^"]+)"\s+(STRING|NUMBER|ENUM|DATE|RANGE|ARRAY|BOOLEAN)(?:\s+(required|optional))?\s*\{\s*$/i);
+      if (tmMulti) {
+        const tName=tmMulti[1], tType=tmMulti[2].toUpperCase(), tReq=tmMulti[3]?tmMulti[3].toLowerCase()==='required':true;
+        let cStr='';
+        i++;
+        while (i<lines.length) {
+          const l=lines[i].trim();
+          if (l==='}') { try { res.templates.push({name:tName,paramType:tType,required:tReq,constraints:cStr.trim()?baraParseInlineObj(cStr.trim()):{}}); } catch(e) { res.errors.push({line:i+1,message:`Error en template: ${e.message}`}); } i++; break; }
+          if (!l||l.startsWith('//')) { i++; continue; }
+          cStr += (cStr?', ':'')+l.replace(/,\s*$/,'');
+          i++;
+        }
+        continue;
+      }
+      res.errors.push({line:i+1,message:`Header template inválido: "${ln.slice(0,80)}"`});
+      i++; continue;
+    }
+
+    // ── lookup (simple and composite keys) ──
     if (ln.startsWith('lookup')) {
-      const hm = ln.match(/^lookup\s+"([^"]+)"\s+on\s+(\w[\w.]*)\s*\{?\s*$/);
-      if (!hm) { res.errors.push({line:i+1,message:`Header lookup inválido`}); i=skipBlock(i); continue; }
-      const tbl = { name:hm[1], keyField:hm[2], columns:[], rows:[] };
+      // Composite key: lookup "name" on [field1, field2] {
+      const hmc = ln.match(/^lookup\s+"([^"]+)"\s+on\s+\[([^\]]+)\]\s*\{?\s*$/);
+      // Simple key: lookup "name" on field {
+      const hms = ln.match(/^lookup\s+"([^"]+)"\s+on\s+(\w[\w.]*)\s*\{?\s*$/);
+      if (!hmc && !hms) { res.errors.push({line:i+1,message:`Header lookup inválido`}); i=skipBlock(i); continue; }
+      const tbl = hmc
+        ? { name:hmc[1], keyField:hmc[2].split(',').map(s=>s.trim()), columns:[], rows:[] }
+        : { name:hms[1], keyField:hms[2], columns:[], rows:[] };
       if (!ln.includes('{')) { i++; if(i<lines.length&&lines[i].trim()==='{'){} else {res.errors.push({line:i+1,message:'Falta "{"'}); continue;} }
       i++;
       while (i<lines.length) {
@@ -3316,14 +3583,22 @@ function parseBARA(source) {
             const cl=lines[i].trim();
             if (cl==='}') { i++; break; }
             if (!cl||cl.startsWith('//')) { i++; continue; }
-            const cm=cl.match(/^(\w+)\s*->\s*([\w.]+)\.([\w]+)\s+(STRING|NUMBER|BOOLEAN|DATE)\s*$/i);
+            const clClean=cl.replace(/\s+\/\/.*$/, '').trim();
+            const cm=clClean.match(/^(\w+)\s*->\s*([\w.]+)\.([\w]+)\s+(STRING|NUMBER|BOOLEAN|DATE)\s*$/i);
             if (cm) tbl.columns.push({columnName:cm[1],targetField:cm[2],constraintKey:cm[3],dataType:cm[4].toUpperCase()});
-            else res.errors.push({line:i+1,message:`Columna inválida: "${cl}"`});
+            else res.errors.push({line:i+1,message:`Columna inválida: "${clClean}"`});
             i++;
           }
           continue;
         }
-        // row
+        // composite key row: {"campo1":"val1","campo2":"val2"} => { ... }
+        const crm=l.match(/^(\{[^}]+\})\s*=>\s*\{(.+)\}\s*$/);
+        if (crm) {
+          try { tbl.rows.push({keyValue:JSON.parse(crm[1]),values:baraParseInlineObj(crm[2])}); }
+          catch(e) { res.errors.push({line:i+1,message:`Error en fila compuesta: ${e.message}`}); }
+          i++; continue;
+        }
+        // simple key row: "key" => { ... }
         const rm=l.match(/^"([^"]+)"\s*=>\s*\{(.+)\}\s*$/);
         if (rm) {
           try { tbl.rows.push({keyValue:rm[1],values:baraParseInlineObj(rm[2])}); }
@@ -3350,46 +3625,72 @@ function parseBARA(source) {
       while (i<lines.length) {
         const l=lines[i].trim();
         if (l==='}') {
-          // auto-detect isEntry
+          // auto-detect isEntry for entry-type nodes
           const tgtIds=new Set(rule.graph.edges.map(e=>e.targetNodeId));
-          rule.graph.nodes.forEach(n=>{if(n.nodeType==='CONDITION')n.isEntry=!tgtIds.has(n.nodeId);});
+          rule.graph.nodes.forEach(n=>{
+            if(['CONDITION','VALIDATION','SUB_RULE'].includes(n.nodeType)) n.isEntry=!tgtIds.has(n.nodeId);
+          });
           res.rules.push(rule);
           i++; break;
         }
         if (!l||l.startsWith('//')) { i++; continue; }
 
-        // Edge: X -> Y, Z
-        if (l.includes('->') && !l.includes(': ')) {
-          const parts=l.split('->');
-          if (parts.length===2) {
-            const src=parts[0].trim();
-            parts[1].split(',').map(s=>s.trim()).filter(Boolean).forEach((tgt,idx)=>{
-              rule.graph.edges.push({sourceNodeId:src,targetNodeId:tgt,edgeOrder:idx+1});
+        // Strip inline comments (but not inside quoted strings)
+        const l2 = l.replace(/\s+\/\/.*$/, '').trim();
+
+        // Edge: X -> Y, Z  or  X ->TRUE Y  or  X ->FALSE Y
+        if (l2.includes('->') && !l2.includes(': ')) {
+          const em=l2.match(/^(\w+)\s*->(TRUE|FALSE)?\s*(.+)$/i);
+          if (em) {
+            const src=em[1].trim();
+            const eType=em[2]?em[2].toUpperCase():'DEFAULT';
+            em[3].split(',').map(s=>s.trim()).filter(Boolean).forEach((tgt,idx)=>{
+              rule.graph.edges.push({sourceNodeId:src,targetNodeId:tgt,edgeOrder:idx+1,edgeType:eType});
             });
           }
           i++; continue;
         }
 
         // Node: ID: body
-        const np=l.match(/^([A-Za-z]\w*)\s*:\s*(.+)$/);
+        const np=l2.match(/^([A-Za-z]\w*)\s*:\s*(.+)$/);
         if (np) {
           const nid=np[1], body=np[2].trim();
+
+          // SUB_RULE: SUB_RULE("ref")
+          const srm=body.match(/^SUB_RULE\s*\("([^"]+)"\)\s*$/i);
+          if (srm) {
+            const ref=srm[1];
+            rule.graph.nodes.push({nodeId:nid,nodeType:'SUB_RULE',label:`SUB_RULE(${ref})`,isEntry:false,isDefault:false,
+              config:{ subRuleRef: ref.startsWith('#') ? {ruleNumber:ref.slice(1)} : {ruleUUID:ref} }});
+            i++; continue;
+          }
+
+          // VALIDATION: VALIDATE field OP value ACTION
+          const vm=body.match(/^VALIDATE\s+([\w.]+)\s+(==|!=|>=|<=|>|<|IN|NOT_IN|BETWEEN|CONTAINS|STARTS_WITH|ENDS_WITH|REGEX|IS_NULL|IS_NOT_NULL|IS_EMPTY|IS_NOT_EMPTY)(?:\s+(.+?))?\s+(STOP|WARN)\s*$/i);
+          if (vm) {
+            const op=BARA_OP_MAP[vm[2]]||BARA_OP_MAP[vm[2].toUpperCase()]||vm[2].toUpperCase();
+            const cfg={field:vm[1],operator:op,failureAction:vm[4].toUpperCase(),data_type:'STRING'};
+            if (vm[3]!==undefined&&vm[3].trim()) { cfg.value=baraParseInlineValue(vm[3].trim()); cfg.data_type=baraInferType(cfg.value); }
+            rule.graph.nodes.push({nodeId:nid,nodeType:'VALIDATION',label:body,isEntry:false,isDefault:false,config:cfg});
+            i++; continue;
+          }
 
           // GATE
           const gm=body.match(/^(AND|OR|NOT|XOR)\s*\(([^)]*)\)\s*$/i);
           if (gm) {
             const inputs=gm[2].split(',').map(s=>s.trim()).filter(Boolean);
             rule.graph.nodes.push({nodeId:nid,nodeType:'GATE',isEntry:false,isDefault:false,config:{logic:gm[1].toUpperCase(),short_circuit:true}});
-            inputs.forEach((inp,idx)=>rule.graph.edges.push({sourceNodeId:inp,targetNodeId:nid,edgeOrder:idx+1}));
+            inputs.forEach((inp,idx)=>rule.graph.edges.push({sourceNodeId:inp,targetNodeId:nid,edgeOrder:idx+1,edgeType:'DEFAULT'}));
             i++; continue;
           }
 
-          // PARAMETER
-          const pm=body.match(/^PARAM\s+([\w.]+)\s+(STRING|NUMBER|ENUM|DATE|RANGE|ARRAY|BOOLEAN)(?:\s+(required|optional))?(?:\s+(default))?(?:\s+lookup\("([^"]+)"\))?\s*(?:\{(.+)\})?\s*$/i);
+          // PARAMETER (with optional template)
+          const pm=body.match(/^PARAM\s+([\w.]+)\s+(STRING|NUMBER|ENUM|DATE|RANGE|ARRAY|BOOLEAN)(?:\s+(required|optional))?(?:\s+(default))?(?:\s+lookup\("([^"]+)"\))?(?:\s+template\("([^"]+)"\))?\s*(?:\{(.+)\})?\s*$/i);
           if (pm) {
             const cfg={target_field:pm[1],param_type:pm[2].toUpperCase(),required:pm[3]?pm[3].toLowerCase()==='required':true,constraints:{}};
             if (pm[5]) cfg.lookupRef={tableName:pm[5]};
-            if (pm[6]) { try{cfg.constraints=baraParseInlineObj(pm[6]);}catch(e){res.errors.push({line:i+1,message:`Constraints error: ${e.message}`});} }
+            if (pm[6]) cfg.templateRef={templateName:pm[6]};
+            if (pm[7]) { try{cfg.constraints=baraParseInlineObj(pm[7]);}catch(e){res.errors.push({line:i+1,message:`Constraints error: ${e.message}`});} }
             rule.graph.nodes.push({nodeId:nid,nodeType:'PARAMETER',isEntry:false,isDefault:!!pm[4],config:cfg});
             i++; continue;
           }
@@ -3431,7 +3732,7 @@ function parseBARA(source) {
           res.errors.push({line:i+1,message:`Nodo no reconocido: "${nid}: ${body.slice(0,50)}"`});
           i++; continue;
         }
-        res.warnings.push({line:i+1,message:`Línea no reconocida en rule`});
+        res.warnings.push({line:i+1,message:`Línea no reconocida en rule: "${l2.slice(0,50)}"`});
         i++;
       }
       continue;
@@ -3461,7 +3762,8 @@ function emitBARA(data) {
   // Lookup tables
   if (data.lookupTables) {
     data.lookupTables.forEach(lt => {
-      L.push(`lookup "${lt.name}" on ${lt.keyField} {`);
+      const kfStr = Array.isArray(lt.keyField) ? `[${lt.keyField.join(', ')}]` : lt.keyField;
+      L.push(`lookup "${lt.name}" on ${kfStr} {`);
       if (lt.columns && lt.columns.length) {
         L.push('  columns {');
         lt.columns.forEach(c => L.push(`    ${c.columnName} -> ${c.targetField}.${c.constraintKey} ${c.dataType}`));
@@ -3469,11 +3771,22 @@ function emitBARA(data) {
       }
       (lt.rows||[]).forEach(r => {
         const vals = Object.entries(r.values).map(([k,v]) => `${k}: ${fmtBara(v)}`).join(', ');
-        L.push(`  "${r.keyValue}" => { ${vals} }`);
+        const keyStr = typeof r.keyValue === 'string' ? `"${r.keyValue}"` : JSON.stringify(r.keyValue);
+        L.push(`  ${keyStr} => { ${vals} }`);
       });
       L.push('}');
       L.push('');
     });
+  }
+
+  // Templates
+  if (data.templates && data.templates.length) {
+    data.templates.forEach(t => {
+      const reqStr = t.required ? 'required' : 'optional';
+      const pairs = Object.entries(t.constraints||{}).map(([k,v])=>`${k}: ${fmtBara(v)}`).join(', ');
+      L.push(`template "${t.name}" ${t.paramType} ${reqStr} { ${pairs} }`);
+    });
+    L.push('');
   }
 
   // Rules
@@ -3487,26 +3800,51 @@ function emitBARA(data) {
 
       const nodes=rule.graph.nodes, edges=rule.graph.edges;
       const conds=nodes.filter(n=>n.nodeType==='CONDITION');
+      const validations=nodes.filter(n=>n.nodeType==='VALIDATION');
+      const subRules=nodes.filter(n=>n.nodeType==='SUB_RULE');
       const gates=nodes.filter(n=>n.nodeType==='GATE');
       const params=nodes.filter(n=>n.nodeType==='PARAMETER');
 
+      // Emit conditions
       conds.forEach(n => {
         const c=n.config;
         let line = `  ${n.nodeId}: `;
         if (['IS_NULL','IS_NOT_NULL','IS_EMPTY','IS_NOT_EMPTY'].includes(c.operator)) { line+=`${c.field} ${c.operator}`; }
-        else if (c._lookupRef) { line+=`${c.field} IN lookup("${c._lookupRef}")`; }
+        else if (c._lookupRef || (typeof c.value==='string'&&c.value.startsWith('lookup:'))) { line+=`${c.field} IN lookup("${c._lookupRef||c.value.replace('lookup:','')}")`; }
         else if ((c.operator==='IN'||c.operator==='NOT_IN')&&Array.isArray(c.value)) { line+=`${c.field} ${c.operator} [${c.value.map(fmtBara).join(', ')}]`; }
         else if (c.operator==='BETWEEN'&&Array.isArray(c.value)) { line+=`${c.field} BETWEEN [${c.value.map(fmtBara).join(', ')}]`; }
         else { line+=`${c.field} ${BARA_REVERSE_OP[c.operator]||c.operator} ${fmtBara(c.value)}`; }
         L.push(line);
       });
 
-      if (conds.length && gates.length) L.push('');
+      // Emit validations
+      if (conds.length && validations.length) L.push('');
+      validations.forEach(n => {
+        const c=n.config;
+        const op=BARA_REVERSE_OP[c.operator]||c.operator;
+        if (['IS_NULL','IS_NOT_NULL','IS_EMPTY','IS_NOT_EMPTY'].includes(c.operator)) {
+          L.push(`  ${n.nodeId}: VALIDATE ${c.field} ${c.operator} ${c.failureAction||'STOP'}`);
+        } else {
+          L.push(`  ${n.nodeId}: VALIDATE ${c.field} ${op} ${fmtBara(c.value)} ${c.failureAction||'STOP'}`);
+        }
+      });
+
+      // Emit sub-rules
+      if ((conds.length||validations.length) && subRules.length) L.push('');
+      subRules.forEach(n => {
+        const ref=n.config.subRuleRef||{};
+        const refStr = ref.ruleNumber ? `#${ref.ruleNumber}` : (ref.ruleUUID||ref.ruleId||'???');
+        L.push(`  ${n.nodeId}: SUB_RULE("${refStr}")`);
+      });
+
+      // Emit gates
+      if ((conds.length||validations.length||subRules.length) && gates.length) L.push('');
       gates.forEach(n => {
         const inputs=edges.filter(e=>e.targetNodeId===n.nodeId).sort((a,b)=>a.edgeOrder-b.edgeOrder).map(e=>e.sourceNodeId);
         L.push(`  ${n.nodeId}: ${n.config.logic}(${inputs.join(', ')})`);
       });
 
+      // Emit parameters
       if (gates.length && params.length) L.push('');
       params.forEach(n => {
         const c=n.config;
@@ -3514,6 +3852,7 @@ function emitBARA(data) {
         line += c.required!==false ? ' required' : ' optional';
         if (n.isDefault) line += ' default';
         if (c.lookupRef) line += ` lookup("${c.lookupRef.tableName||c.lookupRef.tableId||''}")`;
+        if (c.templateRef) line += ` template("${c.templateRef.templateName||c.templateRef.templateId||''}")`;
         if (c.constraints && Object.keys(c.constraints).length) {
           const pairs=Object.entries(c.constraints).map(([k,v])=>`${k}: ${fmtBara(v)}`).join(', ');
           line += ` { ${pairs} }`;
@@ -3521,13 +3860,23 @@ function emitBARA(data) {
         L.push(line);
       });
 
-      // Edges to PARAMETERs
-      const pids=new Set(params.map(n=>n.nodeId));
-      const s2p=new Map();
-      edges.forEach(e=>{if(pids.has(e.targetNodeId)){if(!s2p.has(e.sourceNodeId))s2p.set(e.sourceNodeId,[]);s2p.get(e.sourceNodeId).push(e.targetNodeId);}});
-      if (s2p.size) {
+      // Edges (non-gate-input edges, grouped by source+edgeType)
+      const gateIds=new Set(gates.map(n=>n.nodeId));
+      const explicitEdges=edges.filter(e=>!gateIds.has(e.targetNodeId));
+      const eGroups=new Map();
+      explicitEdges.forEach(e=>{
+        const typeStr=(e.edgeType&&e.edgeType!=='DEFAULT')?e.edgeType:'';
+        const key=`${e.sourceNodeId}|${typeStr}`;
+        if(!eGroups.has(key))eGroups.set(key,[]);
+        eGroups.get(key).push(e.targetNodeId);
+      });
+      if (eGroups.size) {
         L.push('');
-        s2p.forEach((tgts,src)=>L.push(`  ${src} -> ${tgts.join(', ')}`));
+        eGroups.forEach((tgts,key)=>{
+          const [src,typeStr]=key.split('|');
+          const arrow=typeStr?`->${typeStr}`:`->`;
+          L.push(`  ${src} ${arrow} ${tgts.join(', ')}`);
+        });
       }
 
       L.push('}');
@@ -3579,81 +3928,107 @@ async function doBaraParse() {
   const source = document.getElementById('bara_editor').value;
   if (!source.trim()) { toast('Editor vacío', 'warning'); return; }
 
-  const result = parseBARA(source);
   const outputEl = document.getElementById('bara_output');
   outputEl.style.display = '';
 
-  // Show parse results
-  let html = '';
-
-  if (result.errors.length) {
-    html += result.errors.map(e => `<div class="bara-result-item"><span class="bara-line">L${e.line}</span><span class="bara-err">⛔ ${e.message}</span></div>`).join('');
-  }
-  if (result.warnings.length) {
-    html += result.warnings.map(w => `<div class="bara-result-item"><span class="bara-line">L${w.line}</span><span class="bara-warn">⚠ ${w.message}</span></div>`).join('');
-  }
-
-  if (result.errors.length) {
-    html = `<div class="bara-err" style="font-weight:600;margin-bottom:6px">Parse fallido — ${result.errors.length} error(es)</div>` + html;
+  // Preview local rápido para feedback de sintaxis
+  const preview = parseBARA(source);
+  if (preview.errors.length) {
+    let html = `<div class="bara-err" style="font-weight:600;margin-bottom:6px">Parse fallido — ${preview.errors.length} error(es)</div>`;
+    html += preview.errors.map(e => `<div class="bara-result-item"><span class="bara-line">L${e.line}</span><span class="bara-err">⛔ ${e.message}</span></div>`).join('');
+    if (preview.warnings.length) {
+      html += preview.warnings.map(w => `<div class="bara-result-item"><span class="bara-line">L${w.line}</span><span class="bara-warn">⚠ ${w.message}</span></div>`).join('');
+    }
     outputEl.innerHTML = html;
-    document.getElementById('bara_status').textContent = `${result.errors.length} errores`;
+    document.getElementById('bara_status').textContent = `${preview.errors.length} errores`;
     return;
   }
 
-  // Success — show summary
-  html += `<div class="bara-ok" style="font-weight:600;margin-bottom:6px">✓ Parse exitoso</div>`;
-  html += `<div class="bara-result-item"><span class="bara-ok">${result.variables.length} variables</span></div>`;
-  html += `<div class="bara-result-item"><span class="bara-ok">${result.lookupTables.length} lookup tables</span></div>`;
-  html += `<div class="bara-result-item"><span class="bara-ok">${result.rules.length} reglas</span></div>`;
-
-  outputEl.innerHTML = html;
+  // Sintaxis OK → enviar al backend en una sola llamada
+  outputEl.innerHTML = `<div class="bara-ok" style="font-weight:600">✓ Sintaxis OK — importando...</div>`;
   document.getElementById('bara_status').textContent = 'Importando...';
 
-  // ── Apply variables ──
-  if (result.variables.length) {
-    const vars = loadVars();
-    const existing = new Set(vars.map(v => v.name));
-    let added = 0;
-    result.variables.forEach(v => {
-      if (!existing.has(v.name)) { vars.push(v); added++; }
-    });
-    saveVars(vars);
-    renderVarList();
-    if (added) html += `<div class="bara-result-item"><span class="bara-ok">→ ${added} variables nuevas guardadas</span></div>`;
-  }
+  try {
+    const result = await api('POST', `/GraphRule/ruleset/${state.currentRuleSet.id}/import-bara`, { source });
 
-  // ── Import lookup tables ──
-  for (const lt of result.lookupTables) {
-    try {
-      await api('POST', `/LookupTable/ruleset/${state.currentRuleSet.id}/import`, lt);
-      html += `<div class="bara-result-item"><span class="bara-ok">→ Lookup "${lt.name}" importada (${lt.rows.length} filas)</span></div>`;
-    } catch (e) {
-      html += `<div class="bara-result-item"><span class="bara-err">→ Error lookup "${lt.name}": ${e.message}</span></div>`;
+    let html = `<div class="bara-ok" style="font-weight:600;margin-bottom:6px">✓ Importación completa</div>`;
+
+    // Variables (locales)
+    if (result.variables && result.variables.items.length) {
+      const vars = loadVars();
+      const existing = new Set(vars.map(v => v.name));
+      let added = 0;
+      result.variables.items.forEach(v => {
+        if (!existing.has(v.name)) { vars.push(v); added++; }
+      });
+      saveVars(vars);
+      renderVarList();
+      html += `<div class="bara-result-item"><span class="bara-ok">→ ${added} variables nuevas (${result.variables.total} total)</span></div>`;
     }
-  }
 
-  // ── Import rules ──
-  if (result.rules.length) {
-    try {
-      const importResult = await api('POST', `/GraphRule/ruleset/${state.currentRuleSet.id}/import`, { rules: result.rules });
-      html += `<div class="bara-result-item"><span class="bara-ok">→ ${importResult.successful}/${importResult.total} reglas importadas</span></div>`;
-      if (importResult.failed > 0) {
-        importResult.results.filter(r => !r.success).forEach(r => {
+    // Templates
+    for (const t of (result.templates?.results || [])) {
+      if (t.success && !t.error) {
+        html += `<div class="bara-result-item"><span class="bara-ok">→ Template "${t.name}" creado</span></div>`;
+      } else if (t.error?.includes('Ya existe') || t.error?.includes('omitió')) {
+        html += `<div class="bara-result-item"><span class="bara-warn">→ Template "${t.name}" ya existe, se omitió</span></div>`;
+      } else {
+        html += `<div class="bara-result-item"><span class="bara-err">→ Error template "${t.name}": ${t.error}</span></div>`;
+      }
+    }
+
+    // Lookups
+    for (const lt of (result.lookupTables?.results || [])) {
+      if (lt.success && !lt.error) {
+        html += `<div class="bara-result-item"><span class="bara-ok">→ Lookup "${lt.name}" importada (${lt.rows || 0} filas)</span></div>`;
+      } else if (lt.error?.includes('Ya existe') || lt.error?.includes('omitió')) {
+        html += `<div class="bara-result-item"><span class="bara-warn">→ Lookup "${lt.name}" ya existe, se omitió</span></div>`;
+      } else {
+        html += `<div class="bara-result-item"><span class="bara-err">→ Error lookup "${lt.name}": ${lt.error}</span></div>`;
+      }
+    }
+
+    // Rules
+    if (result.rules) {
+      html += `<div class="bara-result-item"><span class="bara-ok">→ ${result.rules.successful}/${result.rules.total} reglas importadas</span></div>`;
+      if (result.rules.failed > 0) {
+        result.rules.results.filter(r => !r.success).forEach(r => {
           html += `<div class="bara-result-item"><span class="bara-err">  #${r.ruleNumber}: ${r.error}</span></div>`;
+          if (r.details) {
+            const detailStr = typeof r.details === 'string' ? r.details : JSON.stringify(r.details, null, 2);
+            html += `<div class="bara-result-item" style="margin-left:20px"><span class="bara-err" style="font-size:11px;white-space:pre-wrap">${detailStr}</span></div>`;
+          }
         });
       }
-    } catch (e) {
-      html += `<div class="bara-result-item"><span class="bara-err">→ Error importando reglas: ${e.message}</span></div>`;
     }
+
+    // Warnings del parser
+    if (result.warnings?.length) {
+      result.warnings.forEach(w => {
+        html += `<div class="bara-result-item"><span class="bara-warn">⚠ L${w.line}: ${w.message}</span></div>`;
+      });
+    }
+
+    outputEl.innerHTML = html;
+    document.getElementById('bara_status').textContent = 'Importación completa';
+
+    // Reload y cerrar
+    await Promise.all([loadRules(), loadLookupTables()]);
+    toast('BARA importado', 'success');
+    closeBaraModal();
+  } catch (e) {
+    let html = `<div class="bara-err" style="font-weight:600;margin-bottom:6px">Error de importación</div>`;
+    html += `<div class="bara-result-item"><span class="bara-err">⛔ ${e.message}</span></div>`;
+    if (e.details) {
+      if (e.details.errors) {
+        e.details.errors.forEach(err => {
+          html += `<div class="bara-result-item"><span class="bara-line">L${err.line || '?'}</span><span class="bara-err">${err.message}</span></div>`;
+        });
+      }
+    }
+    outputEl.innerHTML = html;
+    document.getElementById('bara_status').textContent = 'Error';
   }
-
-  outputEl.innerHTML = html;
-  document.getElementById('bara_status').textContent = 'Importación completa';
-
-  // Reload
-  await loadRules();
-  await loadLookupTables();
-  toast('BARA importado', 'success');
 }
 
 // ── BARA Export ──
@@ -3714,6 +4089,299 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
+// ════════════════════════════════════════════
+// BATCH CONDITION MODAL
+// ════════════════════════════════════════════
+function showBatchConditionModal() {
+  if (!state.currentRule) { toast('Seleccione una regla primero', 'warning'); return; }
+
+  const vars = loadVars();
+  const fieldOptions = vars.map(v => `<option value="${v.name}">${v.name} (${v.type})</option>`).join('');
+
+  const modal = document.createElement('div');
+  modal.className = 'modal-overlay';
+  modal.id = 'batchCondModal';
+  modal.innerHTML = `
+    <div class="modal" style="width:700px;max-height:85vh">
+      <div class="modal-header">
+        <h3>Batch Conditions</h3>
+        <button class="modal-close" onclick="closeBatchCondModal()">&times;</button>
+      </div>
+      <div class="modal-body" style="overflow-y:auto;max-height:60vh">
+        <p style="color:var(--text-secondary);margin-bottom:12px;font-size:13px">
+          Crea múltiples condiciones de una vez. Cada fila genera un nodo CONDITION + se conectan a un GATE automáticamente.
+        </p>
+        <div class="form-group">
+          <label>Gate Logic</label>
+          <select id="batchGateLogic">
+            <option value="AND" selected>AND (todas deben cumplirse)</option>
+            <option value="OR">OR (al menos una)</option>
+            <option value="XOR">XOR (exactamente una)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Conectar resultado a</label>
+          <select id="batchConnectTo">
+            <option value="">— No conectar —</option>
+            ${state.nodes.filter(n => n.nodeType !== 'CONDITION').map(n => `<option value="${n.nodeId}">${n.nodeId} (${n.nodeType})</option>`).join('')}
+          </select>
+        </div>
+        <table style="width:100%;border-collapse:collapse;margin-top:12px" id="batchTable">
+          <thead>
+            <tr style="border-bottom:1px solid var(--border)">
+              <th style="text-align:left;padding:6px;font-size:12px;color:var(--text-secondary)">Field</th>
+              <th style="text-align:left;padding:6px;font-size:12px;color:var(--text-secondary)">Operator</th>
+              <th style="text-align:left;padding:6px;font-size:12px;color:var(--text-secondary)">Value</th>
+              <th style="text-align:left;padding:6px;font-size:12px;color:var(--text-secondary)">Type</th>
+              <th style="width:30px"></th>
+            </tr>
+          </thead>
+          <tbody id="batchRows">
+            ${batchRowHtml(fieldOptions)}
+            ${batchRowHtml(fieldOptions)}
+            ${batchRowHtml(fieldOptions)}
+          </tbody>
+        </table>
+        <button class="btn small" style="margin-top:8px" onclick="addBatchRow()">+ Agregar fila</button>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" onclick="closeBatchCondModal()">Cancelar</button>
+        <button class="btn primary" onclick="executeBatchConditions()">Crear ${'\u26A1'}</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+}
+
+function batchRowHtml(fieldOptions) {
+  const ops = ['EQUALS','NOT_EQUALS','GREATER_THAN','GREATER_EQUAL','LESS_THAN','LESS_EQUAL','IN','NOT_IN','BETWEEN','CONTAINS','STARTS_WITH','ENDS_WITH','REGEX','IS_NULL','IS_NOT_NULL','IS_EMPTY','IS_NOT_EMPTY'];
+  return `<tr class="batch-row" style="border-bottom:1px solid var(--border)">
+    <td style="padding:4px"><input class="bc-field" placeholder="campo" style="width:100%" list="batchFieldList"></td>
+    <td style="padding:4px"><select class="bc-op">${ops.map(o=>`<option>${o}</option>`).join('')}</select></td>
+    <td style="padding:4px"><input class="bc-val" placeholder="valor" style="width:100%"></td>
+    <td style="padding:4px"><select class="bc-type">${['STRING','NUMBER','DATE','BOOLEAN','ENUM'].map(t=>`<option>${t}</option>`).join('')}</select></td>
+    <td style="padding:4px"><button class="btn small danger" onclick="this.closest('tr').remove()" style="padding:2px 6px">&times;</button></td>
+  </tr>`;
+}
+
+function addBatchRow() {
+  const vars = loadVars();
+  const fieldOptions = vars.map(v => `<option value="${v.name}">`).join('');
+  const tbody = document.getElementById('batchRows');
+  tbody.insertAdjacentHTML('beforeend', batchRowHtml(fieldOptions));
+}
+
+function closeBatchCondModal() {
+  const m = document.getElementById('batchCondModal');
+  if (m) m.remove();
+}
+
+function executeBatchConditions() {
+  const rows = document.querySelectorAll('#batchRows .batch-row');
+  const conditions = [];
+  rows.forEach(row => {
+    const field = row.querySelector('.bc-field').value.trim();
+    const operator = row.querySelector('.bc-op').value;
+    const value = parseConfigValue(row.querySelector('.bc-val').value.trim());
+    const data_type = row.querySelector('.bc-type').value;
+    if (field) conditions.push({ field, operator, value, data_type });
+  });
+
+  if (conditions.length === 0) { toast('Agregue al menos una condición', 'warning'); return; }
+
+  const gateLogic = document.getElementById('batchGateLogic').value;
+  const connectTo = document.getElementById('batchConnectTo').value;
+
+  // Create nodes locally
+  const condNodeIds = [];
+  conditions.forEach(cond => {
+    const num = state.nodeCounters.CONDITION++;
+    const nodeId = `N${num + 1}`;
+    state.nodes.push({
+      nodeId,
+      nodeType: 'CONDITION',
+      config: { field: cond.field, operator: cond.operator, value: cond.value, data_type: cond.data_type },
+      label: `${cond.field} ${cond.operator}`,
+      isDefault: false,
+      isEntry: true,
+      x: 100 + condNodeIds.length * 220,
+      y: 80,
+    });
+    condNodeIds.push(nodeId);
+  });
+
+  // Create gate if more than 1 condition
+  let outputNodeId = condNodeIds[0];
+  if (condNodeIds.length > 1) {
+    const gNum = state.nodeCounters.GATE++;
+    const gateId = `G${gNum + 1}`;
+    state.nodes.push({
+      nodeId: gateId,
+      nodeType: 'GATE',
+      config: { logic: gateLogic },
+      label: `${gateLogic}(${condNodeIds.length})`,
+      isDefault: false,
+      isEntry: false,
+      x: 100 + condNodeIds.length * 110,
+      y: 220,
+    });
+
+    condNodeIds.forEach((cId, idx) => {
+      state.edges.push({ sourceNodeId: cId, targetNodeId: gateId, edgeOrder: idx + 1, edgeType: 'DEFAULT' });
+    });
+    outputNodeId = gateId;
+  }
+
+  // Connect to target
+  if (connectTo) {
+    state.edges.push({ sourceNodeId: outputNodeId, targetNodeId: connectTo, edgeOrder: 1, edgeType: 'DEFAULT' });
+  }
+
+  state.isDirty = true;
+  closeBatchCondModal();
+  autoLayout();
+  renderGraph();
+  toast(`${conditions.length} condiciones creadas${condNodeIds.length > 1 ? ` + GATE ${gateLogic}` : ''}`, 'info');
+}
+
+// ════════════════════════════════════════════
+// NODE GROUPS (Visual Collapse)
+// ════════════════════════════════════════════
+// Groups are visual-only, stored in localStorage per rule.
+function groupsKey() {
+  return state.currentRule ? `groups_rule_${state.currentRule.uuid}` : null;
+}
+function loadGroups() {
+  const key = groupsKey();
+  if (!key) return [];
+  try { return JSON.parse(localStorage.getItem(key) || '[]'); } catch { return []; }
+}
+function saveGroups(groups) {
+  const key = groupsKey();
+  if (key) localStorage.setItem(key, JSON.stringify(groups));
+}
+
+function createGroupFromSelection() {
+  if (!state.selectedNode) { toast('Seleccione nodos para agrupar', 'warning'); return; }
+  // For now, group the selected node + all its direct neighbors
+  const nodeId = state.selectedNode;
+  const neighborIds = new Set([nodeId]);
+  state.edges.forEach(e => {
+    if (e.sourceNodeId === nodeId) neighborIds.add(e.targetNodeId);
+    if (e.targetNodeId === nodeId) neighborIds.add(e.sourceNodeId);
+  });
+
+  const name = prompt('Nombre del grupo:', `Grupo ${loadGroups().length + 1}`);
+  if (!name) return;
+
+  const groups = loadGroups();
+  groups.push({
+    id: 'grp_' + Date.now(),
+    name,
+    nodeIds: [...neighborIds],
+    collapsed: false,
+  });
+  saveGroups(groups);
+  renderGraph();
+  toast(`Grupo "${name}" creado con ${neighborIds.size} nodos`, 'info');
+}
+
+function toggleGroupCollapse(groupId) {
+  const groups = loadGroups();
+  const group = groups.find(g => g.id === groupId);
+  if (group) {
+    group.collapsed = !group.collapsed;
+    saveGroups(groups);
+    renderGraph();
+  }
+}
+
+function deleteGroup(groupId) {
+  let groups = loadGroups();
+  groups = groups.filter(g => g.id !== groupId);
+  saveGroups(groups);
+  renderGraph();
+  toast('Grupo eliminado', 'info');
+}
+
+// ════════════════════════════════════════════
+// CONTEXT MENU
+// ════════════════════════════════════════════
+function showCtxMenu(event, type, id) {
+  const menu = document.getElementById('ctxMenu');
+  const backdrop = document.getElementById('ctxBackdrop');
+  let items = '';
+  if (type === 'ruleset') {
+    items = `
+      <div class="ctx-menu-item" onclick="closeCtxMenu();editRuleSet(${id})">✏️ Editar</div>
+      <div class="ctx-menu-item danger" onclick="closeCtxMenu();deleteRuleSet(${id})">🗑️ Eliminar</div>`;
+  } else if (type === 'rule') {
+    const rule = state.rules.find(r => r.uuid === id);
+    const isEnabled = rule?.enabled !== false;
+    items = `
+      <div class="ctx-menu-item" onclick="closeCtxMenu();editRule('${id}')">✏️ Editar</div>
+      <div class="ctx-menu-item" onclick="closeCtxMenu();toggleRuleEnabled('${id}', ${!isEnabled})">${isEnabled ? '⏸️ Deshabilitar' : '▶️ Habilitar'}</div>
+      <div class="ctx-menu-item danger" onclick="closeCtxMenu();deleteRule('${id}')">🗑️ Eliminar</div>`;
+  }
+  menu.innerHTML = items;
+  const rect = event.target.closest('button').getBoundingClientRect();
+  menu.style.top = rect.bottom + 4 + 'px';
+  menu.style.left = rect.left + 'px';
+  menu.classList.add('show');
+  backdrop.style.display = 'block';
+}
+
+function closeCtxMenu() {
+  document.getElementById('ctxMenu').classList.remove('show');
+  document.getElementById('ctxBackdrop').style.display = 'none';
+}
+
+async function toggleRuleEnabled(uuid, enabled) {
+  try {
+    await api('PUT', `/GraphRule/rule/${uuid}`, { enabled });
+    toast(enabled ? 'Regla habilitada' : 'Regla deshabilitada', 'success');
+    await loadRules();
+    if (state.currentRule?.uuid === uuid) {
+      await selectRule(uuid);
+    }
+  } catch (e) {
+    toast('Error: ' + e.message, 'error');
+  }
+}
+
+function deleteRuleSet(id) {
+  const rs = state.ruleSets.find(r => r.id === id);
+  const name = rs ? rs.name : `ID ${id}`;
+  document.getElementById('confirmDeleteRsName').textContent = name;
+  document.getElementById('confirmDeleteRsBtn').onclick = () => confirmDeleteRuleSet(id);
+  document.getElementById('confirmDeleteRuleSetModal').classList.remove('hidden');
+}
+
+async function confirmDeleteRuleSet(id) {
+  closeModal('confirmDeleteRuleSetModal');
+  try {
+    await api('DELETE', `/RuleSet/${id}`, { inactiveBy: 'ui-user' });
+    // Limpiar variables del localStorage siempre
+    localStorage.removeItem(`vars_rs_${id}`);
+    if (state.currentRuleSet?.id === id) {
+      state.currentRuleSet = null;
+      state.currentRule = null;
+      state.rules = [];
+      state.lookupTables = [];
+      clearGraph();
+      renderRuleList();
+      renderLookupList();
+      hideVarForm();
+      renderVarList();
+      updateBreadcrumb();
+    }
+    await loadRuleSets();
+    toast('RuleSet eliminado con todo su contenido', 'success');
+  } catch (e) {
+    toast('Error eliminando RuleSet: ' + e.message, 'error');
+  }
+}
+
 // INIT
 // ════════════════════════════════════════════
 (async function init() {
@@ -3721,5 +4389,7 @@ document.addEventListener('DOMContentLoaded', () => {
   updateTransform();
 })();
 </script>
+<div class="ctx-menu-backdrop" id="ctxBackdrop" onclick="closeCtxMenu()" style="display:none"></div>
+<div class="ctx-menu" id="ctxMenu"></div>
 </body>
 </html>

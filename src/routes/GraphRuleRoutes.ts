@@ -31,6 +31,11 @@ GraphRuleRouter.post('/rule/:ruleId/node', authenticate, GraphRuleController.add
 GraphRuleRouter.put('/rule/:ruleId/node/:nodeId', authenticate, GraphRuleController.updateNode);
 GraphRuleRouter.delete('/rule/:ruleId/node/:nodeId', authenticate, GraphRuleController.removeNode);
 
+// ─── BATCH OPERATIONS ───
+// POST   /ws/GraphRule/rule/:ruleId/conditions/batch     → Crear múltiples condiciones + GATE en batch
+
+GraphRuleRouter.post('/rule/:ruleId/conditions/batch', authenticate, GraphRuleController.addConditionBatch);
+
 // ─── EDGE OPERATIONS ───
 // POST   /ws/GraphRule/rule/:ruleId/edge                 → Agregar arista
 // DELETE /ws/GraphRule/rule/:ruleId/edge/:edgeId          → Eliminar arista
@@ -45,10 +50,12 @@ GraphRuleRouter.get('/rule/:ruleId/validate', authenticate, GraphRuleController.
 
 // ─── IMPORT / EXPORT ───
 // POST   /ws/GraphRule/ruleset/:ruleSetId/import          → Importar reglas desde JSON
+// POST   /ws/GraphRule/ruleset/:ruleSetId/import-bara     → Importar .bara completo (templates + lookups + reglas) en una transacción
 // GET    /ws/GraphRule/rule/:ruleId/export                 → Exportar regla a JSON
 // GET    /ws/GraphRule/ruleset/:ruleSetId/export           → Exportar RuleSet completo a JSON
 
 GraphRuleRouter.post('/ruleset/:ruleSetId/import', authenticate, GraphRuleController.importFromJSON);
+GraphRuleRouter.post('/ruleset/:ruleSetId/import-bara', authenticate, GraphRuleController.importFromBARA);
 GraphRuleRouter.get('/rule/:ruleId/export', authenticate, GraphRuleController.exportRuleToJSON);
 GraphRuleRouter.get('/ruleset/:ruleSetId/export', authenticate, GraphRuleController.exportRuleSetToJSON);
 

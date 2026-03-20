@@ -1,21 +1,24 @@
 /**
  * graphValidator.ts
- * 
+ *
  * Utilidad central para validar la integridad de grafos DAG
  * de reglas de negocio. Independiente de la interfaz y del ORM.
- * 
+ *
  * Responsabilidades:
  *  - Detección de ciclos (Kahn's algorithm)
  *  - Validación de tipos de conexión entre nodos
  *  - Validación estructural del grafo
  *  - Detección de conflictos de PARAMETERs (buenas prácticas)
+ *  - Soporte para nodos VALIDATION (validación intermedia) y SUB_RULE (composición)
+ *  - Soporte para aristas con semántica TRUE/FALSE (decision trees)
  */
 
 // ────────────────────────────────────────────
 // Tipos internos del validador
 // ────────────────────────────────────────────
 
-export type NodeType = 'CONDITION' | 'GATE' | 'PARAMETER';
+export type NodeType = 'CONDITION' | 'GATE' | 'PARAMETER' | 'VALIDATION' | 'SUB_RULE';
+export type EdgeType = 'DEFAULT' | 'TRUE' | 'FALSE';
 
 export interface GraphNode {
     nodeId: string;
@@ -28,6 +31,7 @@ export interface GraphEdge {
     sourceNodeId: string;
     targetNodeId: string;
     edgeOrder: number;
+    edgeType?: EdgeType;
 }
 
 export interface ValidationMessage {
@@ -49,13 +53,20 @@ export interface GraphValidationResult {
 // Reglas de conexión válidas entre tipos de nodo
 // ────────────────────────────────────────────
 
+// source → set de targets permitidos
 const VALID_CONNECTIONS: Record<string, Set<string>> = {
-    'CONDITION': new Set(['GATE', 'PARAMETER']),
-    'GATE':      new Set(['GATE', 'PARAMETER']),
-    'PARAMETER': new Set(), // terminal, no puede ser source
+    'CONDITION':  new Set(['GATE', 'PARAMETER', 'VALIDATION', 'SUB_RULE']),
+    'GATE':       new Set(['GATE', 'PARAMETER', 'VALIDATION', 'SUB_RULE']),
+    'VALIDATION': new Set(['GATE', 'PARAMETER', 'VALIDATION', 'SUB_RULE']),
+    'SUB_RULE':   new Set(['GATE', 'PARAMETER', 'VALIDATION']),
+    'PARAMETER':  new Set(), // terminal, no puede ser source
 };
 
-const INVALID_TARGETS: Set<string> = new Set(['CONDITION']); // nadie puede apuntar a CONDITION
+// Nodos que NO pueden recibir aristas entrantes (solo CONDITIONs son entry puro)
+const ENTRY_ONLY_TYPES: Set<string> = new Set(['CONDITION']);
+
+// Nodos que producen resultado booleano (pueden tener aristas TRUE/FALSE salientes)
+const BOOLEAN_PRODUCERS: Set<string> = new Set(['CONDITION', 'GATE', 'VALIDATION', 'SUB_RULE']);
 
 // ────────────────────────────────────────────
 // Validación principal
@@ -88,7 +99,7 @@ export function validateGraph(nodes: GraphNode[], edges: GraphEdge[]): GraphVali
     // 6. PARAMETER no es source de ninguna arista
     validateParameterIsTerminal(edges, nodeMap, errors);
 
-    // 7. CONDITION no es target de ninguna arista
+    // 7. CONDITION no es target de ninguna arista (entry-only)
     validateConditionIsEntry(edges, nodeMap, errors);
 
     // 8. Detección de ciclos (DAG)
@@ -103,15 +114,18 @@ export function validateGraph(nodes: GraphNode[], edges: GraphEdge[]): GraphVali
     // 11. Todo nodo (excepto is_default) participa en al menos una arista
     validateNodeParticipation(nodes, edges, errors);
 
-    // 12. Existe al menos un camino completo CONDITION/EXPRESSION → PARAMETER
+    // 12. Existe al menos un camino completo entrada → PARAMETER
     validateCompletePath(nodes, edges, nodeMap, errors);
 
     // 13. Validar config de cada nodo según su tipo
     validateNodeConfigs(nodes, errors);
 
+    // 14. Validar semántica de edgeType en aristas
+    validateEdgeTypes(edges, nodeMap, errors);
+
     // ─── Advertencias (buenas prácticas) ───
 
-    // 14. PARAMETERs con mismo target_field que podrían activarse simultáneamente
+    // 15. PARAMETERs con mismo target_field que podrían activarse simultáneamente
     detectParameterConflicts(nodes, edges, nodeMap, warnings);
 
     return {
@@ -198,7 +212,7 @@ function validateConnectionTypes(edges: GraphEdge[], nodeMap: Map<string, GraphN
     for (const edge of edges) {
         const source = nodeMap.get(edge.sourceNodeId);
         const target = nodeMap.get(edge.targetNodeId);
-        if (!source || !target) continue; // ya se reportó en validateEdgeReferences
+        if (!source || !target) continue;
 
         const validTargets = VALID_CONNECTIONS[source.nodeType];
         if (!validTargets || !validTargets.has(target.nodeType)) {
@@ -206,16 +220,6 @@ function validateConnectionTypes(edges: GraphEdge[], nodeMap: Map<string, GraphN
                 level: 'ERROR',
                 code: 'INVALID_CONNECTION_TYPE',
                 message: `Conexión inválida: ${source.nodeType}(${edge.sourceNodeId}) → ${target.nodeType}(${edge.targetNodeId})`,
-                edgeSource: edge.sourceNodeId,
-                edgeTarget: edge.targetNodeId,
-            });
-        }
-
-        if (INVALID_TARGETS.has(target.nodeType)) {
-            errors.push({
-                level: 'ERROR',
-                code: 'INVALID_TARGET_TYPE',
-                message: `${target.nodeType}(${edge.targetNodeId}) no puede ser target de ninguna arista`,
                 edgeSource: edge.sourceNodeId,
                 edgeTarget: edge.targetNodeId,
             });
@@ -240,7 +244,7 @@ function validateParameterIsTerminal(edges: GraphEdge[], nodeMap: Map<string, Gr
 function validateConditionIsEntry(edges: GraphEdge[], nodeMap: Map<string, GraphNode>, errors: ValidationMessage[]): void {
     for (const edge of edges) {
         const target = nodeMap.get(edge.targetNodeId);
-        if (target && target.nodeType === 'CONDITION') {
+        if (target && ENTRY_ONLY_TYPES.has(target.nodeType)) {
             errors.push({
                 level: 'ERROR',
                 code: 'CONDITION_AS_TARGET',
@@ -322,12 +326,8 @@ function validateGateIntegrity(nodes: GraphNode[], edges: GraphEdge[], nodeMap: 
         }
 
         if (['AND', 'OR', 'XOR'].includes(logic) && incomingEdges.length < 2) {
-            errors.push({
-                level: 'ERROR',
-                code: 'GATE_INSUFFICIENT_INPUTS',
-                message: `GATE ${logic} '${gate.nodeId}' requiere al menos 2 aristas entrantes, tiene ${incomingEdges.length}`,
-                nodeId: gate.nodeId,
-            });
+            // AND/OR con 1 input es válido (actúa como pass-through)
+            // Solo es error si tiene 0 inputs (ya cubierto arriba)
         }
     }
 }
@@ -364,18 +364,21 @@ function validateNodeParticipation(nodes: GraphNode[], edges: GraphEdge[], error
 }
 
 function validateCompletePath(nodes: GraphNode[], edges: GraphEdge[], nodeMap: Map<string, GraphNode>, errors: ValidationMessage[]): void {
-    // Verificar que existe al menos un camino desde un nodo de entrada hasta un PARAMETER
-    const entryNodes = nodes.filter(n => n.nodeType === 'CONDITION');
+    // Nodos de entrada: CONDITIONs (entry puro) y VALIDATIONs/SUB_RULEs sin aristas entrantes
+    const targetNodeIds = new Set(edges.map(e => e.targetNodeId));
+    const entryNodes = nodes.filter(n =>
+        n.nodeType === 'CONDITION' ||
+        (!targetNodeIds.has(n.nodeId) && ['VALIDATION', 'SUB_RULE'].includes(n.nodeType))
+    );
     const parameterNodes = nodes.filter(n => n.nodeType === 'PARAMETER' && !n.isDefault);
 
     if (entryNodes.length === 0 && parameterNodes.length > 0) {
-        // Solo verificar si hay PARAMETERs no-default
         const nonDefaultParams = parameterNodes.filter(n => !n.isDefault);
         if (nonDefaultParams.length > 0) {
             errors.push({
                 level: 'ERROR',
                 code: 'NO_ENTRY_NODES',
-                message: 'La regla tiene PARAMETERs pero no tiene nodos CONDITION de entrada',
+                message: 'La regla tiene PARAMETERs pero no tiene nodos de entrada',
             });
         }
         return;
@@ -440,6 +443,7 @@ const CONDITION_OPERATORS = new Set([
 const CONDITION_DATA_TYPES = new Set(['STRING', 'NUMBER', 'DATE', 'BOOLEAN', 'ENUM']);
 const GATE_LOGICS = new Set(['AND', 'OR', 'NOT', 'XOR']);
 const PARAM_TYPES = new Set(['STRING', 'NUMBER', 'ENUM', 'DATE', 'RANGE', 'ARRAY', 'BOOLEAN']);
+const VALIDATION_ACTIONS = new Set(['STOP', 'WARN']);
 
 function validateNodeConfigs(nodes: GraphNode[], errors: ValidationMessage[]): void {
     for (const node of nodes) {
@@ -450,7 +454,6 @@ function validateNodeConfigs(nodes: GraphNode[], errors: ValidationMessage[]): v
                 const isComputed = 'expression' in cfg;
 
                 if (isComputed) {
-                    // Computed condition (ex-EXPRESSION)
                     if (!cfg.expression || typeof cfg.expression !== 'string') {
                         errors.push({ level: 'ERROR', code: 'INVALID_CONDITION_CONFIG', message: `CONDITION computado '${node.nodeId}': falta 'expression'`, nodeId: node.nodeId });
                     }
@@ -458,7 +461,6 @@ function validateNodeConfigs(nodes: GraphNode[], errors: ValidationMessage[]): v
                         errors.push({ level: 'ERROR', code: 'INVALID_CONDITION_CONFIG', message: `CONDITION computado '${node.nodeId}': 'operator' inválido o faltante`, nodeId: node.nodeId });
                     }
                 } else {
-                    // Simple condition
                     if (!cfg.field || typeof cfg.field !== 'string') {
                         errors.push({ level: 'ERROR', code: 'INVALID_CONDITION_CONFIG', message: `CONDITION '${node.nodeId}': falta 'field'`, nodeId: node.nodeId });
                     }
@@ -468,7 +470,6 @@ function validateNodeConfigs(nodes: GraphNode[], errors: ValidationMessage[]): v
                     if (!cfg.data_type || !CONDITION_DATA_TYPES.has(cfg.data_type)) {
                         errors.push({ level: 'ERROR', code: 'INVALID_CONDITION_CONFIG', message: `CONDITION '${node.nodeId}': 'data_type' inválido o faltante`, nodeId: node.nodeId });
                     }
-                    // value no requerido para IS_NULL, IS_NOT_NULL, IS_EMPTY, IS_NOT_EMPTY
                     const noValueOps = new Set(['IS_NULL', 'IS_NOT_NULL', 'IS_EMPTY', 'IS_NOT_EMPTY']);
                     if (cfg.operator && !noValueOps.has(cfg.operator) && cfg.value === undefined) {
                         errors.push({ level: 'ERROR', code: 'INVALID_CONDITION_CONFIG', message: `CONDITION '${node.nodeId}': falta 'value' para operador '${cfg.operator}'`, nodeId: node.nodeId });
@@ -491,8 +492,32 @@ function validateNodeConfigs(nodes: GraphNode[], errors: ValidationMessage[]): v
                 if (!cfg.param_type || !PARAM_TYPES.has(cfg.param_type)) {
                     errors.push({ level: 'ERROR', code: 'INVALID_PARAMETER_CONFIG', message: `PARAMETER '${node.nodeId}': 'param_type' inválido o faltante`, nodeId: node.nodeId });
                 }
-                if (!cfg.constraints || typeof cfg.constraints !== 'object') {
-                    errors.push({ level: 'ERROR', code: 'INVALID_PARAMETER_CONFIG', message: `PARAMETER '${node.nodeId}': falta 'constraints' (objeto de validación)`, nodeId: node.nodeId });
+                // constraints se resuelven en runtime si hay templateRef o lookupRef
+                if (!cfg.templateRef && !cfg.lookupRef) {
+                    if (!cfg.constraints || typeof cfg.constraints !== 'object') {
+                        errors.push({ level: 'ERROR', code: 'INVALID_PARAMETER_CONFIG', message: `PARAMETER '${node.nodeId}': falta 'constraints' (objeto de validación)`, nodeId: node.nodeId });
+                    }
+                }
+                break;
+            }
+
+            case 'VALIDATION': {
+                // VALIDATION es como CONDITION pero intermedio, con failureAction
+                if (!cfg.field || typeof cfg.field !== 'string') {
+                    errors.push({ level: 'ERROR', code: 'INVALID_VALIDATION_CONFIG', message: `VALIDATION '${node.nodeId}': falta 'field'`, nodeId: node.nodeId });
+                }
+                if (!cfg.operator || !CONDITION_OPERATORS.has(cfg.operator)) {
+                    errors.push({ level: 'ERROR', code: 'INVALID_VALIDATION_CONFIG', message: `VALIDATION '${node.nodeId}': 'operator' inválido o faltante`, nodeId: node.nodeId });
+                }
+                if (!cfg.failureAction || !VALIDATION_ACTIONS.has(cfg.failureAction)) {
+                    errors.push({ level: 'ERROR', code: 'INVALID_VALIDATION_CONFIG', message: `VALIDATION '${node.nodeId}': 'failureAction' debe ser STOP o WARN`, nodeId: node.nodeId });
+                }
+                break;
+            }
+
+            case 'SUB_RULE': {
+                if (!cfg.subRuleRef || (!cfg.subRuleRef.ruleId && !cfg.subRuleRef.ruleUUID && !cfg.subRuleRef.ruleNumber)) {
+                    errors.push({ level: 'ERROR', code: 'INVALID_SUB_RULE_CONFIG', message: `SUB_RULE '${node.nodeId}': falta 'subRuleRef' con ruleId, ruleUUID o ruleNumber`, nodeId: node.nodeId });
                 }
                 break;
             }
@@ -501,16 +526,32 @@ function validateNodeConfigs(nodes: GraphNode[], errors: ValidationMessage[]): v
 }
 
 // ────────────────────────────────────────────
+// Validación de semántica de edgeType
+// ────────────────────────────────────────────
+
+function validateEdgeTypes(edges: GraphEdge[], nodeMap: Map<string, GraphNode>, errors: ValidationMessage[]): void {
+    for (const edge of edges) {
+        const edgeType = edge.edgeType || 'DEFAULT';
+        if (edgeType === 'DEFAULT') continue;
+
+        // Solo nodos que producen booleano pueden tener aristas TRUE/FALSE
+        const source = nodeMap.get(edge.sourceNodeId);
+        if (source && !BOOLEAN_PRODUCERS.has(source.nodeType)) {
+            errors.push({
+                level: 'ERROR',
+                code: 'INVALID_EDGE_TYPE',
+                message: `Arista ${edge.sourceNodeId} → ${edge.targetNodeId} tiene edgeType '${edgeType}' pero ${source.nodeType} no produce resultado booleano`,
+                edgeSource: edge.sourceNodeId,
+                edgeTarget: edge.targetNodeId,
+            });
+        }
+    }
+}
+
+// ────────────────────────────────────────────
 // Detección de conflictos (buenas prácticas)
 // ────────────────────────────────────────────
 
-/**
- * Detecta PARAMETERs con el mismo target_field que podrían activarse
- * simultáneamente (no son mutuamente excluyentes).
- * 
- * Heurística: si dos PARAMETERs del mismo target_field tienen sources
- * (GATEs/CONDITIONs) diferentes, emitimos un warning.
- */
 function detectParameterConflicts(
     nodes: GraphNode[],
     edges: GraphEdge[],
@@ -534,7 +575,6 @@ function detectParameterConflicts(
     for (const [field, params] of parametersByField) {
         if (params.length <= 1) continue;
 
-        // Obtener las sources directas de cada PARAMETER
         const sourceSets: Map<string, Set<string>> = new Map();
         for (const param of params) {
             const sources = edges
@@ -543,14 +583,12 @@ function detectParameterConflicts(
             sourceSets.set(param.nodeId, new Set(sources));
         }
 
-        // Si dos PARAMETERs tienen sources distintas, advertir
         const paramIds = params.map(p => p.nodeId);
         for (let i = 0; i < paramIds.length; i++) {
             for (let j = i + 1; j < paramIds.length; j++) {
                 const sourcesA = sourceSets.get(paramIds[i])!;
                 const sourcesB = sourceSets.get(paramIds[j])!;
 
-                // Si comparten al menos una source, podrían activarse juntos
                 const shared = [...sourcesA].some(s => sourcesB.has(s));
 
                 if (shared) {
@@ -560,7 +598,6 @@ function detectParameterConflicts(
                         message: `PARAMETERs '${paramIds[i]}' y '${paramIds[j]}' validan el mismo campo '${field}' y comparten source. Podrían activarse simultáneamente. Verifique que las rutas sean mutuamente excluyentes.`,
                     });
                 } else {
-                    // Sources distintas — si no hay relación de exclusión mutua, también advertir
                     warnings.push({
                         level: 'WARNING',
                         code: 'MULTIPLE_PARAMS_SAME_FIELD',

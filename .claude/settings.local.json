@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx ts-node:*)",
+      "Bash(docker compose:*)",
+      "Bash(curl -s http://localhost:3000/api/RuleSet)",
+      "Bash(curl -s http://localhost:3000/RuleSet)",
+      "Bash(python -m json.tool)",
+      "Bash(curl -s \"http://localhost:3000/ws/RuleSet\")",
+      "Bash(npx jest:*)"
+    ]
+  }
+}

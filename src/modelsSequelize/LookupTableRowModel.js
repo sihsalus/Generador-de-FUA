@@ -7,9 +7,9 @@ const LookupTableRowModel = sequelize.define(
     {
         ...BaseEntityModel.commonAttributes(),
         keyValue: {
-            type: DataTypes.STRING,
+            type: DataTypes.JSONB,
             allowNull: false,
-            comment: 'Valor discriminador (ej: "301", "302")',
+            comment: 'Valor discriminador. String simple ("301") o objeto compuesto ({"codigo":"301","tipo":"A"})',
         },
         values: {
             type: DataTypes.JSONB,

@@ -369,6 +369,34 @@ const GraphRuleController = {
         }
     },
 
+    // ─── BATCH OPERATIONS ───
+
+    async addConditionBatch(req: Request, res: Response): Promise<void> {
+        try {
+            const result = await GraphRuleService.addConditionBatch(req.params.ruleId as string, req.body);
+            loggerInstance.printLog(new Log({
+                timeStamp: new Date(),
+                logLevel: Logger_LogLevel.INFO,
+                securityLevel: Logger_SecurityLevel.Admin,
+                logType: Logger_LogType.CREATE,
+                environmentType: loggerInstance.enviroment.toString(),
+                description: 'Adding condition batch Successful',
+            }), LOG_TARGETS);
+            res.status(201).json(result);
+        } catch (err: any) {
+            const status = err.status || 500;
+            loggerInstance.printLog(new Log({
+                timeStamp: new Date(),
+                logLevel: Logger_LogLevel.ERROR,
+                securityLevel: Logger_SecurityLevel.Admin,
+                logType: Logger_LogType.CREATE,
+                environmentType: loggerInstance.enviroment.toString(),
+                description: (err.message ? err.message + '\n' : '') + (err.details ?? ''),
+            }), LOG_TARGETS);
+            res.status(status).json({ error: 'Failed to add condition batch. (Controller)', message: err.message, details: err.details ?? null });
+        }
+    },
+
     // ─── IMPORT / EXPORT ───
 
     async importFromJSON(req: Request, res: Response): Promise<void> {
@@ -451,6 +479,42 @@ const GraphRuleController = {
                 description: (err.message ? err.message + '\n' : '') + (err.details ?? ''),
             }), LOG_TARGETS);
             res.status(status).json({ error: 'Failed to export RuleSet to JSON. (Controller)', message: err.message, details: err.details ?? null });
+        }
+    },
+
+    async importFromBARA(req: Request, res: Response): Promise<void> {
+        try {
+            const ruleSetId = Number(req.params.ruleSetId);
+            if (isNaN(ruleSetId)) {
+                res.status(400).json({ error: 'ruleSetId debe ser numérico' });
+                return;
+            }
+            const { source } = req.body;
+            if (!source || typeof source !== 'string') {
+                res.status(400).json({ error: 'Se requiere el campo "source" con el texto .bara' });
+                return;
+            }
+            const result = await GraphRuleService.importFromBARA(ruleSetId, source);
+            loggerInstance.printLog(new Log({
+                timeStamp: new Date(),
+                logLevel: Logger_LogLevel.INFO,
+                securityLevel: Logger_SecurityLevel.Admin,
+                logType: Logger_LogType.CREATE,
+                environmentType: loggerInstance.enviroment.toString(),
+                description: `BARA import: ${result.rules.successful}/${result.rules.total} rules, ${result.lookupTables.created} lookups, ${result.templates.created} templates`,
+            }), LOG_TARGETS);
+            res.status(201).json(result);
+        } catch (err: any) {
+            const status = err.status || 500;
+            loggerInstance.printLog(new Log({
+                timeStamp: new Date(),
+                logLevel: Logger_LogLevel.ERROR,
+                securityLevel: Logger_SecurityLevel.Admin,
+                logType: Logger_LogType.CREATE,
+                environmentType: loggerInstance.enviroment.toString(),
+                description: (err.message ? err.message + '\n' : '') + (err.details ? JSON.stringify(err.details) : ''),
+            }), LOG_TARGETS);
+            res.status(status).json({ error: 'Failed to import BARA', message: err.message, details: err.details ?? null });
         }
     },
 };

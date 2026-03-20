@@ -2,13 +2,18 @@
  * baraParser.ts
  *
  * Parser para el lenguaje BARA (.bara)
- * Notación declarativa para definir variables, lookup tables y reglas
+ * Notación declarativa para definir variables, lookup tables, templates y reglas
  * del sistema Graph Rule Master.
  *
  * Fases:
- *  1. Tokenizar → identificar bloques (vars, lookup, rule)
+ *  1. Tokenizar → identificar bloques (vars, lookup, template, rule)
  *  2. Parsear cada bloque → estructuras tipadas
  *  3. Emitir → formato compatible con la API / UI
+ *
+ * Soporta:
+ *  - Variables, Lookup Tables (clave simple y compuesta), Parameter Templates
+ *  - Nodos: CONDITION, GATE, PARAMETER, VALIDATION, SUB_RULE
+ *  - Aristas: DEFAULT, TRUE, FALSE (decision trees)
  *
  * Utilidad PURA — sin dependencias de DB ni framework.
  */
@@ -30,20 +35,27 @@ export interface BaraLookupColumn {
 }
 
 export interface BaraLookupRow {
-    keyValue: string;
+    keyValue: string | Record<string, string>;
     values: Record<string, any>;
 }
 
 export interface BaraLookupTable {
     name: string;
-    keyField: string;
+    keyField: string | string[];
     columns: BaraLookupColumn[];
     rows: BaraLookupRow[];
 }
 
+export interface BaraTemplate {
+    name: string;
+    paramType: string;
+    required: boolean;
+    constraints: Record<string, any>;
+}
+
 export interface BaraNode {
     nodeId: string;
-    nodeType: 'CONDITION' | 'GATE' | 'PARAMETER';
+    nodeType: 'CONDITION' | 'GATE' | 'PARAMETER' | 'VALIDATION' | 'SUB_RULE';
     label?: string;
     isEntry: boolean;
     isDefault: boolean;
@@ -54,6 +66,7 @@ export interface BaraEdge {
     sourceNodeId: string;
     targetNodeId: string;
     edgeOrder: number;
+    edgeType?: 'DEFAULT' | 'TRUE' | 'FALSE';
 }
 
 export interface BaraRule {
@@ -71,6 +84,7 @@ export interface BaraRule {
 export interface BaraParseResult {
     variables: BaraVariable[];
     lookupTables: BaraLookupTable[];
+    templates: BaraTemplate[];
     rules: BaraRule[];
     errors: BaraError[];
     warnings: BaraWarning[];
@@ -118,6 +132,7 @@ export function parseBARA(source: string): BaraParseResult {
     const result: BaraParseResult = {
         variables: [],
         lookupTables: [],
+        templates: [],
         rules: [],
         errors: [],
         warnings: [],
@@ -144,6 +159,12 @@ export function parseBARA(source: string): BaraParseResult {
         // ── lookup block ──
         if (line.startsWith('lookup')) {
             i = parseLookupBlock(lines, i, result);
+            continue;
+        }
+
+        // ── template block ──
+        if (line.startsWith('template')) {
+            i = parseTemplateBlock(lines, i, result);
             continue;
         }
 
@@ -184,8 +205,9 @@ function parseVarsBlock(lines: string[], startLine: number, result: BaraParseRes
         if (line === '}') return i + 1;
         if (!line || line.startsWith('//')) { i++; continue; }
 
-        // Parse: name: TYPE
-        const match = line.match(/^(\w[\w.]*)\s*:\s*(STRING|NUMBER|BOOLEAN|DATE|ENUM|RANGE|ARRAY)\s*$/i);
+        // Parse: name: TYPE  (strip inline comments first)
+        const lineClean = line.replace(/\/\/.*$/, '').trim();
+        const match = lineClean.match(/^(\w[\w.]*)\s*:\s*(STRING|NUMBER|BOOLEAN|DATE|ENUM|RANGE|ARRAY)\s*$/i);
         if (match) {
             result.variables.push({ name: match[1], type: match[2].toUpperCase() });
         } else {
@@ -199,22 +221,37 @@ function parseVarsBlock(lines: string[], startLine: number, result: BaraParseRes
 }
 
 /**
- * Parse: lookup "name" on keyField { columns { ... } "key" => { ... } }
+ * Parse: lookup "name" on keyField { ... }
+ *        lookup "name" on [field1, field2] { ... }
  */
 function parseLookupBlock(lines: string[], startLine: number, result: BaraParseResult): number {
     let i = startLine;
     const header = lines[i].trim();
 
-    // Parse header: lookup "name" on keyField {
-    const headerMatch = header.match(/^lookup\s+"([^"]+)"\s+on\s+(\w[\w.]*)\s*\{?\s*$/);
-    if (!headerMatch) {
-        result.errors.push({ line: i + 1, message: `Header de lookup inválido: "${header}". Formato: lookup "nombre" on campo {` });
+    // Try composite key: lookup "name" on [field1, field2] {
+    const compositeMatch = header.match(/^lookup\s+"([^"]+)"\s+on\s+\[([^\]]+)\]\s*\{?\s*$/);
+    // Try simple key: lookup "name" on keyField {
+    const simpleMatch = header.match(/^lookup\s+"([^"]+)"\s+on\s+(\w[\w.]*)\s*\{?\s*$/);
+
+    if (!compositeMatch && !simpleMatch) {
+        result.errors.push({ line: i + 1, message: `Header de lookup inválido: "${header}". Formato: lookup "nombre" on campo { o lookup "nombre" on [campo1, campo2] {` });
         return skipBlock(lines, i);
     }
 
+    let keyField: string | string[];
+    let tableName: string;
+
+    if (compositeMatch) {
+        tableName = compositeMatch[1];
+        keyField = compositeMatch[2].split(',').map(s => s.trim());
+    } else {
+        tableName = simpleMatch![1];
+        keyField = simpleMatch![2];
+    }
+
     const table: BaraLookupTable = {
-        name: headerMatch[1],
-        keyField: headerMatch[2],
+        name: tableName,
+        keyField,
         columns: [],
         rows: [],
     };
@@ -245,7 +282,21 @@ function parseLookupBlock(lines: string[], startLine: number, result: BaraParseR
             continue;
         }
 
-        // ── row: "keyValue" => { col: val, ... } ──
+        // ── composite key row: {"campo1": "val1", "campo2": "val2"} => { col: val, ... } ──
+        const compositeRowMatch = line.match(/^(\{[^}]+\})\s*=>\s*\{(.+)\}\s*$/);
+        if (compositeRowMatch) {
+            try {
+                const keyValue = JSON.parse(compositeRowMatch[1]);
+                const values = parseInlineObject(compositeRowMatch[2]);
+                table.rows.push({ keyValue, values });
+            } catch (e: any) {
+                result.errors.push({ line: i + 1, message: `Error parseando fila lookup compuesta: ${e.message}` });
+            }
+            i++;
+            continue;
+        }
+
+        // ── simple key row: "keyValue" => { col: val, ... } ──
         const rowMatch = line.match(/^"([^"]+)"\s*=>\s*\{(.+)\}\s*$/);
         if (rowMatch) {
             try {
@@ -290,8 +341,9 @@ function parseLookupColumns(lines: string[], startLine: number, table: BaraLooku
         if (line === '}') return i + 1;
         if (!line || line.startsWith('//')) { i++; continue; }
 
-        // Parse: colName -> targetField.constraintKey DATATYPE
-        const colMatch = line.match(/^(\w+)\s*->\s*([\w.]+)\.([\w]+)\s+(STRING|NUMBER|BOOLEAN|DATE)\s*$/i);
+        // Parse: colName -> targetField.constraintKey DATATYPE  (strip inline comments)
+        const colLine = line.replace(/\s+\/\/.*$/, '').trim();
+        const colMatch = colLine.match(/^(\w+)\s*->\s*([\w.]+)\.([\w]+)\s+(STRING|NUMBER|BOOLEAN|DATE)\s*$/i);
         if (colMatch) {
             table.columns.push({
                 columnName: colMatch[1],
@@ -300,7 +352,7 @@ function parseLookupColumns(lines: string[], startLine: number, table: BaraLooku
                 dataType: colMatch[4].toUpperCase(),
             });
         } else {
-            result.errors.push({ line: i + 1, message: `Columna lookup inválida: "${line}". Formato: nombre -> campo.constraint TIPO` });
+            result.errors.push({ line: i + 1, message: `Columna lookup inválida: "${colLine}". Formato: nombre -> campo.constraint TIPO` });
         }
         i++;
     }
@@ -310,12 +362,81 @@ function parseLookupColumns(lines: string[], startLine: number, table: BaraLooku
 }
 
 /**
+ * Parse: template "name" TYPE required|optional { constraints }
+ */
+function parseTemplateBlock(lines: string[], startLine: number, result: BaraParseResult): number {
+    let i = startLine;
+    const header = lines[i].trim();
+
+    // template "name" TYPE required|optional { key: val, ... }
+    const headerMatch = header.match(
+        /^template\s+"([^"]+)"\s+(STRING|NUMBER|ENUM|DATE|RANGE|ARRAY|BOOLEAN)(?:\s+(required|optional))?\s*\{(.+)\}\s*$/i
+    );
+
+    // Multi-line: template "name" TYPE required {
+    const headerMultiMatch = header.match(
+        /^template\s+"([^"]+)"\s+(STRING|NUMBER|ENUM|DATE|RANGE|ARRAY|BOOLEAN)(?:\s+(required|optional))?\s*\{\s*$/i
+    );
+
+    if (headerMatch) {
+        // Single-line template
+        try {
+            const constraints = parseInlineObject(headerMatch[4].trim());
+            result.templates.push({
+                name: headerMatch[1],
+                paramType: headerMatch[2].toUpperCase(),
+                required: headerMatch[3] ? headerMatch[3].toLowerCase() === 'required' : true,
+                constraints,
+            });
+        } catch (e: any) {
+            result.errors.push({ line: i + 1, message: `Error en constraints de template: ${e.message}` });
+        }
+        return i + 1;
+    }
+
+    if (headerMultiMatch) {
+        // Multi-line template — collect lines until }
+        const templateName = headerMultiMatch[1];
+        const paramType = headerMultiMatch[2].toUpperCase();
+        const required = headerMultiMatch[3] ? headerMultiMatch[3].toLowerCase() === 'required' : true;
+        let constraintStr = '';
+
+        i++;
+        while (i < lines.length) {
+            const line = lines[i].trim();
+            if (line === '}') {
+                try {
+                    const constraints = constraintStr.trim() ? parseInlineObject(constraintStr.trim()) : {};
+                    result.templates.push({ name: templateName, paramType, required, constraints });
+                } catch (e: any) {
+                    result.errors.push({ line: i + 1, message: `Error en constraints de template: ${e.message}` });
+                }
+                return i + 1;
+            }
+            if (!line || line.startsWith('//')) { i++; continue; }
+            constraintStr += (constraintStr ? ', ' : '') + line.replace(/,\s*$/, '');
+            i++;
+        }
+
+        result.errors.push({ line: startLine + 1, message: 'Bloque template sin cerrar' });
+        return i;
+    }
+
+    result.errors.push({ line: i + 1, message: `Header de template inválido: "${header.slice(0, 80)}"` });
+    return i + 1;
+}
+
+/**
  * Parse rule block:
  *   rule "name" #number TYPE priority=N {
  *     C1: field == value
- *     G1: AND(C1, C2)
- *     P1: PARAM field TYPE required { constraints }
+ *     V1: VALIDATE field OP value STOP|WARN
+ *     S1: SUB_RULE("#ruleRef")
+ *     G1: AND(C1, V1, S1)
+ *     P1: PARAM field TYPE required template("name") { constraints }
  *     G1 -> P1, P2
+ *     G1 ->TRUE P3
+ *     G1 ->FALSE P4
  *   }
  */
 function parseRuleBlock(lines: string[], startLine: number, result: BaraParseResult): number {
@@ -354,10 +475,10 @@ function parseRuleBlock(lines: string[], startLine: number, result: BaraParseRes
     while (i < lines.length) {
         const line = lines[i].trim();
         if (line === '}') {
-            // Auto-detect isEntry for CONDITION nodes
+            // Auto-detect isEntry for entry-type nodes
             const targetIds = new Set(rule.graph.edges.map(e => e.targetNodeId));
             rule.graph.nodes.forEach(n => {
-                if (n.nodeType === 'CONDITION') {
+                if (['CONDITION', 'VALIDATION', 'SUB_RULE'].includes(n.nodeType)) {
                     n.isEntry = !targetIds.has(n.nodeId);
                 }
             });
@@ -366,15 +487,18 @@ function parseRuleBlock(lines: string[], startLine: number, result: BaraParseRes
         }
         if (!line || line.startsWith('//')) { i++; continue; }
 
-        // ── Edge: G1 -> P1, P2, P3 ──
-        if (line.includes('->') && !line.includes(': ')) {
-            parseEdgeLine(line, i, rule, result);
+        // Strip inline comments (preserving content inside quoted strings)
+        const lineClean = line.replace(/\s+\/\/.*$/, '').trim();
+
+        // ── Edge: G1 -> P1, P2  or  G1 ->TRUE P1  or  G1 ->FALSE P2 ──
+        if (lineClean.includes('->') && !lineClean.includes(': ')) {
+            parseEdgeLine(lineClean, i, rule, result);
             i++;
             continue;
         }
 
         // ── Node declaration: ID: ... ──
-        const nodePrefix = line.match(/^([A-Za-z]\w*)\s*:\s*(.+)$/);
+        const nodePrefix = lineClean.match(/^([A-Za-z]\w*)\s*:\s*(.+)$/);
         if (nodePrefix) {
             const nodeId = nodePrefix[1];
             const body = nodePrefix[2].trim();
@@ -383,7 +507,7 @@ function parseRuleBlock(lines: string[], startLine: number, result: BaraParseRes
             continue;
         }
 
-        result.warnings.push({ line: i + 1, message: `Línea no reconocida en rule: "${line.slice(0, 60)}"` });
+        result.warnings.push({ line: i + 1, message: `Línea no reconocida en rule: "${lineClean.slice(0, 60)}"` });
         i++;
     }
 
@@ -402,6 +526,60 @@ function parseNodeDeclaration(
     rule: BaraRule,
     result: BaraParseResult,
 ) {
+    // ── SUB_RULE: SUB_RULE("ruleRef") ──
+    const subRuleMatch = body.match(/^SUB_RULE\s*\("([^"]+)"\)\s*$/i);
+    if (subRuleMatch) {
+        const ref = subRuleMatch[1];
+        rule.graph.nodes.push({
+            nodeId,
+            nodeType: 'SUB_RULE',
+            label: `SUB_RULE(${ref})`,
+            isEntry: false,
+            isDefault: false,
+            config: {
+                subRuleRef: ref.startsWith('#')
+                    ? { ruleNumber: ref.slice(1) }
+                    : { ruleUUID: ref },
+            },
+        });
+        return;
+    }
+
+    // ── VALIDATION: VALIDATE field OP value ACTION ──
+    const validateMatch = body.match(
+        /^VALIDATE\s+([\w.]+)\s+(==|!=|>=|<=|>|<|IN|NOT_IN|BETWEEN|CONTAINS|STARTS_WITH|ENDS_WITH|REGEX|IS_NULL|IS_NOT_NULL|IS_EMPTY|IS_NOT_EMPTY)(?:\s+(.+?))?\s+(STOP|WARN)\s*$/i
+    );
+    if (validateMatch) {
+        const field = validateMatch[1];
+        const op = validateMatch[2];
+        const rawValue = validateMatch[3];
+        const failureAction = validateMatch[4].toUpperCase();
+        const operator = OPERATOR_MAP[op] || OPERATOR_MAP[op.toUpperCase()] || op.toUpperCase();
+
+        const config: Record<string, any> = {
+            field,
+            operator,
+            failureAction,
+            data_type: 'STRING',
+        };
+
+        // Parse value if present (not for unary operators)
+        if (rawValue !== undefined && rawValue.trim()) {
+            config.value = parseInlineValue(rawValue.trim());
+            config.data_type = inferDataType(config.value);
+        }
+
+        rule.graph.nodes.push({
+            nodeId,
+            nodeType: 'VALIDATION',
+            label: `VALIDATE ${field} ${op}${rawValue ? ' ' + rawValue : ''} ${failureAction}`,
+            isEntry: false,
+            isDefault: false,
+            config,
+        });
+        return;
+    }
+
     // ── GATE: AND(C1, C2) / OR(C1, C2) / NOT(C1) / XOR(C1, C2) ──
     const gateMatch = body.match(/^(AND|OR|NOT|XOR)\s*\(([^)]*)\)\s*$/i);
     if (gateMatch) {
@@ -422,14 +600,15 @@ function parseNodeDeclaration(
                 sourceNodeId: inputId,
                 targetNodeId: nodeId,
                 edgeOrder: idx + 1,
+                edgeType: 'DEFAULT',
             });
         });
         return;
     }
 
-    // ── PARAMETER: PARAM field TYPE [required|optional] [default] [lookup("name")] { constraints } ──
+    // ── PARAMETER: PARAM field TYPE [required|optional] [default] [lookup("name")] [template("name")] { constraints } ──
     const paramMatch = body.match(
-        /^PARAM\s+([\w.]+)\s+(STRING|NUMBER|ENUM|DATE|RANGE|ARRAY|BOOLEAN)(?:\s+(required|optional))?(?:\s+(default))?(?:\s+lookup\("([^"]+)"\))?\s*(?:\{(.+)\})?\s*$/i
+        /^PARAM\s+([\w.]+)\s+(STRING|NUMBER|ENUM|DATE|RANGE|ARRAY|BOOLEAN)(?:\s+(required|optional))?(?:\s+(default))?(?:\s+lookup\("([^"]+)"\))?(?:\s+template\("([^"]+)"\))?\s*(?:\{(.+)\})?\s*$/i
     );
     if (paramMatch) {
         const config: Record<string, any> = {
@@ -444,8 +623,12 @@ function parseNodeDeclaration(
         }
 
         if (paramMatch[6]) {
+            config.templateRef = { templateName: paramMatch[6] };
+        }
+
+        if (paramMatch[7]) {
             try {
-                config.constraints = parseInlineObject(paramMatch[6].trim());
+                config.constraints = parseInlineObject(paramMatch[7].trim());
             } catch (e: any) {
                 result.errors.push({ line: lineNum + 1, message: `Error en constraints de ${nodeId}: ${e.message}` });
             }
@@ -546,25 +729,30 @@ function parseConditionBody(body: string, lineNum: number, result: BaraParseResu
 }
 
 // ────────────────────────────────────────────
-// Edge parser
+// Edge parser (supports ->  ->TRUE  ->FALSE)
 // ────────────────────────────────────────────
 
 function parseEdgeLine(line: string, lineNum: number, rule: BaraRule, result: BaraParseResult) {
-    // Format: SOURCE -> TARGET1, TARGET2, TARGET3
-    const parts = line.split('->');
-    if (parts.length !== 2) {
+    // Formats:
+    //   SOURCE -> TARGET1, TARGET2
+    //   SOURCE ->TRUE TARGET1, TARGET2
+    //   SOURCE ->FALSE TARGET1, TARGET2
+    const edgeMatch = line.match(/^(\w+)\s*->(TRUE|FALSE)?\s*(.+)$/i);
+    if (!edgeMatch) {
         result.errors.push({ line: lineNum + 1, message: `Edge inválido: "${line}"` });
         return;
     }
 
-    const source = parts[0].trim();
-    const targets = parts[1].split(',').map(s => s.trim()).filter(Boolean);
+    const source = edgeMatch[1].trim();
+    const edgeType = (edgeMatch[2] ? edgeMatch[2].toUpperCase() : 'DEFAULT') as 'DEFAULT' | 'TRUE' | 'FALSE';
+    const targets = edgeMatch[3].split(',').map(s => s.trim()).filter(Boolean);
 
     targets.forEach((target, idx) => {
         rule.graph.edges.push({
             sourceNodeId: source,
             targetNodeId: target,
             edgeOrder: idx + 1,
+            edgeType,
         });
     });
 }
@@ -711,6 +899,7 @@ const REVERSE_OPERATOR_MAP: Record<string, string> = {
 export function emitBARA(data: {
     variables?: BaraVariable[];
     lookupTables?: BaraLookupTable[];
+    templates?: BaraTemplate[];
     rules?: BaraRule[];
 }): string {
     const lines: string[] = [];
@@ -728,7 +917,11 @@ export function emitBARA(data: {
     // ── Lookup Tables ──
     if (data.lookupTables) {
         for (const lt of data.lookupTables) {
-            lines.push(`lookup "${lt.name}" on ${lt.keyField} {`);
+            // Emit keyField: simple or composite
+            const keyFieldStr = Array.isArray(lt.keyField)
+                ? `[${lt.keyField.join(', ')}]`
+                : lt.keyField;
+            lines.push(`lookup "${lt.name}" on ${keyFieldStr} {`);
 
             if (lt.columns.length > 0) {
                 lines.push('  columns {');
@@ -742,12 +935,29 @@ export function emitBARA(data: {
                 const vals = Object.entries(row.values)
                     .map(([k, v]) => `${k}: ${formatBaraValue(v)}`)
                     .join(', ');
-                lines.push(`  "${row.keyValue}" => { ${vals} }`);
+
+                // Emit keyValue: simple string or composite object
+                const keyStr = typeof row.keyValue === 'string'
+                    ? `"${row.keyValue}"`
+                    : JSON.stringify(row.keyValue);
+                lines.push(`  ${keyStr} => { ${vals} }`);
             }
 
             lines.push('}');
             lines.push('');
         }
+    }
+
+    // ── Templates ──
+    if (data.templates) {
+        for (const t of data.templates) {
+            const reqStr = t.required ? 'required' : 'optional';
+            const pairs = Object.entries(t.constraints)
+                .map(([k, v]) => `${k}: ${formatBaraValue(v)}`)
+                .join(', ');
+            lines.push(`template "${t.name}" ${t.paramType} ${reqStr} { ${pairs} }`);
+        }
+        if (data.templates.length > 0) lines.push('');
     }
 
     // ── Rules ──
@@ -764,6 +974,8 @@ export function emitBARA(data: {
 
             // Group nodes by type
             const conditions = nodes.filter(n => n.nodeType === 'CONDITION');
+            const validations = nodes.filter(n => n.nodeType === 'VALIDATION');
+            const subRules = nodes.filter(n => n.nodeType === 'SUB_RULE');
             const gates = nodes.filter(n => n.nodeType === 'GATE');
             const parameters = nodes.filter(n => n.nodeType === 'PARAMETER');
 
@@ -772,9 +984,20 @@ export function emitBARA(data: {
                 lines.push(`  ${n.nodeId}: ${emitCondition(n.config)}`);
             }
 
-            if (conditions.length > 0 && gates.length > 0) lines.push('');
+            // Emit validations
+            if (conditions.length > 0 && validations.length > 0) lines.push('');
+            for (const n of validations) {
+                lines.push(`  ${n.nodeId}: ${emitValidation(n.config)}`);
+            }
+
+            // Emit sub-rules
+            if ((conditions.length > 0 || validations.length > 0) && subRules.length > 0) lines.push('');
+            for (const n of subRules) {
+                lines.push(`  ${n.nodeId}: ${emitSubRule(n.config)}`);
+            }
 
             // Emit gates
+            if ((conditions.length > 0 || validations.length > 0 || subRules.length > 0) && gates.length > 0) lines.push('');
             for (const n of gates) {
                 const inputs = edges
                     .filter(e => e.targetNodeId === n.nodeId)
@@ -783,27 +1006,31 @@ export function emitBARA(data: {
                 lines.push(`  ${n.nodeId}: ${n.config.logic}(${inputs.join(', ')})`);
             }
 
-            if (gates.length > 0 && parameters.length > 0) lines.push('');
-
             // Emit parameters
+            if (gates.length > 0 && parameters.length > 0) lines.push('');
             for (const n of parameters) {
                 lines.push(`  ${n.nodeId}: ${emitParameter(n)}`);
             }
 
-            // Emit edges (only non-gate-input edges, i.e., edges to PARAMETERs)
-            const paramIds = new Set(parameters.map(n => n.nodeId));
-            const sourceToParams = new Map<string, string[]>();
-            for (const e of edges) {
-                if (paramIds.has(e.targetNodeId)) {
-                    if (!sourceToParams.has(e.sourceNodeId)) sourceToParams.set(e.sourceNodeId, []);
-                    sourceToParams.get(e.sourceNodeId)!.push(e.targetNodeId);
-                }
+            // Emit edges (non-gate-input edges, i.e., edges to PARAMETERs, VALIDATIONs, SUB_RULEs that aren't auto-created)
+            const gateIds = new Set(gates.map(n => n.nodeId));
+            const explicitEdges = edges.filter(e => !gateIds.has(e.targetNodeId));
+
+            // Group by source + edgeType
+            const edgeGroups = new Map<string, string[]>();
+            for (const e of explicitEdges) {
+                const typeStr = e.edgeType && e.edgeType !== 'DEFAULT' ? e.edgeType : '';
+                const key = `${e.sourceNodeId}|${typeStr}`;
+                if (!edgeGroups.has(key)) edgeGroups.set(key, []);
+                edgeGroups.get(key)!.push(e.targetNodeId);
             }
 
-            if (sourceToParams.size > 0) {
+            if (edgeGroups.size > 0) {
                 lines.push('');
-                for (const [src, targets] of sourceToParams) {
-                    lines.push(`  ${src} -> ${targets.join(', ')}`);
+                for (const [key, targets] of edgeGroups) {
+                    const [src, typeStr] = key.split('|');
+                    const arrow = typeStr ? `->${typeStr}` : '->';
+                    lines.push(`  ${src} ${arrow} ${targets.join(', ')}`);
                 }
             }
 
@@ -829,6 +1056,9 @@ function emitCondition(config: Record<string, any>): string {
     if (config._lookupRef) {
         return `${field} IN lookup("${config._lookupRef}")`;
     }
+    if (typeof value === 'string' && value.startsWith('lookup:')) {
+        return `${field} IN lookup("${value.replace('lookup:', '')}")`;
+    }
 
     // IN with array
     if (config.operator === 'IN' || config.operator === 'NOT_IN') {
@@ -846,6 +1076,28 @@ function emitCondition(config: Record<string, any>): string {
     return `${field} ${operator} ${formatBaraValue(value)}`;
 }
 
+function emitValidation(config: Record<string, any>): string {
+    const field = config.field || '???';
+    const operator = REVERSE_OPERATOR_MAP[config.operator] || config.operator;
+    const value = config.value;
+    const action = config.failureAction || 'STOP';
+
+    // Unary operators
+    if (['IS_NULL', 'IS_NOT_NULL', 'IS_EMPTY', 'IS_NOT_EMPTY'].includes(config.operator)) {
+        return `VALIDATE ${field} ${config.operator} ${action}`;
+    }
+
+    return `VALIDATE ${field} ${operator} ${formatBaraValue(value)} ${action}`;
+}
+
+function emitSubRule(config: Record<string, any>): string {
+    const ref = config.subRuleRef || {};
+    if (ref.ruleNumber) {
+        return `SUB_RULE("#${ref.ruleNumber}")`;
+    }
+    return `SUB_RULE("${ref.ruleUUID || ref.ruleId || '???'}")`;
+}
+
 function emitParameter(node: BaraNode): string {
     const cfg = node.config;
     let line = `PARAM ${cfg.target_field} ${cfg.param_type}`;
@@ -858,6 +1110,11 @@ function emitParameter(node: BaraNode): string {
     if (cfg.lookupRef) {
         const ref = cfg.lookupRef.tableName || cfg.lookupRef.tableId || '';
         line += ` lookup("${ref}")`;
+    }
+
+    if (cfg.templateRef) {
+        const ref = cfg.templateRef.templateName || cfg.templateRef.templateId || '';
+        line += ` template("${ref}")`;
     }
 
     if (cfg.constraints && Object.keys(cfg.constraints).length > 0) {

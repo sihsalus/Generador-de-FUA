@@ -6,7 +6,7 @@ class LookupTableImplementation {
         RuleSetId: number;
         name: string;
         description?: string;
-        keyField: string;
+        keyField: string | string[];
         columns: any[];
         createdBy: string;
     }) {
@@ -55,7 +55,7 @@ class LookupTableImplementation {
     async updateLookupTableSequelize(id: number, data: Partial<{
         name: string;
         description: string;
-        keyField: string;
+        keyField: string | string[];
         columns: any[];
         updatedBy: string;
     }>) {

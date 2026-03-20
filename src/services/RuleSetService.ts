@@ -1,5 +1,12 @@
 import { z } from "zod";
+import { sequelize } from "../modelsSequelize/database";
 import RuleSetImplementation from "../implementation/sequelize/RuleSetImplementation";
+import RuleImplementation from "../implementation/sequelize/RuleImplementation";
+import RuleNodeImplementation from "../implementation/sequelize/RuleNodeImplementation";
+import RuleEdgeImplementation from "../implementation/sequelize/RuleEdgeImplementation";
+import LookupTableImplementation from "../implementation/sequelize/LookupTableImplementation";
+import LookupTableRowImplementation from "../implementation/sequelize/LookupTableRowImplementation";
+import ParameterTemplateImplementation from "../implementation/sequelize/ParameterTemplateImplementation";
 import { CREATED_BY_PLACEHOLDER } from "../utils/constants";
 
 // ── Zod Schemas ──
@@ -74,10 +81,54 @@ class RuleSetService {
         return { uuid: existing.get('uuid'), updated: true };
     }
 
+    /**
+     * Soft-delete del RuleSet y todo su contenido:
+     * Rules (+ nodes + edges), LookupTables (+ rows), ParameterTemplates.
+     */
     async softDelete(idReceived: string, inactiveBy: string, inactiveReason?: string) {
         const existing = await this.getByIdOrUUID(idReceived);
         const id = existing.get('id') as number;
-        await RuleSetImplementation.softDeleteRuleSetSequelize(id, inactiveBy, inactiveReason);
+
+        const transaction = await sequelize.transaction();
+        try {
+            // 1. Soft-delete edges y nodes de cada regla
+            const rules = await RuleImplementation.listRulesByRuleSetIdSequelize(id);
+            for (const rule of rules) {
+                const ruleId = rule.get('id') as number;
+                await RuleEdgeImplementation.softDeleteEdgesByRuleIdSequelize(ruleId, inactiveBy);
+                await RuleNodeImplementation.softDeleteNodesByRuleIdSequelize(ruleId, inactiveBy);
+            }
+
+            // 2. Soft-delete reglas
+            for (const rule of rules) {
+                const ruleId = rule.get('id') as number;
+                await RuleImplementation.softDeleteRuleSequelize(ruleId, inactiveBy, inactiveReason);
+            }
+
+            // 3. Soft-delete rows y lookup tables
+            const lookupTables = await LookupTableImplementation.listByRuleSetSequelize(id);
+            for (const lt of lookupTables) {
+                const ltId = lt.get('id') as number;
+                await LookupTableRowImplementation.softDeleteRowsByTableIdSequelize(ltId, inactiveBy);
+                await LookupTableImplementation.softDeleteLookupTableSequelize(ltId, inactiveBy, inactiveReason);
+            }
+
+            // 4. Soft-delete templates
+            const templates = await ParameterTemplateImplementation.listByRuleSetSequelize(id);
+            for (const t of templates) {
+                const tId = t.get('id') as number;
+                await ParameterTemplateImplementation.softDeleteTemplateSequelize(tId, inactiveBy, inactiveReason);
+            }
+
+            // 5. Soft-delete el RuleSet
+            await RuleSetImplementation.softDeleteRuleSetSequelize(id, inactiveBy, inactiveReason);
+
+            await transaction.commit();
+        } catch (error) {
+            await transaction.rollback();
+            throw error;
+        }
+
         return { uuid: existing.get('uuid'), deleted: true };
     }
 }

@@ -14,32 +14,44 @@ const columnDefSchema = z.object({
     dataType: z.enum(['STRING', 'NUMBER', 'BOOLEAN', 'DATE']),
 });
 
+// keyField puede ser string simple o array de strings (clave compuesta)
+const keyFieldSchema = z.union([
+    z.string().min(1).max(255),
+    z.array(z.string().min(1).max(255)).min(2, "Clave compuesta requiere al menos 2 campos"),
+]);
+
+// keyValue puede ser string simple o objeto (clave compuesta)
+const keyValueSchema = z.union([
+    z.string().min(1).max(255),
+    z.record(z.string()),
+]);
+
 const createLookupTableSchema = z.object({
     name: z.string().min(1).max(255),
     description: z.string().max(1000).optional(),
-    keyField: z.string().min(1).max(255),
+    keyField: keyFieldSchema,
     columns: z.array(columnDefSchema).min(1, "Se requiere al menos una columna"),
 });
 
 const updateLookupTableSchema = z.object({
     name: z.string().min(1).max(255).optional(),
     description: z.string().max(1000).optional(),
-    keyField: z.string().min(1).max(255).optional(),
+    keyField: keyFieldSchema.optional(),
     columns: z.array(columnDefSchema).min(1).optional(),
 });
 
 const createRowSchema = z.object({
-    keyValue: z.string().min(1).max(255),
+    keyValue: keyValueSchema,
     values: z.record(z.any()),
 });
 
 const importTableSchema = z.object({
     name: z.string().min(1).max(255),
     description: z.string().max(1000).optional(),
-    keyField: z.string().min(1).max(255),
+    keyField: keyFieldSchema,
     columns: z.array(columnDefSchema).min(1),
     rows: z.array(z.object({
-        keyValue: z.string().min(1),
+        keyValue: keyValueSchema,
         values: z.record(z.any()),
     })).min(1, "Se requiere al menos una fila"),
 });
@@ -332,8 +344,7 @@ class LookupTableService {
 
     /**
      * Dado un tableId y un keyValue, devuelve los constraints resueltos.
-     * Este método es usado por el ruleEvaluator para resolver dinámicamente
-     * los constraints de un PARAMETER que referencia una LookupTable.
+     * Soporta keyValue como string simple o como string serializado de un objeto compuesto.
      *
      * Retorna un mapa: { targetField → { constraintKey: value } }
      */
@@ -341,13 +352,22 @@ class LookupTableService {
         const table = await LookupTableImplementation.getByIdSequelize(tableId);
         if (!table) return null;
 
-        const row = await LookupTableRowImplementation.getByKeyValueSequelize(tableId, keyValue);
+        // Intentar buscar directamente
+        let row = await LookupTableRowImplementation.getByKeyValueSequelize(tableId, keyValue);
+
+        // Si no se encontró y parece JSON, intentar parsear y buscar como objeto
+        if (!row && keyValue.startsWith('{')) {
+            try {
+                const compositeKey = JSON.parse(keyValue);
+                row = await LookupTableRowImplementation.getByCompositeKeySequelize(tableId, compositeKey);
+            } catch { /* no es JSON válido, ignorar */ }
+        }
+
         if (!row) return null;
 
         const columns = table.get('columns') as any[];
         const rowValues = row.get('values') as Record<string, any>;
 
-        // Construir mapa: targetField → constraints parciales
         const resolved: Record<string, Record<string, any>> = {};
         for (const col of columns) {
             if (!resolved[col.targetField]) {
@@ -361,11 +381,14 @@ class LookupTableService {
 
     /**
      * Retorna todas las keyValues de una LookupTable.
-     * Usado por el evaluador para resolver CONDITIONs con "IN lookup(...)".
+     * Para claves simples retorna string[], para compuestas retorna los strings serializados.
      */
     async getAllKeys(tableId: number): Promise<string[]> {
         const rows = await LookupTableRowImplementation.listByTableIdSequelize(tableId);
-        return rows.map((r: any) => r.get('keyValue') as string);
+        return rows.map((r: any) => {
+            const kv = r.get('keyValue');
+            return typeof kv === 'string' ? kv : JSON.stringify(kv);
+        });
     }
 
     // ─── HELPERS PRIVADOS ───

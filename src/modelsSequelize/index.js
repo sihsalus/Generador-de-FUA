@@ -20,6 +20,7 @@ import RuleEdge from './RuleEdgeModel';
 
 import LookupTable    from './LookupTableModel';
 import LookupTableRow from './LookupTableRowModel';
+import ParameterTemplate from './ParameterTemplateModel';
 
 // ── Relaciones FK de Validacion──
 
@@ -67,6 +68,15 @@ LookupTable.hasMany(LookupTableRow, {
     }
 });
 LookupTableRow.belongsTo(LookupTable);
+
+// RuleSet 1:N ParameterTemplate
+RuleSet.hasMany(ParameterTemplate, {
+    foreignKey: {
+        name: 'RuleSetId',
+        allowNull: false
+    }
+});
+ParameterTemplate.belongsTo(RuleSet);
 
 // Foreign keys
 /*
@@ -172,6 +182,7 @@ export {
     RuleEdge,
     LookupTable,
     LookupTableRow,
+    ParameterTemplate,
     User,
     Visit,
     FUAFromVisitModel,

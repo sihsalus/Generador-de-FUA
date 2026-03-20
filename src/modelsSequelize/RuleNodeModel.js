@@ -12,7 +12,7 @@ const RuleNodeModel = sequelize.define(
             comment: 'Business ID within rule (e.g. N1, G1, P1)',
         },
         nodeType: {
-            type: DataTypes.ENUM('CONDITION', 'GATE', 'PARAMETER'),
+            type: DataTypes.ENUM('CONDITION', 'GATE', 'PARAMETER', 'VALIDATION', 'SUB_RULE'),
             allowNull: false,
         },
         config: {

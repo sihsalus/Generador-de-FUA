@@ -8,6 +8,10 @@ import RuleImplementation from "../implementation/sequelize/RuleImplementation";
 import RuleNodeImplementation from "../implementation/sequelize/RuleNodeImplementation";
 import RuleEdgeImplementation from "../implementation/sequelize/RuleEdgeImplementation";
 import { validateGraph, GraphNode, GraphEdge, GraphValidationResult } from "../utils/graphValidator";
+import { parseBARA, BaraParseResult } from "../utils/baraParser";
+import LookupTableImplementation from "../implementation/sequelize/LookupTableImplementation";
+import LookupTableRowImplementation from "../implementation/sequelize/LookupTableRowImplementation";
+import ParameterTemplateImplementation from "../implementation/sequelize/ParameterTemplateImplementation";
 import { CREATED_BY_PLACEHOLDER } from "../utils/constants";
 
 // ────────────────────────────────────────────
@@ -16,7 +20,7 @@ import { CREATED_BY_PLACEHOLDER } from "../utils/constants";
 
 const nodeSchema = z.object({
     nodeId: z.string().min(1).max(50),
-    nodeType: z.enum(['CONDITION', 'GATE', 'PARAMETER']),
+    nodeType: z.enum(['CONDITION', 'GATE', 'PARAMETER', 'VALIDATION', 'SUB_RULE']),
     config: z.record(z.any()),
     label: z.string().max(255).optional(),
     isEntry: z.boolean().default(false),
@@ -27,7 +31,22 @@ const edgeSchema = z.object({
     sourceNodeId: z.string().min(1),
     targetNodeId: z.string().min(1),
     edgeOrder: z.number().int().min(1).default(1),
+    edgeType: z.enum(['DEFAULT', 'TRUE', 'FALSE']).default('DEFAULT'),
     label: z.string().max(255).optional(),
+});
+
+const batchConditionSchema = z.object({
+    conditions: z.array(z.object({
+        field: z.string().min(1),
+        operator: z.string().min(1),
+        value: z.any(),
+        data_type: z.string().min(1).default('STRING'),
+        label: z.string().optional(),
+    })).min(1),
+    gateLogic: z.enum(['AND', 'OR', 'XOR']).default('AND'),
+    gateNodeId: z.string().optional(),
+    connectToNodeId: z.string().optional(),
+    connectEdgeType: z.enum(['DEFAULT', 'TRUE', 'FALSE']).default('DEFAULT'),
 });
 
 const createFullRuleSchema = z.object({
@@ -59,6 +78,14 @@ const importJsonSchema = z.object({
         }),
     })).min(1),
 });
+
+const NODE_TYPE_PREFIXES: Record<string, string> = {
+    'CONDITION': 'C',
+    'GATE': 'G',
+    'PARAMETER': 'P',
+    'VALIDATION': 'V',
+    'SUB_RULE': 'S',
+};
 
 // ────────────────────────────────────────────
 // Servicio orquestador
@@ -97,11 +124,11 @@ class GraphRuleService {
             throw err;
         }
 
-        // 4. Auto-detectar isEntry en nodos CONDITION que no son target de ninguna arista
+        // 4. Auto-detectar isEntry en nodos que no son target de ninguna arista
         const targetNodeIds = new Set(ruleData.graph.edges.map(e => e.targetNodeId));
         const nodesWithEntry = ruleData.graph.nodes.map(node => ({
             ...node,
-            isEntry: node.nodeType === 'CONDITION' && !targetNodeIds.has(node.nodeId),
+            isEntry: !targetNodeIds.has(node.nodeId) && ['CONDITION', 'VALIDATION', 'SUB_RULE'].includes(node.nodeType),
         }));
 
         // 5. Validar integridad del grafo
@@ -115,6 +142,7 @@ class GraphRuleService {
             sourceNodeId: e.sourceNodeId,
             targetNodeId: e.targetNodeId,
             edgeOrder: e.edgeOrder,
+            edgeType: e.edgeType || 'DEFAULT',
         }));
 
         const validation = validateGraph(graphNodes, graphEdges);
@@ -166,6 +194,7 @@ class GraphRuleService {
                     sourceNodeId: e.sourceNodeId,
                     targetNodeId: e.targetNodeId,
                     edgeOrder: e.edgeOrder,
+                    edgeType: e.edgeType || 'DEFAULT',
                     label: e.label,
                     createdBy: CREATED_BY_PLACEHOLDER,
                 }));
@@ -220,6 +249,7 @@ class GraphRuleService {
                     sourceNodeId: e.sourceNodeId,
                     targetNodeId: e.targetNodeId,
                     edgeOrder: e.edgeOrder,
+                    edgeType: e.edgeType || 'DEFAULT',
                     label: e.label,
                 })),
             },
@@ -400,9 +430,169 @@ class GraphRuleService {
             sourceNodeId: e.get('sourceNodeId'),
             targetNodeId: e.get('targetNodeId'),
             edgeOrder: e.get('edgeOrder'),
+            edgeType: e.get('edgeType') || 'DEFAULT',
         }));
 
         return validateGraph(graphNodes, graphEdges);
+    }
+
+    /**
+     * Crea múltiples nodos CONDITION en batch + un GATE que los une,
+     * opcionalmente conectados a un nodo destino.
+     * Reduce de N*3 clicks a 1 operación.
+     */
+    async addConditionBatch(ruleIdOrUUID: string, data: Record<string, any>) {
+        const parsed = batchConditionSchema.safeParse(data);
+        if (!parsed.success) {
+            const err: any = new Error("Datos inválidos para batch de condiciones");
+            err.details = parsed.error.flatten();
+            err.status = 400;
+            throw err;
+        }
+
+        const rule = await RuleService.getByIdOrUUID(ruleIdOrUUID);
+        const ruleId = rule.get('id') as number;
+
+        // Obtener nodos existentes para generar IDs únicos
+        const existingNodes = await RuleNodeImplementation.listNodesByRuleIdSequelize(ruleId);
+        const existingIds = new Set(existingNodes.map((n: any) => n.get('nodeId')));
+
+        let condCounter = existingNodes.filter((n: any) => n.get('nodeType') === 'CONDITION').length;
+        let gateCounter = existingNodes.filter((n: any) => n.get('nodeType') === 'GATE').length;
+
+        const batchData = parsed.data;
+
+        // Generar nodos CONDITION
+        const conditionNodes: Array<{
+            RuleId: number;
+            nodeId: string;
+            nodeType: string;
+            config: Record<string, any>;
+            label: string;
+            isEntry: boolean;
+            isDefault: boolean;
+            createdBy: string;
+        }> = [];
+
+        const conditionNodeIds: string[] = [];
+
+        for (const cond of batchData.conditions) {
+            condCounter++;
+            let nodeId = `C${condCounter}`;
+            while (existingIds.has(nodeId)) {
+                condCounter++;
+                nodeId = `C${condCounter}`;
+            }
+            existingIds.add(nodeId);
+
+            conditionNodes.push({
+                RuleId: ruleId,
+                nodeId,
+                nodeType: 'CONDITION',
+                config: {
+                    field: cond.field,
+                    operator: cond.operator,
+                    value: cond.value,
+                    data_type: cond.data_type,
+                },
+                label: cond.label || `${cond.field} ${cond.operator} ${JSON.stringify(cond.value)}`.slice(0, 80),
+                isEntry: true,
+                isDefault: false,
+                createdBy: CREATED_BY_PLACEHOLDER,
+            });
+            conditionNodeIds.push(nodeId);
+        }
+
+        // Generar GATE si hay más de 1 condición
+        let gateNodeId: string | null = null;
+        if (conditionNodeIds.length > 1) {
+            if (batchData.gateNodeId && !existingIds.has(batchData.gateNodeId)) {
+                gateNodeId = batchData.gateNodeId;
+            } else {
+                gateCounter++;
+                gateNodeId = `G${gateCounter}`;
+                while (existingIds.has(gateNodeId)) {
+                    gateCounter++;
+                    gateNodeId = `G${gateCounter}`;
+                }
+            }
+            existingIds.add(gateNodeId);
+        }
+
+        const transaction = await sequelize.transaction();
+        try {
+            // Crear condiciones
+            await RuleNodeImplementation.bulkCreateNodesSequelize(conditionNodes);
+
+            // Crear gate
+            if (gateNodeId) {
+                await RuleNodeImplementation.bulkCreateNodesSequelize([{
+                    RuleId: ruleId,
+                    nodeId: gateNodeId,
+                    nodeType: 'GATE',
+                    config: { logic: batchData.gateLogic },
+                    label: `${batchData.gateLogic}(${conditionNodeIds.length} conds)`,
+                    isEntry: false,
+                    isDefault: false,
+                    createdBy: CREATED_BY_PLACEHOLDER,
+                }]);
+            }
+
+            // Crear aristas CONDITION → GATE
+            const edges: Array<{
+                RuleId: number;
+                sourceNodeId: string;
+                targetNodeId: string;
+                edgeOrder: number;
+                edgeType: string;
+                createdBy: string;
+            }> = [];
+
+            if (gateNodeId) {
+                conditionNodeIds.forEach((cId, idx) => {
+                    edges.push({
+                        RuleId: ruleId,
+                        sourceNodeId: cId,
+                        targetNodeId: gateNodeId!,
+                        edgeOrder: idx + 1,
+                        edgeType: 'DEFAULT',
+                        createdBy: CREATED_BY_PLACEHOLDER,
+                    });
+                });
+            }
+
+            // Conectar al nodo destino si se especificó
+            const outputNodeId = gateNodeId || conditionNodeIds[0];
+            if (batchData.connectToNodeId) {
+                edges.push({
+                    RuleId: ruleId,
+                    sourceNodeId: outputNodeId,
+                    targetNodeId: batchData.connectToNodeId,
+                    edgeOrder: 1,
+                    edgeType: batchData.connectEdgeType || 'DEFAULT',
+                    createdBy: CREATED_BY_PLACEHOLDER,
+                });
+            }
+
+            if (edges.length > 0) {
+                await RuleEdgeImplementation.bulkCreateEdgesSequelize(edges);
+            }
+
+            await transaction.commit();
+        } catch (error) {
+            await transaction.rollback();
+            throw error;
+        }
+
+        // Re-validar
+        const graphValidation = await this.validateRuleGraph(ruleId);
+
+        return {
+            createdConditions: conditionNodeIds,
+            createdGate: gateNodeId,
+            connectedTo: batchData.connectToNodeId || null,
+            graphValidation,
+        };
     }
 
     /**
@@ -417,7 +607,7 @@ class GraphRuleService {
             throw err;
         }
 
-        const results: Array<{ ruleNumber: string; success: boolean; uuid?: string; error?: string; warnings?: any[] }> = [];
+        const results: Array<{ ruleNumber: string; success: boolean; uuid?: string; error?: string; details?: any; warnings?: any[] }> = [];
 
         for (const ruleInput of parsed.data.rules) {
             try {
@@ -429,10 +619,12 @@ class GraphRuleService {
                     warnings: result.validation.warnings,
                 });
             } catch (error: any) {
+                console.error(`[BARA IMPORT] Rule #${ruleInput.ruleNumber} FAILED:`, error.message, error.details ? JSON.stringify(error.details) : '');
                 results.push({
                     ruleNumber: ruleInput.ruleNumber,
                     success: false,
                     error: error.message,
+                    details: error.details ?? null,
                 });
             }
         }
@@ -443,6 +635,208 @@ class GraphRuleService {
             failed: results.filter(r => !r.success).length,
             results,
         };
+    }
+
+    /**
+     * Importa un archivo .bara completo: parsea el texto y crea
+     * templates, lookup tables y reglas en una sola transacción atómica.
+     * Las variables se devuelven al frontend (son locales, no se persisten en DB).
+     */
+    async importFromBARA(ruleSetId: number, baraSource: string) {
+        // 1. Verificar RuleSet
+        await RuleSetService.getByIdOrUUID(String(ruleSetId));
+
+        // 2. Parsear el .bara
+        const parsed: BaraParseResult = parseBARA(baraSource);
+        if (parsed.errors.length > 0) {
+            const err: any = new Error("Error de sintaxis BARA");
+            err.status = 422;
+            err.details = {
+                errors: parsed.errors,
+                warnings: parsed.warnings,
+            };
+            throw err;
+        }
+
+        const summary: {
+            variables: { total: number; items: Array<{ name: string; type: string }> };
+            templates: { total: number; created: number; skipped: number; results: Array<{ name: string; success: boolean; error?: string }> };
+            lookupTables: { total: number; created: number; skipped: number; results: Array<{ name: string; success: boolean; rows?: number; error?: string }> };
+            rules: { total: number; successful: number; failed: number; results: Array<{ ruleNumber: string; success: boolean; uuid?: string; error?: string; details?: any; warnings?: any[] }> };
+            warnings: Array<{ line: number; message: string }>;
+        } = {
+            variables: { total: parsed.variables.length, items: parsed.variables },
+            templates: { total: (parsed.templates || []).length, created: 0, skipped: 0, results: [] },
+            lookupTables: { total: parsed.lookupTables.length, created: 0, skipped: 0, results: [] },
+            rules: { total: parsed.rules.length, successful: 0, failed: 0, results: [] },
+            warnings: parsed.warnings,
+        };
+
+        // 3. Transacción atómica para templates + lookups + reglas
+        const transaction = await sequelize.transaction();
+        try {
+            // ── Templates ──
+            for (const t of (parsed.templates || [])) {
+                const existing = await ParameterTemplateImplementation.getByNameAndRuleSetSequelize(t.name, ruleSetId);
+                if (existing) {
+                    summary.templates.skipped++;
+                    summary.templates.results.push({ name: t.name, success: true, error: 'Ya existe, se omitió' });
+                    continue;
+                }
+                await ParameterTemplateImplementation.createTemplateSequelize({
+                    RuleSetId: ruleSetId,
+                    name: t.name,
+                    paramType: t.paramType,
+                    constraints: t.constraints,
+                    required: t.required,
+                    createdBy: CREATED_BY_PLACEHOLDER,
+                });
+                summary.templates.created++;
+                summary.templates.results.push({ name: t.name, success: true });
+            }
+
+            // ── Lookup Tables ──
+            for (const lt of parsed.lookupTables) {
+                const existing = await LookupTableImplementation.getByNameAndRuleSetSequelize(lt.name, ruleSetId);
+                if (existing) {
+                    summary.lookupTables.skipped++;
+                    summary.lookupTables.results.push({ name: lt.name, success: true, error: 'Ya existe, se omitió' });
+                    continue;
+                }
+
+                const table = await LookupTableImplementation.createLookupTableSequelize({
+                    RuleSetId: ruleSetId,
+                    name: lt.name,
+                    keyField: lt.keyField,
+                    columns: lt.columns,
+                    createdBy: CREATED_BY_PLACEHOLDER,
+                });
+                const tableId = table.get('id') as number;
+
+                if (lt.rows.length > 0) {
+                    const rowsToCreate = lt.rows.map(r => ({
+                        LookupTableId: tableId,
+                        keyValue: r.keyValue,
+                        values: r.values,
+                        createdBy: CREATED_BY_PLACEHOLDER,
+                    }));
+                    await LookupTableRowImplementation.bulkCreateRowsSequelize(rowsToCreate);
+                }
+
+                summary.lookupTables.created++;
+                summary.lookupTables.results.push({ name: lt.name, success: true, rows: lt.rows.length });
+            }
+
+            // ── Reglas ──
+            for (const ruleInput of parsed.rules) {
+                try {
+                    // Verificar duplicado
+                    const duplicate = await RuleImplementation.checkDuplicateRuleNumber(ruleSetId, ruleInput.ruleNumber);
+                    if (duplicate) {
+                        summary.rules.failed++;
+                        summary.rules.results.push({
+                            ruleNumber: ruleInput.ruleNumber,
+                            success: false,
+                            error: `Ya existe una regla con ruleNumber '${ruleInput.ruleNumber}'`,
+                        });
+                        continue;
+                    }
+
+                    // Auto-detectar isEntry
+                    const targetNodeIds = new Set(ruleInput.graph.edges.map(e => e.targetNodeId));
+                    const nodesWithEntry = ruleInput.graph.nodes.map(node => ({
+                        ...node,
+                        isEntry: !targetNodeIds.has(node.nodeId) && ['CONDITION', 'VALIDATION', 'SUB_RULE'].includes(node.nodeType),
+                    }));
+
+                    // Validar grafo
+                    const graphNodes: GraphNode[] = nodesWithEntry.map(n => ({
+                        nodeId: n.nodeId,
+                        nodeType: n.nodeType,
+                        config: n.config,
+                        isDefault: n.isDefault,
+                    }));
+                    const graphEdges: GraphEdge[] = ruleInput.graph.edges.map(e => ({
+                        sourceNodeId: e.sourceNodeId,
+                        targetNodeId: e.targetNodeId,
+                        edgeOrder: e.edgeOrder,
+                        edgeType: e.edgeType || 'DEFAULT',
+                    }));
+
+                    const validation = validateGraph(graphNodes, graphEdges);
+                    if (!validation.isValid) {
+                        summary.rules.failed++;
+                        summary.rules.results.push({
+                            ruleNumber: ruleInput.ruleNumber,
+                            success: false,
+                            error: 'Grafo inválido',
+                            details: { errors: validation.errors, warnings: validation.warnings },
+                        });
+                        continue;
+                    }
+
+                    // Crear regla + nodos + aristas
+                    const rule = await RuleImplementation.createRuleSequelize({
+                        RuleSetId: ruleSetId,
+                        ruleNumber: ruleInput.ruleNumber,
+                        name: ruleInput.name,
+                        ruleType: ruleInput.ruleType,
+                        enabled: ruleInput.enabled,
+                        priority: ruleInput.priority,
+                        weight: 1.0,
+                        createdBy: CREATED_BY_PLACEHOLDER,
+                    });
+
+                    const ruleId = rule.get('id') as number;
+
+                    const nodesToCreate = nodesWithEntry.map(n => ({
+                        RuleId: ruleId,
+                        nodeId: n.nodeId,
+                        nodeType: n.nodeType,
+                        config: n.config,
+                        label: n.label,
+                        isEntry: n.isEntry,
+                        isDefault: n.isDefault,
+                        createdBy: CREATED_BY_PLACEHOLDER,
+                    }));
+                    await RuleNodeImplementation.bulkCreateNodesSequelize(nodesToCreate);
+
+                    if (ruleInput.graph.edges.length > 0) {
+                        const edgesToCreate = ruleInput.graph.edges.map(e => ({
+                            RuleId: ruleId,
+                            sourceNodeId: e.sourceNodeId,
+                            targetNodeId: e.targetNodeId,
+                            edgeOrder: e.edgeOrder,
+                            edgeType: e.edgeType || 'DEFAULT',
+                            createdBy: CREATED_BY_PLACEHOLDER,
+                        }));
+                        await RuleEdgeImplementation.bulkCreateEdgesSequelize(edgesToCreate);
+                    }
+
+                    summary.rules.successful++;
+                    summary.rules.results.push({
+                        ruleNumber: ruleInput.ruleNumber,
+                        success: true,
+                        uuid: rule.get('uuid') as string,
+                        warnings: validation.warnings,
+                    });
+                } catch (ruleError: any) {
+                    summary.rules.failed++;
+                    summary.rules.results.push({
+                        ruleNumber: ruleInput.ruleNumber,
+                        success: false,
+                        error: ruleError.message,
+                        details: ruleError.details ?? null,
+                    });
+                }
+            }
+
+            await transaction.commit();
+            return summary;
+        } catch (error) {
+            await transaction.rollback();
+            throw error;
+        }
     }
 
     /**
@@ -517,7 +911,7 @@ class GraphRuleService {
         const targetNodeIds = new Set(parsed.data.edges.map(e => e.targetNodeId));
         const nodesWithEntry = parsed.data.nodes.map(node => ({
             ...node,
-            isEntry: node.nodeType === 'CONDITION' && !targetNodeIds.has(node.nodeId),
+            isEntry: !targetNodeIds.has(node.nodeId) && ['CONDITION', 'VALIDATION', 'SUB_RULE'].includes(node.nodeType),
         }));
 
         // Validar grafo antes de modificar
@@ -531,6 +925,7 @@ class GraphRuleService {
             sourceNodeId: e.sourceNodeId,
             targetNodeId: e.targetNodeId,
             edgeOrder: e.edgeOrder,
+            edgeType: e.edgeType || 'DEFAULT',
         }));
 
         const validation = validateGraph(graphNodes, graphEdges);
@@ -570,6 +965,7 @@ class GraphRuleService {
                     sourceNodeId: e.sourceNodeId,
                     targetNodeId: e.targetNodeId,
                     edgeOrder: e.edgeOrder,
+                    edgeType: e.edgeType || 'DEFAULT',
                     label: e.label,
                     createdBy: CREATED_BY_PLACEHOLDER,
                 }));

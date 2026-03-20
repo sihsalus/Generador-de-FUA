@@ -16,9 +16,9 @@ const LookupTableModel = sequelize.define(
             allowNull: true,
         },
         keyField: {
-            type: DataTypes.STRING,
+            type: DataTypes.JSONB,
             allowNull: false,
-            comment: 'Campo del dato que se usa como clave de búsqueda (ej: "codigo_prestacional")',
+            comment: 'Campo(s) del dato como clave de búsqueda. String simple ("codigo") o array compuesto (["codigo","tipo"])',
         },
         columns: {
             type: DataTypes.JSONB,

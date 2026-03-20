@@ -4,7 +4,7 @@ class LookupTableRowImplementation {
 
     async createRowSequelize(data: {
         LookupTableId: number;
-        keyValue: string;
+        keyValue: string | Record<string, any>;
         values: Record<string, any>;
         createdBy: string;
     }) {
@@ -13,7 +13,7 @@ class LookupTableRowImplementation {
 
     async bulkCreateRowsSequelize(rows: Array<{
         LookupTableId: number;
-        keyValue: string;
+        keyValue: string | Record<string, any>;
         values: Record<string, any>;
         createdBy: string;
     }>) {
@@ -31,9 +31,18 @@ class LookupTableRowImplementation {
         return await LookupTableRow.findOne({ where: { id, active: true } });
     }
 
-    async getByKeyValueSequelize(lookupTableId: number, keyValue: string) {
+    async getByKeyValueSequelize(lookupTableId: number, keyValue: string | Record<string, any>) {
         return await LookupTableRow.findOne({
             where: { LookupTableId: lookupTableId, keyValue, active: true },
+        });
+    }
+
+    /**
+     * Busca una fila por clave compuesta (objeto JSONB).
+     */
+    async getByCompositeKeySequelize(lookupTableId: number, compositeKey: Record<string, string>) {
+        return await LookupTableRow.findOne({
+            where: { LookupTableId: lookupTableId, keyValue: compositeKey, active: true },
         });
     }
 

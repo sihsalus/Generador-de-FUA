@@ -7,6 +7,9 @@
  * Responsabilidades:
  *  - Recibir un dato (JSON, potencialmente anidado) y un grafo de regla
  *  - Evaluar cada nodo siguiendo el flujo del DAG
+ *  - Soportar nodos VALIDATION (validación intermedia con STOP/WARN)
+ *  - Soportar nodos SUB_RULE (composición de reglas)
+ *  - Soportar aristas TRUE/FALSE (decision trees)
  *  - Retornar resultado detallado (TRUE/FALSE + path + valores que causaron fallo)
  */
 
@@ -14,9 +17,11 @@
 // Tipos
 // ────────────────────────────────────────────
 
+export type EvalEdgeType = 'DEFAULT' | 'TRUE' | 'FALSE';
+
 export interface EvalNode {
     nodeId: string;
-    nodeType: 'CONDITION' | 'GATE' | 'PARAMETER';
+    nodeType: 'CONDITION' | 'GATE' | 'PARAMETER' | 'VALIDATION' | 'SUB_RULE';
     config: Record<string, any>;
     label?: string;
     isDefault: boolean;
@@ -27,6 +32,7 @@ export interface EvalEdge {
     sourceNodeId: string;
     targetNodeId: string;
     edgeOrder: number;
+    edgeType?: EvalEdgeType;
 }
 
 export interface EvalGraph {
@@ -36,33 +42,34 @@ export interface EvalGraph {
 
 /**
  * Resolver de LookupTable.
- * Dado un lookupRef y un keyValue del dato, retorna los constraints
- * resueltos por targetField: { targetField → { constraintKey: value } }
- * Retorna null si no se encuentra la fila.
- *
- * También retorna el keyField de la LookupTable para saber qué campo
- * del dato usar como discriminador.
  */
 export type LookupResolver = (
     lookupRef: { tableId?: string; tableName?: string },
 ) => Promise<{
-    keyField: string;
+    keyField: string | string[];
     resolve: (keyValue: string) => Promise<Record<string, Record<string, any>> | null>;
     getKeys?: () => Promise<string[]>;
 } | null>;
+
+/**
+ * Resolver de sub-reglas. Evalúa una regla referenciada y retorna su resultado.
+ */
+export type SubRuleResolver = (
+    subRuleRef: { ruleId?: string; ruleUUID?: string },
+) => Promise<RuleEvalResult>;
 
 export interface NodeEvalDetail {
     nodeId: string;
     nodeType: string;
     label?: string;
     result: boolean;
-    /** Solo para CONDITION: el valor real encontrado en el dato */
+    /** Solo para CONDITION/VALIDATION: el valor real encontrado en el dato */
     actualValue?: any;
-    /** Solo para CONDITION: el valor esperado */
+    /** Solo para CONDITION/VALIDATION: el valor esperado */
     expectedValue?: any;
-    /** Solo para CONDITION: el operador usado */
+    /** Solo para CONDITION/VALIDATION: el operador usado */
     operator?: string;
-    /** Solo para CONDITION: el campo evaluado */
+    /** Solo para CONDITION/VALIDATION: el campo evaluado */
     field?: string;
     /** Solo para PARAMETER: resultado de la validación del campo */
     paramValidation?: {
@@ -73,8 +80,20 @@ export interface NodeEvalDetail {
     };
     /** Solo para GATE: lógica usada */
     logic?: string;
-    /** Nodos hijos que alimentaron este nodo */
+    /** Solo para GATE: nodos hijos que alimentaron este nodo */
     inputs?: string[];
+    /** Solo para VALIDATION: acción ante fallo */
+    failureAction?: string;
+    /** Solo para SUB_RULE: resultado de la sub-regla evaluada */
+    subRuleResult?: RuleEvalResult;
+}
+
+export interface EvalDiagnosticEntry {
+    nodeId: string;
+    field?: string;
+    message: string;
+    actualValue?: any;
+    expectedValue?: any;
 }
 
 export interface RuleEvalResult {
@@ -83,16 +102,15 @@ export interface RuleEvalResult {
     ruleName?: string;
     ruleNumber?: string;
     isValid: boolean;
+    /** true si la evaluación fue detenida por un nodo VALIDATION con failureAction=STOP */
+    halted?: boolean;
+    haltedByNodeId?: string;
     evaluatedPath: string[];
     activatedParameters: string[];
     nodeDetails: NodeEvalDetail[];
-    errors: Array<{
-        nodeId: string;
-        field?: string;
-        message: string;
-        actualValue?: any;
-        expectedValue?: any;
-    }>;
+    failures: EvalDiagnosticEntry[];
+    errors: EvalDiagnosticEntry[];
+    warnings: EvalDiagnosticEntry[];
     executionTimeMs: number;
 }
 
@@ -113,11 +131,6 @@ export interface RuleSetEvalResult {
 // Acceso a campos anidados (dot notation)
 // ────────────────────────────────────────────
 
-/**
- * Accede a un valor en un objeto JSON usando dot notation.
- * Ej: getNestedValue({paciente: {edad: 25}}, "paciente.edad") => 25
- * Soporta arrays: "items.0.precio"
- */
 function getNestedValue(obj: Record<string, any>, path: string): any {
     if (!path || !obj) return undefined;
 
@@ -127,7 +140,6 @@ function getNestedValue(obj: Record<string, any>, path: string): any {
     for (const part of parts) {
         if (current === null || current === undefined) return undefined;
 
-        // Soporte para índices de array
         const arrayIndex = parseInt(part);
         if (Array.isArray(current) && !isNaN(arrayIndex)) {
             current = current[arrayIndex];
@@ -148,15 +160,17 @@ export async function evaluateRule(
     data: Record<string, any>,
     ruleMeta?: { ruleId?: string; ruleUUID?: string; ruleName?: string; ruleNumber?: string },
     lookupResolver?: LookupResolver,
+    subRuleResolver?: SubRuleResolver,
 ): Promise<RuleEvalResult> {
     const startTime = performance.now();
+    const ruleTag = `[EVAL #${ruleMeta?.ruleNumber || '?'} "${ruleMeta?.ruleName || ''}"]`;
 
     const nodeMap = new Map<string, EvalNode>();
     graph.nodes.forEach(n => nodeMap.set(n.nodeId, n));
 
-    // Construir adjacency (source → targets) y reverse (target → sources)
-    const adjacency = new Map<string, Array<{ targetNodeId: string; edgeOrder: number }>>();
-    const reverseAdj = new Map<string, Array<{ sourceNodeId: string; edgeOrder: number }>>();
+    // Construir adjacency (source → targets) y reverse (target → sources) con edgeType
+    const adjacency = new Map<string, Array<{ targetNodeId: string; edgeOrder: number; edgeType: EvalEdgeType }>>();
+    const reverseAdj = new Map<string, Array<{ sourceNodeId: string; edgeOrder: number; edgeType: EvalEdgeType }>>();
 
     graph.nodes.forEach(n => {
         adjacency.set(n.nodeId, []);
@@ -164,12 +178,12 @@ export async function evaluateRule(
     });
 
     graph.edges.forEach(e => {
-        adjacency.get(e.sourceNodeId)?.push({ targetNodeId: e.targetNodeId, edgeOrder: e.edgeOrder });
-        reverseAdj.get(e.targetNodeId)?.push({ sourceNodeId: e.sourceNodeId, edgeOrder: e.edgeOrder });
+        const edgeType = (e.edgeType || 'DEFAULT') as EvalEdgeType;
+        adjacency.get(e.sourceNodeId)?.push({ targetNodeId: e.targetNodeId, edgeOrder: e.edgeOrder, edgeType });
+        reverseAdj.get(e.targetNodeId)?.push({ sourceNodeId: e.sourceNodeId, edgeOrder: e.edgeOrder, edgeType });
     });
 
     // ── Pre-resolver CONDITIONs que referencian lookup tables ──
-    // Reemplaza "lookup:tableName" por el array real de keys de la tabla
     if (lookupResolver) {
         for (const node of graph.nodes) {
             if (node.nodeType === 'CONDITION' && node.config.operator === 'IN'
@@ -182,20 +196,42 @@ export async function evaluateRule(
                         node.config.value = keys;
                     }
                 } catch (err: any) {
-                    console.error(`[ruleEvaluator] Error resolviendo lookup keys para tabla "${tableName}":`, err?.message || err);
+                    console.error(`${ruleTag} [LOOKUP-PRE] Error resolviendo lookup keys para "${tableName}":`, err?.message);
                 }
             }
         }
     }
 
-    // Cache de resultados por nodo (cada nodo se evalúa una sola vez)
+    // ── Pre-resolver SUB_RULE nodos ──
+    const subRuleResults = new Map<string, RuleEvalResult>();
+    if (subRuleResolver) {
+        for (const node of graph.nodes) {
+            if (node.nodeType === 'SUB_RULE' && node.config.subRuleRef) {
+                try {
+                    const result = await subRuleResolver(node.config.subRuleRef);
+                    subRuleResults.set(node.nodeId, result);
+                } catch (err: any) {
+                    console.error(`${ruleTag} [SUB_RULE] Error evaluando sub-regla para ${node.nodeId}:`, err?.message);
+                }
+            }
+        }
+    }
+
+    // Cache de resultados por nodo
     const evalCache = new Map<string, boolean>();
     const nodeDetails: NodeEvalDetail[] = [];
     const evaluatedPath: string[] = [];
-    const errors: RuleEvalResult['errors'] = [];
+    const failures: EvalDiagnosticEntry[] = [];
+    const errors: EvalDiagnosticEntry[] = [];
+    const warnings: EvalDiagnosticEntry[] = [];
+
+    // Halt state
+    let halted = false;
+    let haltedByNodeId: string | undefined;
 
     // ── Evaluar un nodo recursivamente ──
     function evalNode(nodeId: string): boolean {
+        if (halted) return false;
         if (evalCache.has(nodeId)) return evalCache.get(nodeId)!;
 
         const node = nodeMap.get(nodeId);
@@ -212,25 +248,26 @@ export async function evaluateRule(
 
         switch (node.nodeType) {
             case 'CONDITION': {
-                result = evaluateCondition(node, data, detail, errors);
+                result = evaluateCondition(node, data, detail, failures, errors);
                 break;
             }
 
             case 'GATE': {
                 const inputs = (reverseAdj.get(nodeId) || [])
-                    .sort((a, b) => a.edgeOrder - b.edgeOrder)
-                    .map(e => e.sourceNodeId);
+                    .sort((a, b) => a.edgeOrder - b.edgeOrder);
 
                 detail.logic = node.config.logic;
-                detail.inputs = inputs;
+                detail.inputs = inputs.map(e => e.sourceNodeId);
                 const shortCircuit = node.config.short_circuit !== false;
 
                 switch (node.config.logic) {
                     case 'AND': {
                         result = true;
-                        for (const inputId of inputs) {
-                            const inputResult = evalNode(inputId);
-                            if (!inputResult) {
+                        for (const input of inputs) {
+                            const rawResult = evalNode(input.sourceNodeId);
+                            if (halted) { result = false; break; }
+                            const effectiveResult = resolveEdgeResult(rawResult, input.edgeType);
+                            if (!effectiveResult) {
                                 result = false;
                                 if (shortCircuit) break;
                             }
@@ -239,9 +276,11 @@ export async function evaluateRule(
                     }
                     case 'OR': {
                         result = false;
-                        for (const inputId of inputs) {
-                            const inputResult = evalNode(inputId);
-                            if (inputResult) {
+                        for (const input of inputs) {
+                            const rawResult = evalNode(input.sourceNodeId);
+                            if (halted) break;
+                            const effectiveResult = resolveEdgeResult(rawResult, input.edgeType);
+                            if (effectiveResult) {
                                 result = true;
                                 if (shortCircuit) break;
                             }
@@ -250,14 +289,21 @@ export async function evaluateRule(
                     }
                     case 'NOT': {
                         if (inputs.length > 0) {
-                            result = !evalNode(inputs[0]);
+                            const rawResult = evalNode(inputs[0].sourceNodeId);
+                            if (!halted) {
+                                const effectiveResult = resolveEdgeResult(rawResult, inputs[0].edgeType);
+                                result = !effectiveResult;
+                            }
                         }
                         break;
                     }
                     case 'XOR': {
                         let trueCount = 0;
-                        for (const inputId of inputs) {
-                            if (evalNode(inputId)) trueCount++;
+                        for (const input of inputs) {
+                            const rawResult = evalNode(input.sourceNodeId);
+                            if (halted) break;
+                            const effectiveResult = resolveEdgeResult(rawResult, input.edgeType);
+                            if (effectiveResult) trueCount++;
                         }
                         result = trueCount === 1;
                         break;
@@ -267,10 +313,91 @@ export async function evaluateRule(
             }
 
             case 'PARAMETER': {
-                // Un PARAMETER no produce true/false en el flujo del grafo.
-                // Se "activa" si las condiciones que lo preceden son true.
-                // La validación del PARAMETER se hace después.
+                // PARAMETERs se "activan" si sus inputs son true. Validación se hace después.
                 result = true;
+                break;
+            }
+
+            case 'VALIDATION': {
+                // Primero evaluar inputs (como un GATE implícito AND)
+                const vInputs = (reverseAdj.get(nodeId) || [])
+                    .sort((a, b) => a.edgeOrder - b.edgeOrder);
+
+                let inputsPass = true;
+                for (const input of vInputs) {
+                    const rawResult = evalNode(input.sourceNodeId);
+                    if (halted) { inputsPass = false; break; }
+                    const effectiveResult = resolveEdgeResult(rawResult, input.edgeType);
+                    if (!effectiveResult) { inputsPass = false; break; }
+                }
+
+                if (!inputsPass) {
+                    // Inputs no se cumplen → la validación no aplica, pasa como false
+                    result = false;
+                } else {
+                    // Inputs OK → ejecutar la validación propia
+                    const validationResult = evaluateCondition(node, data, detail, failures, errors);
+                    detail.failureAction = node.config.failureAction;
+
+                    if (!validationResult) {
+                        if (node.config.failureAction === 'STOP') {
+                            halted = true;
+                            haltedByNodeId = nodeId;
+                            errors.push({
+                                nodeId,
+                                field: node.config.field,
+                                message: `VALIDATION STOP: ${node.config.field} ${node.config.operator} ${JSON.stringify(node.config.value)} falló — evaluación detenida`,
+                                actualValue: detail.actualValue,
+                                expectedValue: detail.expectedValue,
+                            });
+                            result = false;
+                        } else {
+                            // WARN: registrar warning pero continuar como true
+                            warnings.push({
+                                nodeId,
+                                field: node.config.field,
+                                message: `VALIDATION WARN: ${node.config.field} ${node.config.operator} ${JSON.stringify(node.config.value)} falló`,
+                                actualValue: detail.actualValue,
+                                expectedValue: detail.expectedValue,
+                            });
+                            result = true;
+                        }
+                    } else {
+                        result = true;
+                    }
+                }
+                break;
+            }
+
+            case 'SUB_RULE': {
+                // Evaluar inputs primero
+                const sInputs = (reverseAdj.get(nodeId) || [])
+                    .sort((a, b) => a.edgeOrder - b.edgeOrder);
+
+                let sInputsPass = true;
+                for (const input of sInputs) {
+                    const rawResult = evalNode(input.sourceNodeId);
+                    if (halted) { sInputsPass = false; break; }
+                    const effectiveResult = resolveEdgeResult(rawResult, input.edgeType);
+                    if (!effectiveResult) { sInputsPass = false; break; }
+                }
+
+                if (!sInputsPass) {
+                    result = false;
+                } else {
+                    // Usar resultado pre-resuelto
+                    const subResult = subRuleResults.get(nodeId);
+                    if (subResult) {
+                        detail.subRuleResult = subResult;
+                        result = subResult.isValid;
+                    } else {
+                        result = false;
+                        errors.push({
+                            nodeId,
+                            message: `SUB_RULE '${nodeId}': no se pudo resolver la sub-regla referenciada`,
+                        });
+                    }
+                }
                 break;
             }
         }
@@ -278,31 +405,29 @@ export async function evaluateRule(
         detail.result = result;
         evalCache.set(nodeId, result);
         nodeDetails.push(detail);
+
         return result;
     }
 
-    // ── Fase 1: Evaluar desde nodos de entrada hacia los GATEs/PARAMETERs ──
-    // Identificar nodos terminales (PARAMETERs no-default)
+    // ── Fase 1: Evaluar desde nodos de entrada hacia los PARAMETERs ──
     const parameterNodes = graph.nodes.filter(n => n.nodeType === 'PARAMETER' && !n.isDefault);
     const defaultParameters = graph.nodes.filter(n => n.nodeType === 'PARAMETER' && n.isDefault);
 
-    // Para cada PARAMETER, determinar si su ruta se activa
     const activatedParameters: string[] = [];
     const activatedParamFields = new Set<string>();
 
     for (const param of parameterNodes) {
+        if (halted) break;
+
         const inputs = reverseAdj.get(param.nodeId) || [];
+        if (inputs.length === 0) continue;
 
-        if (inputs.length === 0) {
-            // PARAMETER sin aristas entrantes (podría estar conectado directamente)
-            continue;
-        }
-
-        // Evaluar todos los nodos que alimentan al PARAMETER
         let paramActivated = true;
         for (const input of inputs) {
-            const inputResult = evalNode(input.sourceNodeId);
-            if (!inputResult) {
+            const rawResult = evalNode(input.sourceNodeId);
+            if (halted) { paramActivated = false; break; }
+            const effectiveResult = resolveEdgeResult(rawResult, input.edgeType);
+            if (!effectiveResult) {
                 paramActivated = false;
                 break;
             }
@@ -315,32 +440,26 @@ export async function evaluateRule(
     }
 
     // ── Fase 2: Activar defaults para campos no cubiertos ──
-    for (const defParam of defaultParameters) {
-        if (!activatedParamFields.has(defParam.config.target_field)) {
-            activatedParameters.push(defParam.nodeId);
+    if (!halted) {
+        for (const defParam of defaultParameters) {
+            if (!activatedParamFields.has(defParam.config.target_field)) {
+                activatedParameters.push(defParam.nodeId);
+            }
         }
     }
 
-    // ── Fase 3: Resolver lookups y validar PARAMETERs activados contra el dato ──
-    //
-    // Si hay lookupResolver, se resuelven dinámicamente los constraints de
-    // PARAMETERs que referencian una LookupTable. Los constraints de la fila
-    // se mezclan (override) con los constraints estáticos del nodo.
-
+    // ── Fase 3: Resolver lookups y validar PARAMETERs activados ──
     const resolvedParams: Array<{ param: EvalNode; resolvedConstraints?: Record<string, any> }> = [];
 
-    // Cache de resolvers por tableId para evitar queries repetidas
-    const resolverCache = new Map<string, { keyField: string; resolve: (kv: string) => Promise<Record<string, Record<string, any>> | null> }>();
+    const resolverCache = new Map<string, { keyField: string | string[]; resolve: (kv: string) => Promise<Record<string, Record<string, any>> | null> }>();
 
     for (const paramId of activatedParameters) {
         const param = nodeMap.get(paramId)!;
         let resolvedConstraints: Record<string, any> | undefined;
 
         if (lookupResolver && param.config.lookupRef) {
+            const refKey = param.config.lookupRef.tableId || param.config.lookupRef.tableName || '';
             try {
-                const refKey = param.config.lookupRef.tableId || param.config.lookupRef.tableName || '';
-
-                // Obtener o cachear el resolver para esta tabla
                 if (!resolverCache.has(refKey)) {
                     const tableResolver = await lookupResolver(param.config.lookupRef);
                     if (tableResolver) {
@@ -350,18 +469,28 @@ export async function evaluateRule(
 
                 const cached = resolverCache.get(refKey);
                 if (cached) {
-                    // Usar el keyField de la LookupTable para buscar el valor en el dato
-                    const keyValue = getNestedValue(data, cached.keyField);
+                    // Soportar keyField simple o compuesto
+                    let keyValue: string;
+                    if (Array.isArray(cached.keyField)) {
+                        // Clave compuesta: construir objeto y serializar
+                        const compositeKey: Record<string, string> = {};
+                        for (const field of cached.keyField) {
+                            compositeKey[field] = String(getNestedValue(data, field) ?? '');
+                        }
+                        keyValue = JSON.stringify(compositeKey);
+                    } else {
+                        keyValue = String(getNestedValue(data, cached.keyField) ?? '');
+                    }
 
-                    if (keyValue !== undefined && keyValue !== null) {
-                        const lookupResult = await cached.resolve(String(keyValue));
+                    if (keyValue) {
+                        const lookupResult = await cached.resolve(keyValue);
                         if (lookupResult && lookupResult[param.config.target_field]) {
                             resolvedConstraints = lookupResult[param.config.target_field];
                         }
                     }
                 }
-            } catch {
-                // Si falla la resolución, se usan los constraints estáticos
+            } catch (lookupErr: any) {
+                console.error(`${ruleTag} [LOOKUP-PARAM] Error:`, lookupErr?.message);
             }
         }
 
@@ -370,76 +499,107 @@ export async function evaluateRule(
 
     let allParametersValid = true;
 
-    for (const { param, resolvedConstraints } of resolvedParams) {
-        // Mezclar constraints: estáticos + lookup (lookup sobreescribe)
-        const effectiveConfig = resolvedConstraints
-            ? { ...param.config, constraints: { ...param.config.constraints, ...resolvedConstraints } }
-            : param.config;
+    if (!halted) {
+        for (const { param, resolvedConstraints } of resolvedParams) {
+            const effectiveConfig = resolvedConstraints
+                ? { ...param.config, constraints: { ...param.config.constraints, ...resolvedConstraints } }
+                : param.config;
 
-        const effectiveNode = { ...param, config: effectiveConfig };
-        const validation = validateParameter(effectiveNode, data);
+            const effectiveNode = { ...param, config: effectiveConfig };
+            const validation = validateParameter(effectiveNode, data);
 
-        const paramDetail: NodeEvalDetail = {
-            nodeId: param.nodeId,
-            nodeType: 'PARAMETER',
-            label: param.label,
-            result: validation.isValid,
-            paramValidation: validation,
-        };
+            const paramDetail: NodeEvalDetail = {
+                nodeId: param.nodeId,
+                nodeType: 'PARAMETER',
+                label: param.label,
+                result: validation.isValid,
+                paramValidation: validation,
+            };
 
-        // Actualizar o agregar al nodeDetails
-        const existingIdx = nodeDetails.findIndex(d => d.nodeId === param.nodeId);
-        if (existingIdx >= 0) {
-            nodeDetails[existingIdx] = paramDetail;
-        } else {
-            evaluatedPath.push(param.nodeId);
-            nodeDetails.push(paramDetail);
-        }
+            const existingIdx = nodeDetails.findIndex(d => d.nodeId === param.nodeId);
+            if (existingIdx >= 0) {
+                nodeDetails[existingIdx] = paramDetail;
+            } else {
+                evaluatedPath.push(param.nodeId);
+                nodeDetails.push(paramDetail);
+            }
 
-        if (!validation.isValid) {
-            allParametersValid = false;
-            validation.errors.forEach(errMsg => {
-                errors.push({
-                    nodeId: param.nodeId,
-                    field: validation.targetField,
-                    message: errMsg,
-                    actualValue: validation.actualValue,
+            if (!validation.isValid) {
+                allParametersValid = false;
+                validation.errors.forEach(errMsg => {
+                    errors.push({
+                        nodeId: param.nodeId,
+                        field: validation.targetField,
+                        message: errMsg,
+                        actualValue: validation.actualValue,
+                    });
                 });
-            });
+            }
         }
     }
 
+    if (activatedParameters.length === 0 && !halted) {
+        warnings.push({
+            nodeId: 'RULE',
+            message: `La regla no activó ningún parámetro (las condiciones no aplican para este dato)`,
+        });
+    }
+
     const executionTimeMs = Math.round((performance.now() - startTime) * 100) / 100;
+
+    const finalIsValid = halted
+        ? false
+        : (activatedParameters.length === 0 ? true : allParametersValid);
 
     return {
         ruleId: ruleMeta?.ruleId || '',
         ruleUUID: ruleMeta?.ruleUUID,
         ruleName: ruleMeta?.ruleName,
         ruleNumber: ruleMeta?.ruleNumber,
-        isValid: allParametersValid && activatedParameters.length > 0,
+        isValid: finalIsValid,
+        halted: halted || undefined,
+        haltedByNodeId,
         evaluatedPath,
         activatedParameters,
         nodeDetails,
+        failures,
         errors,
+        warnings,
         executionTimeMs,
     };
 }
 
 // ────────────────────────────────────────────
-// Evaluación de CONDITION
+// Resolución de resultado según edgeType
+// ────────────────────────────────────────────
+
+/**
+ * Resuelve el resultado efectivo de una arista según su tipo.
+ * - DEFAULT: resultado tal cual
+ * - TRUE: resultado tal cual (la arista solo "se activa" si es true)
+ * - FALSE: invierte el resultado (la arista "se activa" si es false)
+ */
+function resolveEdgeResult(rawResult: boolean, edgeType: EvalEdgeType): boolean {
+    if (edgeType === 'FALSE') return !rawResult;
+    return rawResult; // DEFAULT y TRUE: resultado directo
+}
+
+// ────────────────────────────────────────────
+// Evaluación de CONDITION (y VALIDATION, misma lógica)
 // ────────────────────────────────────────────
 
 function evaluateCondition(
     node: EvalNode,
     data: Record<string, any>,
     detail: NodeEvalDetail,
-    errors: RuleEvalResult['errors'],
+    failures: EvalDiagnosticEntry[],
+    errors: EvalDiagnosticEntry[],
 ): boolean {
     const cfg = node.config;
     const isComputed = 'expression' in cfg && cfg.expression;
 
     if (isComputed) {
-        return evaluateComputedCondition(node, data, detail, errors);
+        return evaluateComputedCondition(node, data, detail, failures, errors);
     }
 
     const field = cfg.field;
@@ -447,7 +607,6 @@ function evaluateCondition(
     const actualValue = getNestedValue(data, field);
     let expectedValue = cfg.value;
 
-    // Si value_type es FIELD_REF, resolver el valor del otro campo
     if (cfg.value_type === 'FIELD_REF' && typeof expectedValue === 'string') {
         expectedValue = getNestedValue(data, expectedValue);
     }
@@ -473,7 +632,7 @@ function evaluateCondition(
     }
 
     if (!result) {
-        errors.push({
+        failures.push({
             nodeId: node.nodeId,
             field,
             message: `Condición fallida: ${field} ${operator} ${JSON.stringify(expectedValue)} (valor real: ${JSON.stringify(actualValue)})`,
@@ -489,7 +648,8 @@ function evaluateComputedCondition(
     node: EvalNode,
     data: Record<string, any>,
     detail: NodeEvalDetail,
-    errors: RuleEvalResult['errors'],
+    failures: EvalDiagnosticEntry[],
+    errors: EvalDiagnosticEntry[],
 ): boolean {
     const cfg = node.config;
 
@@ -506,7 +666,6 @@ function evaluateComputedCondition(
         detail.actualValue = computedValue;
         detail.expectedValue = expectedValue;
 
-        // Aplicar tolerance si existe
         const tolerance = cfg.tolerance || 0;
         let result = false;
 
@@ -521,7 +680,7 @@ function evaluateComputedCondition(
         }
 
         if (!result) {
-            errors.push({
+            failures.push({
                 nodeId: node.nodeId,
                 field: cfg.expression,
                 message: `Expresión fallida: ${cfg.expression} = ${computedValue}, esperado ${cfg.operator} ${JSON.stringify(expectedValue)}`,
@@ -606,7 +765,6 @@ function looseEquals(a: any, b: any, dataType?: string): boolean {
     if (dataType === 'BOOLEAN') return toBool(a) === toBool(b);
     if (dataType === 'DATE') return new Date(a).getTime() === new Date(b).getTime();
 
-    // Default: comparación string case-insensitive
     return String(a).toLowerCase() === String(b).toLowerCase();
 }
 
@@ -625,18 +783,12 @@ function toBool(val: any): boolean {
 }
 
 // ────────────────────────────────────────────
-// Evaluador de expresiones matemáticas simple
+// Evaluador de expresiones matemáticas
 // ────────────────────────────────────────────
 
-/**
- * Evalúa expresiones como "cantidad * precioUnitario",
- * "montoTotal * 0.18", "LENGTH(nombre)", etc.
- * Resuelve nombres de campo contra el dato.
- */
 function evaluateExpression(expression: string, data: Record<string, any>): number {
     let expr = expression;
 
-    // Resolver funciones primero
     expr = expr.replace(/ABS\(([^)]+)\)/gi, (_, inner) => {
         return String(Math.abs(evaluateExpression(inner, data)));
     });
@@ -660,15 +812,12 @@ function evaluateExpression(expression: string, data: Record<string, any>): numb
         return String(Math.floor(diffMs / (1000 * 60 * 60 * 24)));
     });
 
-    // Reemplazar nombres de campo con sus valores numéricos
-    // Tokenizar: buscar palabras que no sean números ni operadores
     expr = expr.replace(/[a-zA-Z_][a-zA-Z0-9_.]*/g, (token) => {
         const val = getNestedValue(data, token);
         if (val === undefined || val === null) return '0';
         return String(Number(val) || 0);
     });
 
-    // Evaluar la expresión matemática de forma segura
     return safeEval(expr);
 }
 
@@ -678,10 +827,6 @@ function resolveExprToken(token: string, data: Record<string, any>): any {
     return getNestedValue(data, token.trim()) ?? token;
 }
 
-/**
- * Evaluador matemático seguro (sin eval).
- * Soporta: +, -, *, /, %, paréntesis.
- */
 function safeEval(expr: string): number {
     expr = expr.replace(/\s+/g, '');
     let pos = 0;
@@ -719,11 +864,10 @@ function safeEval(expr: string): number {
         if (expr[pos] === '(') {
             pos++;
             const result = parseExpression();
-            pos++; // closing ')'
+            pos++;
             return result;
         }
 
-        // Parse number (including negative)
         let numStr = '';
         if (expr[pos] === '-') { numStr += '-'; pos++; }
         while (pos < expr.length && (expr[pos] >= '0' && expr[pos] <= '9' || expr[pos] === '.')) {
@@ -754,74 +898,71 @@ function validateParameter(node: EvalNode, data: Record<string, any>): ParamVali
     const paramType = cfg.param_type;
     const constraints = cfg.constraints || {};
     const required = cfg.required !== false;
-    const errors: string[] = [];
+    const errs: string[] = [];
 
-    // Check required
     if (required && (actualValue === null || actualValue === undefined || actualValue === '')) {
-        errors.push(`Campo '${targetField}' es requerido pero está vacío o ausente`);
-        return { targetField, actualValue, isValid: false, errors };
+        errs.push(`Campo '${targetField}' es requerido pero está vacío o ausente`);
+        return { targetField, actualValue, isValid: false, errors: errs };
     }
 
-    // Si no es required y está vacío, es válido
     if (!required && (actualValue === null || actualValue === undefined || actualValue === '')) {
+        // Aún si es optional, si tiene allowNull:false explícito, validar
+        if (constraints.allowNull === false && (actualValue === null || actualValue === undefined)) {
+            errs.push(`Campo '${targetField}': no permite nulos`);
+            return { targetField, actualValue, isValid: false, errors: errs };
+        }
         return { targetField, actualValue, isValid: true, errors: [] };
     }
 
     switch (paramType) {
         case 'STRING':
-            validateString(actualValue, constraints, targetField, errors);
+            validateString(actualValue, constraints, targetField, errs);
             break;
         case 'NUMBER':
-            validateNumber(actualValue, constraints, targetField, errors);
+            validateNumber(actualValue, constraints, targetField, errs);
             break;
         case 'ENUM':
-            validateEnum(actualValue, constraints, targetField, errors);
+            validateEnum(actualValue, constraints, targetField, errs);
             break;
         case 'DATE':
-            validateDate(actualValue, constraints, targetField, errors);
+            validateDate(actualValue, constraints, targetField, errs);
             break;
         case 'BOOLEAN':
-            validateBoolean(actualValue, constraints, targetField, errors);
+            validateBoolean(actualValue, constraints, targetField, errs);
             break;
         case 'RANGE':
-            validateRange(actualValue, constraints, targetField, errors);
+            validateRange(actualValue, constraints, targetField, errs);
             break;
         case 'ARRAY':
-            validateArray(actualValue, constraints, targetField, errors);
+            validateArray(actualValue, constraints, targetField, errs);
             break;
     }
 
-    return { targetField, actualValue, isValid: errors.length === 0, errors };
+    return { targetField, actualValue, isValid: errs.length === 0, errors: errs };
 }
 
 function validateString(value: any, c: Record<string, any>, field: string, errors: string[]): void {
     let str = String(value);
     if (c.trim) str = str.trim();
 
-    if (c.minLength !== undefined && str.length < c.minLength) {
+    if (c.minLength !== undefined && str.length < c.minLength)
         errors.push(`'${field}': longitud mínima ${c.minLength}, tiene ${str.length}`);
-    }
-    if (c.maxLength !== undefined && str.length > c.maxLength) {
+    if (c.maxLength !== undefined && str.length > c.maxLength)
         errors.push(`'${field}': longitud máxima ${c.maxLength}, tiene ${str.length}`);
-    }
     if (c.pattern) {
         try {
-            if (!new RegExp(c.pattern).test(str)) {
+            if (!new RegExp(c.pattern).test(str))
                 errors.push(`'${field}': no coincide con patrón '${c.pattern}'`);
-            }
         } catch {
             errors.push(`'${field}': patrón regex inválido '${c.pattern}'`);
         }
     }
-    if (c.allowEmpty === false && str === '') {
+    if (c.allowEmpty === false && str === '')
         errors.push(`'${field}': no permite cadena vacía`);
-    }
-    if (c.case === 'UPPER' && str !== str.toUpperCase()) {
+    if (c.case === 'UPPER' && str !== str.toUpperCase())
         errors.push(`'${field}': debe estar en mayúsculas`);
-    }
-    if (c.case === 'LOWER' && str !== str.toLowerCase()) {
+    if (c.case === 'LOWER' && str !== str.toLowerCase())
         errors.push(`'${field}': debe estar en minúsculas`);
-    }
 }
 
 function validateNumber(value: any, c: Record<string, any>, field: string, errors: string[]): void {
@@ -830,45 +971,45 @@ function validateNumber(value: any, c: Record<string, any>, field: string, error
         errors.push(`'${field}': no es un número válido (valor: ${JSON.stringify(value)})`);
         return;
     }
-    if (c.minValue !== undefined && num < c.minValue) {
+    if (c.minValue !== undefined && num < c.minValue)
         errors.push(`'${field}': valor mínimo ${c.minValue}, tiene ${num}`);
-    }
-    if (c.maxValue !== undefined && num > c.maxValue) {
+    if (c.maxValue !== undefined && num > c.maxValue)
         errors.push(`'${field}': valor máximo ${c.maxValue}, tiene ${num}`);
-    }
-    if (c.isInteger && !Number.isInteger(num)) {
+    if (c.isInteger && !Number.isInteger(num))
         errors.push(`'${field}': debe ser entero, tiene ${num}`);
-    }
-    if (c.allowNegative === false && num < 0) {
+    if (c.allowNegative === false && num < 0)
         errors.push(`'${field}': no permite negativos, tiene ${num}`);
-    }
-    if (c.allowZero === false && num === 0) {
+    if (c.allowZero === false && num === 0)
         errors.push(`'${field}': no permite cero`);
-    }
     if (c.decimals !== undefined) {
         const decimalPart = String(num).split('.')[1];
-        if (decimalPart && decimalPart.length > c.decimals) {
+        if (decimalPart && decimalPart.length > c.decimals)
             errors.push(`'${field}': máximo ${c.decimals} decimales, tiene ${decimalPart.length}`);
-        }
     }
 }
 
 function validateEnum(value: any, c: Record<string, any>, field: string, errors: string[]): void {
-    const values = c.values || [];
-    if (values.length === 0) return;
+    // allowedSex: convención salud — "A"=ambos(F,M), "F"=solo femenino, "M"=solo masculino
+    // Se resuelve a un array de valores permitidos antes de validar
+    let values = c.values || [];
+    if (c.allowedSex !== undefined && values.length === 0) {
+        const sex = String(c.allowedSex).toUpperCase();
+        if (sex === 'A') values = ['F', 'M'];
+        else if (sex === 'F' || sex === 'M') values = [sex];
+        else values = [sex]; // valor literal
+    }
 
-    const caseSensitive = c.caseSensitive !== false;
+    if (values.length === 0) return;
+    const caseSensitive = c.caseSensitive === true;
 
     if (c.allowMultiple && Array.isArray(value)) {
         for (const v of value) {
-            if (!matchesEnum(v, values, caseSensitive)) {
+            if (!matchesEnum(v, values, caseSensitive))
                 errors.push(`'${field}': valor '${v}' no está en lista permitida [${values.join(', ')}]`);
-            }
         }
     } else {
-        if (!matchesEnum(value, values, caseSensitive)) {
+        if (!matchesEnum(value, values, caseSensitive))
             errors.push(`'${field}': valor '${value}' no está en lista permitida [${values.join(', ')}]`);
-        }
     }
 }
 
@@ -886,32 +1027,25 @@ function validateDate(value: any, c: Record<string, any>, field: string, errors:
         errors.push(`'${field}': no es una fecha válida (valor: ${JSON.stringify(value)})`);
         return;
     }
-
     const now = new Date();
-
     if (c.minDate) {
         const min = resolveDate(c.minDate, now);
-        if (date < min) {
+        if (date < min)
             errors.push(`'${field}': fecha mínima ${min.toISOString().split('T')[0]}, tiene ${date.toISOString().split('T')[0]}`);
-        }
     }
     if (c.maxDate) {
         const max = resolveDate(c.maxDate, now);
-        if (date > max) {
+        if (date > max)
             errors.push(`'${field}': fecha máxima ${max.toISOString().split('T')[0]}, tiene ${date.toISOString().split('T')[0]}`);
-        }
     }
-    if (c.allowFuture === false && date > now) {
+    if (c.allowFuture === false && date > now)
         errors.push(`'${field}': no permite fechas futuras`);
-    }
-    if (c.allowPast === false && date < now) {
+    if (c.allowPast === false && date < now)
         errors.push(`'${field}': no permite fechas pasadas`);
-    }
 }
 
 function resolveDate(dateStr: string, now: Date): Date {
     if (dateStr === 'TODAY') return new Date(now.toISOString().split('T')[0]);
-
     const todayMatch = dateStr.match(/^TODAY([+-])(\d+)$/);
     if (todayMatch) {
         const d = new Date(now.toISOString().split('T')[0]);
@@ -919,7 +1053,6 @@ function resolveDate(dateStr: string, now: Date): Date {
         d.setDate(d.getDate() + days);
         return d;
     }
-
     return new Date(dateStr);
 }
 
@@ -928,36 +1061,35 @@ function validateBoolean(value: any, c: Record<string, any>, field: string, erro
         errors.push(`'${field}': no permite nulos`);
         return;
     }
-    // Verificar que sea interpretable como booleano
     const valid = ['true', 'false', '1', '0', 'si', 'sí', 'no', 'yes'];
-    if (typeof value !== 'boolean' && !valid.includes(String(value).toLowerCase())) {
+    if (typeof value !== 'boolean' && !valid.includes(String(value).toLowerCase()))
         errors.push(`'${field}': no es un valor booleano válido (valor: ${JSON.stringify(value)})`);
+
+    // equals: el valor debe ser exactamente igual al esperado
+    if (c.equals !== undefined) {
+        const actualBool = toBool(value);
+        const expectedBool = toBool(c.equals);
+        if (actualBool !== expectedBool)
+            errors.push(`'${field}': debe ser ${expectedBool} pero es ${actualBool}`);
     }
 }
 
 function validateRange(value: any, c: Record<string, any>, field: string, errors: string[]): void {
-    // RANGE espera un array de 2 elementos [lower, upper]
     if (!Array.isArray(value) || value.length !== 2) {
         errors.push(`'${field}': debe ser un rango [lower, upper], recibido: ${JSON.stringify(value)}`);
         return;
     }
     const [lower, upper] = value.map(Number);
-
-    if (c.lowerMustBeLessThanUpper !== false && lower >= upper) {
+    if (c.lowerMustBeLessThanUpper !== false && lower >= upper)
         errors.push(`'${field}': lower (${lower}) debe ser menor que upper (${upper})`);
-    }
-    if (c.minValueLower !== undefined && lower < c.minValueLower) {
+    if (c.minValueLower !== undefined && lower < c.minValueLower)
         errors.push(`'${field}': lower mínimo ${c.minValueLower}, tiene ${lower}`);
-    }
-    if (c.maxValueLower !== undefined && lower > c.maxValueLower) {
+    if (c.maxValueLower !== undefined && lower > c.maxValueLower)
         errors.push(`'${field}': lower máximo ${c.maxValueLower}, tiene ${lower}`);
-    }
-    if (c.minValueUpper !== undefined && upper < c.minValueUpper) {
+    if (c.minValueUpper !== undefined && upper < c.minValueUpper)
         errors.push(`'${field}': upper mínimo ${c.minValueUpper}, tiene ${upper}`);
-    }
-    if (c.maxValueUpper !== undefined && upper > c.maxValueUpper) {
+    if (c.maxValueUpper !== undefined && upper > c.maxValueUpper)
         errors.push(`'${field}': upper máximo ${c.maxValueUpper}, tiene ${upper}`);
-    }
 }
 
 function validateArray(value: any, c: Record<string, any>, field: string, errors: string[]): void {
@@ -965,15 +1097,12 @@ function validateArray(value: any, c: Record<string, any>, field: string, errors
         errors.push(`'${field}': debe ser un array, recibido: ${typeof value}`);
         return;
     }
-    if (c.minItems !== undefined && value.length < c.minItems) {
+    if (c.minItems !== undefined && value.length < c.minItems)
         errors.push(`'${field}': mínimo ${c.minItems} elementos, tiene ${value.length}`);
-    }
-    if (c.maxItems !== undefined && value.length > c.maxItems) {
+    if (c.maxItems !== undefined && value.length > c.maxItems)
         errors.push(`'${field}': máximo ${c.maxItems} elementos, tiene ${value.length}`);
-    }
-    if (c.uniqueItems && new Set(value).size !== value.length) {
+    if (c.uniqueItems && new Set(value).size !== value.length)
         errors.push(`'${field}': los elementos deben ser únicos`);
-    }
 }
 
 // ────────────────────────────────────────────
