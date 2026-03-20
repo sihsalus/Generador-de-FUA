@@ -62,9 +62,10 @@ class RuleEvaluationService {
         // Construir EvalGraph
         const graph = this.buildEvalGraph(fullRule);
 
-        // Construir lookup resolver si algún nodo PARAMETER referencia una LookupTable
-        const hasLookups = graph.nodes.some(n => n.nodeType === 'PARAMETER' && n.config.lookupRef);
-        const resolver: LookupResolver | undefined = hasLookups
+        // Construir lookup resolver si algún nodo referencia una LookupTable
+        const hasParamLookups = graph.nodes.some(n => n.nodeType === 'PARAMETER' && n.config.lookupRef);
+        const hasConditionLookups = graph.nodes.some(n => n.nodeType === 'CONDITION' && typeof n.config.value === 'string' && n.config.value.startsWith('lookup:'));
+        const resolver: LookupResolver | undefined = (hasParamLookups || hasConditionLookups)
             ? this.buildLookupResolver()
             : undefined;
 
@@ -191,6 +192,10 @@ class RuleEvaluationService {
             case 'WEIGHTED':
                 isValid = sumWeightTotal > 0 && (sumWeightPassed / sumWeightTotal) >= threshold;
                 break;
+            case 'REPORT':
+                // Modo diagnóstico: evalúa todas, no determina válido/inválido del conjunto
+                isValid = failedRules === 0;
+                break;
             default:
                 isValid = failedRules === 0 && passedRules > 0;
         }
@@ -228,6 +233,9 @@ class RuleEvaluationService {
                 keyField,
                 resolve: async (keyValue: string) => {
                     return await LookupTableService.resolveConstraints(tableId, keyValue);
+                },
+                getKeys: async () => {
+                    return await LookupTableService.getAllKeys(tableId);
                 },
             };
         };

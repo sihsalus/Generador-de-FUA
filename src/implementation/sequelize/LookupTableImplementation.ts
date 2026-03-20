@@ -28,6 +28,10 @@ class LookupTableImplementation {
         return await LookupTable.findOne({ where: { uuid, active: true } });
     }
 
+    async getByNameSequelize(name: string) {
+        return await LookupTable.findOne({ where: { name, active: true } });
+    }
+
     async getByNameAndRuleSetSequelize(name: string, ruleSetId: number) {
         return await LookupTable.findOne({
             where: { name, RuleSetId: ruleSetId, active: true },

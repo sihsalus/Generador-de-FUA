@@ -45,7 +45,11 @@ export interface EvalGraph {
  */
 export type LookupResolver = (
     lookupRef: { tableId?: string; tableName?: string },
-) => Promise<{ keyField: string; resolve: (keyValue: string) => Promise<Record<string, Record<string, any>> | null> } | null>;
+) => Promise<{
+    keyField: string;
+    resolve: (keyValue: string) => Promise<Record<string, Record<string, any>> | null>;
+    getKeys?: () => Promise<string[]>;
+} | null>;
 
 export interface NodeEvalDetail {
     nodeId: string;
@@ -163,6 +167,26 @@ export async function evaluateRule(
         adjacency.get(e.sourceNodeId)?.push({ targetNodeId: e.targetNodeId, edgeOrder: e.edgeOrder });
         reverseAdj.get(e.targetNodeId)?.push({ sourceNodeId: e.sourceNodeId, edgeOrder: e.edgeOrder });
     });
+
+    // ── Pre-resolver CONDITIONs que referencian lookup tables ──
+    // Reemplaza "lookup:tableName" por el array real de keys de la tabla
+    if (lookupResolver) {
+        for (const node of graph.nodes) {
+            if (node.nodeType === 'CONDITION' && node.config.operator === 'IN'
+                && typeof node.config.value === 'string' && node.config.value.startsWith('lookup:')) {
+                const tableName = node.config.value.replace('lookup:', '');
+                try {
+                    const tableResolver = await lookupResolver({ tableName });
+                    if (tableResolver?.getKeys) {
+                        const keys = await tableResolver.getKeys();
+                        node.config.value = keys;
+                    }
+                } catch (err: any) {
+                    console.error(`[ruleEvaluator] Error resolviendo lookup keys para tabla "${tableName}":`, err?.message || err);
+                }
+            }
+        }
+    }
 
     // Cache de resultados por nodo (cada nodo se evalúa una sola vez)
     const evalCache = new Map<string, boolean>();

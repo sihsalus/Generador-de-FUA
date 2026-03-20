@@ -19,7 +19,7 @@ const RuleSetModel = sequelize.define(
             allowNull: false,
         },
         evaluationMode: {
-            type: DataTypes.ENUM('ALL', 'FIRST_VALID', 'ANY', 'MAJORITY', 'WEIGHTED'),
+            type: DataTypes.ENUM('ALL', 'FIRST_VALID', 'ANY', 'MAJORITY', 'WEIGHTED', 'REPORT'),
             allowNull: false,
             defaultValue: 'ALL',
         },

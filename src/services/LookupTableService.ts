@@ -94,7 +94,11 @@ class LookupTableService {
         if (isNumeric) {
             item = await LookupTableImplementation.getByIdSequelize(Number(idReceived));
         } else {
+            // Intentar por UUID primero, luego por nombre
             item = await LookupTableImplementation.getByUUIDSequelize(idReceived);
+            if (!item) {
+                item = await LookupTableImplementation.getByNameSequelize(idReceived);
+            }
         }
 
         if (!item) {
@@ -353,6 +357,15 @@ class LookupTableService {
         }
 
         return resolved;
+    }
+
+    /**
+     * Retorna todas las keyValues de una LookupTable.
+     * Usado por el evaluador para resolver CONDITIONs con "IN lookup(...)".
+     */
+    async getAllKeys(tableId: number): Promise<string[]> {
+        const rows = await LookupTableRowImplementation.listByTableIdSequelize(tableId);
+        return rows.map((r: any) => r.get('keyValue') as string);
     }
 
     // ─── HELPERS PRIVADOS ───

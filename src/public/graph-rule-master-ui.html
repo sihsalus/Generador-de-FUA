@@ -1012,6 +1012,7 @@
           <option value="ANY">ANY — Al menos una debe pasar</option>
           <option value="MAJORITY">MAJORITY — Más de la mitad deben pasar</option>
           <option value="WEIGHTED">WEIGHTED — Suma ponderada ≥ umbral</option>
+          <option value="REPORT">REPORT — Evalúa todas y reporta resultados</option>
         </select>
       </div>
       <div class="form-group" id="thresholdGroup" style="display:none">
@@ -1748,7 +1749,10 @@ function renderNodes() {
     descText.setAttribute('y', 52);
     let desc = node.label || '';
     if (node.nodeType === 'CONDITION' && node.config.field) {
-      desc = `${node.config.field} ${node.config.operator || ''} ${node.config.value ?? ''}`.substring(0, 28);
+      const valDisplay = typeof node.config.value === 'string' && node.config.value.startsWith('lookup:')
+        ? `lookup("${node.config.value.replace('lookup:','')}")`
+        : (node.config.value ?? '');
+      desc = `${node.config.field} ${node.config.operator || ''} ${valDisplay}`.substring(0, 28);
     } else if (node.nodeType === 'GATE') {
       desc = node.config.logic || '';
     } else if (node.nodeType === 'PARAMETER' && node.config.target_field) {
@@ -2044,7 +2048,13 @@ function showNodeProps(nodeId) {
         </div>
         <div class="form-group">
           <label>Value</label>
-          <input value="${cfg.value ?? ''}" onchange="updateNodeConfig('${nodeId}', 'value', parseConfigValue(this.value))">
+          ${typeof cfg.value === 'string' && cfg.value.startsWith('lookup:')
+            ? `<div style="display:flex;align-items:center;gap:8px">
+                <span class="badge blue" style="font-size:12px;padding:4px 10px;border-radius:6px;cursor:default" title="Valor resuelto dinámicamente desde la LookupTable">&#128269; lookup: ${cfg.value.replace('lookup:','')}</span>
+                <button class="btn small" style="font-size:11px" onclick="updateNodeConfig('${nodeId}', 'value', ''); showNodeProps('${nodeId}')">Desvincular</button>
+              </div>`
+            : `<input value="${cfg.value ?? ''}" onchange="updateNodeConfig('${nodeId}', 'value', parseConfigValue(this.value))">`
+          }
         </div>
         <div class="form-group">
           <label>Data Type</label>
