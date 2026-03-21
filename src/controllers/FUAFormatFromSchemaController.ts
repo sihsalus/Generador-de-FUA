@@ -233,7 +233,7 @@ class FUAFormatFromSchemaController {
     // Render FUA Format by Id or UUID
     render = async (req: Request, res: Response): Promise<void> => {
         const formatidentifier = req.params.id;
-        const visitpayload = req.body.payload;
+        //const visitpayload = req.body.payload;
      
         let htmlContent = null;
 
