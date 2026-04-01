@@ -12,6 +12,7 @@ import FUAFromVisitPDFModel from './FUAFromVisitPDFModel';
 import BaseEntityVersionModel from "./BaseEntityVersionModel.js";
 import BaseEntityVersion_MiddleTableModel from './BaseEntityVersion_MiddleTableModel.js';
 import FUAFormatFromSchemaModel from './FUAFormatFromSchemaModel';
+import EntityScriptModel from './EntityScriptModel';
 
 
 // Foreign keys
@@ -111,11 +112,12 @@ BaseEntityVersionModel.hasOne( FUAFromVisitPDFModel, {
 
 
 //Exports
-export {    
+export {
     User,
     Visit,
     FUAFromVisitModel,
     FUAFromVisitPDFModel,
     BaseEntityVersionModel,
-    BaseEntityVersion_MiddleTableModel
+    BaseEntityVersion_MiddleTableModel,
+    EntityScriptModel
 };

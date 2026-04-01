@@ -1,0 +1,46 @@
+export {
+    type Fua,
+    type Asegurado,
+    type CondicionPaciente,
+    type ResponsableAtencion,
+    type Diagnostico,
+    type MedicamentoRegistrado,
+    type InsumoRegistrado,
+    type ProcedimientoRegistrado,
+    type ActividadPreventiva,
+    type Ipress,
+    FuaSchema,
+    AseguradoSchema,
+    CondicionPacienteSchema,
+    ResponsableAtencionSchema,
+    DiagnosticoSchema,
+    MedicamentoRegistradoSchema,
+    InsumoRegistradoSchema,
+    ProcedimientoRegistradoSchema,
+    ActividadPreventivaSchema,
+    IpressSchema,
+    DESTINOS_ASEGURADO,
+    TIPOS_ATENCION,
+} from "./fua";
+
+export {
+    EdadCalculada,
+    FuaContext,
+    type FuaResumen,
+    type HistorialAsegurado,
+    type FuaContextData,
+    FuaResumenSchema,
+    HistorialAseguradoSchema,
+    FuaContextSchema,
+} from "./context";
+
+export {
+    type RuleResult,
+    type ValidationResult,
+    RuleResultSchema,
+    ValidationResultSchema,
+    RULE_ACTIONS,
+    createRuleResult,
+    createEmptyValidationResult,
+    consolidateResults,
+} from "./results";

@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/ElNicolays/.claude/**)",
+      "Bash(npx jest:*)",
+      "Bash(npm test:*)",
+      "Bash(ls node_modules/.bin/jest*)",
+      "Bash(npm install:*)",
+      "Bash(./node_modules/.bin/jest --testPathPattern=\"ruleEngine\")",
+      "Bash(./node_modules/.bin/jest --testPathPatterns=\"ruleEngine\")"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\ElNicolays\\.claude",
+      "c:\\Users\\ElNicolays\\Documents\\GitHub\\NuevoSeed\\Generador-de-FUA\\src\\ruleEngine"
+    ]
+  }
+}
