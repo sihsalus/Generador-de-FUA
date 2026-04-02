@@ -45,6 +45,9 @@ export class ScriptExecutorService {
     "fetch",
     "XMLHttpRequest",
     "WebSocket",
+    "Proxy",
+    "Reflect",
+    "Symbol",
   ];
 
   /**
@@ -129,6 +132,7 @@ export class ScriptExecutorService {
 
   private static sanitize(script: string): { ok: boolean; error?: string } {
     const codeWithoutComments = script
+      .replace(/\/\*[\s\S]*?\*\//g, "")
       .split("\n")
       .map((line) => {
         const trimmed = line.trim();
@@ -153,6 +157,7 @@ export class ScriptExecutorService {
       /constructor\s*\[/,
       /constructor\s*\(/,
       /\.prototype\b/,
+      /\bthis\b/,
     ];
     for (const pattern of dangerousPatterns) {
       if (pattern.test(codeWithoutComments)) {

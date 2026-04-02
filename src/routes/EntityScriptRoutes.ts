@@ -24,5 +24,6 @@ EntityScriptRouter.post("/", authenticate, EntityScriptCrudController.create);
 EntityScriptRouter.get("/", authenticate, EntityScriptCrudController.list);
 EntityScriptRouter.get("/:id", authenticate, EntityScriptCrudController.getById);
 EntityScriptRouter.put("/:id", authenticate, EntityScriptCrudController.update);
+EntityScriptRouter.delete("/:id", authenticate, EntityScriptCrudController.softDelete);
 
 export default EntityScriptRouter;

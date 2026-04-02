@@ -187,6 +187,50 @@ const EntityScriptCrudController = {
       });
     }
   },
+
+  async softDelete(req: Request, res: Response): Promise<void> {
+    try {
+      const deletedBy = req.body.deletedBy;
+      if (!deletedBy) {
+        res.status(400).json({ success: false, error: "deletedBy es requerido." });
+        return;
+      }
+
+      const record = await EntityScriptService.softDelete(req.params.id, deletedBy);
+
+      loggerInstance.printLog(
+        new Log({
+          timeStamp: new Date(),
+          logLevel: Logger_LogLevel.INFO,
+          securityLevel: Logger_SecurityLevel.Admin,
+          logType: Logger_LogType.DELETE,
+          environmentType: loggerInstance.enviroment.toString(),
+          description: "Soft-deleting EntityScript successful",
+          content: { objectName: ENTITY_NAME, id: req.params.id },
+        }),
+        LOG_TARGETS
+      );
+
+      res.json({ success: true, data: record });
+    } catch (err: any) {
+      loggerInstance.printLog(
+        new Log({
+          timeStamp: new Date(),
+          logLevel: Logger_LogLevel.ERROR,
+          securityLevel: Logger_SecurityLevel.Admin,
+          logType: Logger_LogType.DELETE,
+          environmentType: loggerInstance.enviroment.toString(),
+          description: `EntityScript softDelete error: ${err.message}`,
+        }),
+        LOG_TARGETS
+      );
+      res.status(500).json({
+        error: 'Failed to soft-delete EntityScript. (Controller)',
+        message: (err as Error).message,
+        details: (err as any).details ?? null,
+      });
+    }
+  },
 };
 
 export default EntityScriptCrudController;
