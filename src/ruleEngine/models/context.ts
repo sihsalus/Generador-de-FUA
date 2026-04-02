@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { FuaSchema, type Fua } from "./fua";
+import { VisitPayloadSchema, type VisitPayload } from "./visitPayload";
 
 // --- Edad calculada ---
 
@@ -70,60 +70,38 @@ export class EdadCalculada {
     }
 }
 
-// --- Historial del asegurado ---
-
-export const FuaResumenSchema = z.object({
-    numero_fua: z.string(),
-    codigo_prestacional: z.string(),
-    fecha_atencion: z.coerce.date(),
-    fecha_alta: z.coerce.date().optional(),
-    destino: z.string().optional(),
-    diagnosticos_principales: z.array(z.string()),
-    ipress_codigo: z.string(),
-});
-export type FuaResumen = z.infer<typeof FuaResumenSchema>;
-
-export const HistorialAseguradoSchema = z.object({
-    fuas_previos: z.array(FuaResumenSchema),
-    prestaciones_periodo: z.record(z.string(), z.array(FuaResumenSchema)),
-});
-export type HistorialAsegurado = z.infer<typeof HistorialAseguradoSchema>;
-
 // --- Contexto de evaluacion ---
 
-export const FuaContextSchema = z.object({
-    fua: FuaSchema,
-    historial_asegurado: HistorialAseguradoSchema,
+export const ValidationContextSchema = z.object({
+    visit: VisitPayloadSchema,
 });
-export type FuaContextData = z.infer<typeof FuaContextSchema>;
+export type ValidationContextData = z.infer<typeof ValidationContextSchema>;
 
-export class FuaContext {
-    readonly fua: Fua;
+export class ValidationContext {
+    readonly visit: VisitPayload;
     readonly edad_calculada: EdadCalculada;
-    readonly historial_asegurado: HistorialAsegurado;
 
-    constructor(data: FuaContextData) {
-        const result = FuaContextSchema.safeParse(data);
+    constructor(data: ValidationContextData) {
+        const result = ValidationContextSchema.safeParse(data);
         if (!result.success) {
-            const error = new Error("FuaContext: datos invalidos");
+            const error = new Error("ValidationContext: datos invalidos");
             (error as any).details = result.error;
             throw error;
         }
 
-        this.fua = result.data.fua;
-        this.historial_asegurado = result.data.historial_asegurado;
+        this.visit = result.data.visit;
         this.edad_calculada = EdadCalculada.fromDates(
-            this.fua.asegurado.fecha_nacimiento,
-            this.fua.fecha_atencion
+            this.visit.patient_details.fecha_nacimiento,
+            this.visit.startDatetime
         );
     }
 
-    get prestacionesDelMismoCodigo(): FuaResumen[] {
-        return this.historial_asegurado.prestaciones_periodo[this.fua.codigo_prestacional] ?? [];
+    get diagnosticoPrincipal(): string | undefined {
+        const principal = this.visit.fua.diagnosticos.find((d) => d.posicion === 1);
+        return principal?.codigo_cie10;
     }
 
-    get diagnosticoPrincipal(): string | undefined {
-        const principal = this.fua.diagnosticos.find((d) => d.posicion === 1);
-        return principal?.codigo_cie10;
+    get codigoPrestacional(): string {
+        return this.visit.fua.codigo_prestacional;
     }
 }

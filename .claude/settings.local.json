@@ -7,11 +7,14 @@
       "Bash(ls node_modules/.bin/jest*)",
       "Bash(npm install:*)",
       "Bash(./node_modules/.bin/jest --testPathPattern=\"ruleEngine\")",
-      "Bash(./node_modules/.bin/jest --testPathPatterns=\"ruleEngine\")"
+      "Bash(./node_modules/.bin/jest --testPathPatterns=\"ruleEngine\")",
+      "Bash(find c:UsersElNicolaysDocumentsGitHubNuevoSeedGenerador-de-FUA/src -type f -name *.ts -o -name *.js)",
+      "Bash(grep -E \"\\\\.\\(ts|js\\)$\")"
     ],
     "additionalDirectories": [
       "C:\\Users\\ElNicolays\\.claude",
-      "c:\\Users\\ElNicolays\\Documents\\GitHub\\NuevoSeed\\Generador-de-FUA\\src\\ruleEngine"
+      "c:\\Users\\ElNicolays\\Documents\\GitHub\\NuevoSeed\\Generador-de-FUA\\src\\ruleEngine",
+      "c:\\Users\\ElNicolays\\Documents\\GitHub\\NuevoSeed\\Generador-de-FUA\\src\\ruleEngine\\models"
     ]
   }
 }

@@ -15,10 +15,10 @@ export const RuleResultSchema = z.object({
 });
 export type RuleResult = z.infer<typeof RuleResultSchema>;
 
-// --- Resultado consolidado de la validacion de un FUA ---
+// --- Resultado consolidado de la validacion de un visit ---
 
 export const ValidationResultSchema = z.object({
-    fua_numero: z.string(),
+    visit_uuid: z.string(),
     allowed: z.boolean(),
     blocks: z.array(RuleResultSchema),
     warnings: z.array(RuleResultSchema),
@@ -41,9 +41,9 @@ export function createRuleResult(params: {
     return RuleResultSchema.parse(params);
 }
 
-export function createEmptyValidationResult(fuaNumero: string): ValidationResult {
+export function createEmptyValidationResult(visitUuid: string): ValidationResult {
     return {
-        fua_numero: fuaNumero,
+        visit_uuid: visitUuid,
         allowed: true,
         blocks: [],
         warnings: [],
@@ -53,7 +53,7 @@ export function createEmptyValidationResult(fuaNumero: string): ValidationResult
 }
 
 export function consolidateResults(
-    fuaNumero: string,
+    visitUuid: string,
     results: RuleResult[]
 ): ValidationResult {
     const blocks = results.filter((r) => !r.passed && r.action === "BLOCK");
@@ -67,7 +67,7 @@ export function consolidateResults(
     }
 
     return {
-        fua_numero: fuaNumero,
+        visit_uuid: visitUuid,
         allowed: blocks.length === 0,
         blocks,
         warnings,

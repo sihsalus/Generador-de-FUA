@@ -1,7 +1,7 @@
 import { EdadCalculada } from "../context";
-import { FuaSchema } from "../fua";
+import { VisitPayloadSchema } from "../visitPayload";
 import { consolidateResults, createRuleResult } from "../results";
-import { FuaContext } from "../context";
+import { ValidationContext } from "../context";
 
 // --- Helpers ---
 
@@ -9,46 +9,111 @@ function date(str: string): Date {
     return new Date(str + "T00:00:00.000Z");
 }
 
-function buildFuaMinimo(overrides: Record<string, unknown> = {}) {
+function buildVisitPayloadMinimo(overrides: Record<string, unknown> = {}) {
     return {
-        numero_fua: "001-00001",
-        lote: "25",
-        codigo_prestacional: "301",
-        fecha_atencion: date("2025-03-15"),
-        asegurado: {
-            documento_identidad: "12345678",
-            tipo_documento: "DNI",
-            nombres: "JUAN",
-            apellido_paterno: "PEREZ",
-            apellido_materno: "GARCIA",
+        uuid: "549e5078-ec89-41b5-9691-adb8e16999e4",
+        display: "Consulta Ambulatoria @ UPSS - CONSULTA EXTERNA - 25/03/2026 10:37",
+
+        patient: {
+            uuid: "26cdcb17-2226-474e-800b-155bc1ba2d25",
+            display: "58147747 - Ignacio TORRES CUETO",
+        },
+        patient_details: {
             fecha_nacimiento: date("1990-06-15"),
             sexo: "M",
-            codigo_afiliacion: "7-12345678",
-            contrato: "166",
+            nombres: "IGNACIO",
+            apellido_paterno: "TORRES",
+            apellido_materno: "CUETO",
+            documento_identidad: "58147747",
+            tipo_documento: "DNI",
         },
-        condicion: {
-            gestante: false,
-            puerpera: false,
-            hospitalizado: false,
+        visitType: {
+            uuid: "b1f0e8a1-9c5d-4f0e-8892-81f3140fbc09",
+            display: "Consulta Ambulatoria",
         },
-        responsable_atencion: {
-            tipo_profesional: 1,
-            colegiatura: "CMP-12345",
-            dni: "87654321",
+        location: {
+            uuid: "35d2234e-129a-4c40-abb2-1ae0b2400001",
+            display: "UPSS - CONSULTA EXTERNA",
         },
-        diagnosticos: [
-            { codigo_cie10: "J06.9", tipo: "DEFINITIVO", posicion: 1 },
-        ],
-        medicamentos: [],
-        insumos: [],
-        procedimientos: [],
-        actividades_preventivas: [],
-        ipress: {
-            codigo_renipress: "00000066",
-            nivel_atencion: "II",
-            categoria: "II-1",
+
+        startDatetime: date("2026-03-25"),
+        stopDatetime: null,
+
+        encounters: [],
+        attributes: [],
+
+        fua: {
+            numero_fua: "001-00234",
+            lote: "26",
+            fecha_digitacion: date("2026-03-26"),
+
+            ipress: {
+                codigo_renipress: "00000066",
+                nombre: "HOSPITAL II-1 SANTA CLOTILDE",
+                nivel_atencion: "II",
+                categoria: "II-1",
+                codigo_oferta_flexible: "",
+            },
+
+            codigo_prestacional: "301",
+            codigos_prestacionales_adicionales: [],
+            ups: "001",
+            fua_vinculado: "",
+            reporte_vinculado: "",
+
+            asegurado_sis: {
+                codigo_asegurado: "7-58147747",
+                diresa: "166",
+                contrato: "S.I.S",
+            },
+            condicion: {
+                gestante: false,
+                puerpera: false,
+                hospitalizado: false,
+            },
+            hospitalizacion: {
+                fecha_ingreso: null,
+                atencion_directa: false,
+                cob_extraordinaria: false,
+                monto_cob: null,
+                carta_garantia: false,
+                monto_carta: null,
+                traslado: false,
+                sepelio: false,
+            },
+            destino_asegurado: "ALTA",
+            referencia: {
+                ipress_origen_codigo: "",
+                ipress_origen_nombre: "",
+                numero_hoja_referencia: "",
+                ipress_destino_codigo: "",
+                ipress_destino_nombre: "",
+            },
+            responsable_atencion: {
+                dni: "43218765",
+                tipo_profesional: 1,
+                colegiatura: "CMP-12345",
+            },
+
+            diagnosticos: [
+                {
+                    posicion: 1,
+                    descripcion: "RINOFARINGITIS AGUDA",
+                    codigo_cie10: "J00",
+                    tipo: "DEFINITIVO",
+                },
+            ],
+            medicamentos: [],
+            insumos: [],
+            procedimientos: [],
+
+            sub_componente_prestacional: {
+                medicamentos_monto: 0,
+                insumos_monto: 0,
+                procedimientos_monto: 0,
+            },
         },
-        fecha_digitacion: date("2025-03-16"),
+
         ...overrides,
     };
 }
@@ -131,124 +196,122 @@ describe("EdadCalculada", () => {
     });
 });
 
-// --- FuaSchema ---
+// --- VisitPayloadSchema ---
 
-describe("FuaSchema", () => {
-    it("valida un FUA minimo correcto", () => {
-        const result = FuaSchema.safeParse(buildFuaMinimo());
+describe("VisitPayloadSchema", () => {
+    it("valida un payload minimo correcto", () => {
+        const result = VisitPayloadSchema.safeParse(buildVisitPayloadMinimo());
         expect(result.success).toBe(true);
     });
 
-    it("falla sin numero_fua", () => {
-        const data = buildFuaMinimo();
-        delete (data as any).numero_fua;
-        const result = FuaSchema.safeParse(data);
+    it("falla sin uuid", () => {
+        const data = buildVisitPayloadMinimo();
+        delete (data as any).uuid;
+        const result = VisitPayloadSchema.safeParse(data);
         expect(result.success).toBe(false);
     });
 
-    it("falla con sexo invalido", () => {
-        const data = buildFuaMinimo({
-            asegurado: {
-                ...buildFuaMinimo().asegurado,
+    it("falla con sexo invalido en patient_details", () => {
+        const data = buildVisitPayloadMinimo({
+            patient_details: {
+                ...buildVisitPayloadMinimo().patient_details,
                 sexo: "X",
             },
         });
-        const result = FuaSchema.safeParse(data);
+        const result = VisitPayloadSchema.safeParse(data);
         expect(result.success).toBe(false);
     });
 
     it("acepta campos opcionales ausentes", () => {
-        const data = buildFuaMinimo();
-        const result = FuaSchema.safeParse(data);
+        const data = buildVisitPayloadMinimo();
+        const result = VisitPayloadSchema.safeParse(data);
         expect(result.success).toBe(true);
         if (result.success) {
-            expect(result.data.fecha_ingreso).toBeUndefined();
-            expect(result.data.fecha_alta).toBeUndefined();
-            expect(result.data.destino_asegurado).toBeUndefined();
+            expect(result.data.stopDatetime).toBeNull();
         }
     });
 
     it("acepta fechas como string ISO", () => {
-        const data = buildFuaMinimo({
-            fecha_atencion: "2025-03-15",
+        const data = buildVisitPayloadMinimo({
+            startDatetime: "2026-03-25T10:37:40.000+0000",
         });
-        const result = FuaSchema.safeParse(data);
+        const result = VisitPayloadSchema.safeParse(data);
         expect(result.success).toBe(true);
     });
 
     it("valida diagnostico con tipo invalido", () => {
-        const data = buildFuaMinimo({
+        const data = buildVisitPayloadMinimo();
+        data.fua = {
+            ...data.fua,
             diagnosticos: [
-                { codigo_cie10: "J06.9", tipo: "INVALIDO", posicion: 1 },
+                { posicion: 1, descripcion: "TEST", codigo_cie10: "J06.9", tipo: "INVALIDO" },
             ],
-        });
-        const result = FuaSchema.safeParse(data);
+        } as any;
+        const result = VisitPayloadSchema.safeParse(data);
         expect(result.success).toBe(false);
+    });
+
+    it("falla sin numero_fua en bloque fua", () => {
+        const data = buildVisitPayloadMinimo();
+        delete (data.fua as any).numero_fua;
+        const result = VisitPayloadSchema.safeParse(data);
+        expect(result.success).toBe(false);
+    });
+
+    it("valida patient_details completo", () => {
+        const data = buildVisitPayloadMinimo();
+        const result = VisitPayloadSchema.safeParse(data);
+        expect(result.success).toBe(true);
+        if (result.success) {
+            expect(result.data.patient_details.documento_identidad).toBe("58147747");
+            expect(result.data.patient_details.sexo).toBe("M");
+        }
     });
 });
 
-// --- FuaContext ---
+// --- ValidationContext ---
 
-describe("FuaContext", () => {
-    const historialVacio = {
-        fuas_previos: [],
-        prestaciones_periodo: {},
-    };
-
-    it("calcula edad automaticamente", () => {
-        const ctx = new FuaContext({
-            fua: buildFuaMinimo() as any,
-            historial_asegurado: historialVacio,
+describe("ValidationContext", () => {
+    it("calcula edad automaticamente desde patient_details", () => {
+        const ctx = new ValidationContext({
+            visit: buildVisitPayloadMinimo() as any,
         });
-        expect(ctx.edad_calculada.anios).toBe(34);
+        expect(ctx.edad_calculada.anios).toBe(35);
     });
 
     it("diagnosticoPrincipal retorna el de posicion 1", () => {
-        const ctx = new FuaContext({
-            fua: buildFuaMinimo() as any,
-            historial_asegurado: historialVacio,
+        const ctx = new ValidationContext({
+            visit: buildVisitPayloadMinimo() as any,
         });
-        expect(ctx.diagnosticoPrincipal).toBe("J06.9");
+        expect(ctx.diagnosticoPrincipal).toBe("J00");
     });
 
     it("diagnosticoPrincipal retorna undefined sin diagnosticos", () => {
-        const ctx = new FuaContext({
-            fua: buildFuaMinimo({ diagnosticos: [] }) as any,
-            historial_asegurado: historialVacio,
-        });
+        const data = buildVisitPayloadMinimo();
+        data.fua = { ...data.fua, diagnosticos: [] };
+        const ctx = new ValidationContext({ visit: data as any });
         expect(ctx.diagnosticoPrincipal).toBeUndefined();
     });
 
-    it("prestacionesDelMismoCodigo retorna array vacio si no hay historial", () => {
-        const ctx = new FuaContext({
-            fua: buildFuaMinimo() as any,
-            historial_asegurado: historialVacio,
+    it("codigoPrestacional retorna el codigo del bloque fua", () => {
+        const ctx = new ValidationContext({
+            visit: buildVisitPayloadMinimo() as any,
         });
-        expect(ctx.prestacionesDelMismoCodigo).toEqual([]);
+        expect(ctx.codigoPrestacional).toBe("301");
     });
 
-    it("prestacionesDelMismoCodigo filtra por codigo prestacional", () => {
-        const resumen = {
-            numero_fua: "001-00002",
-            codigo_prestacional: "301",
-            fecha_atencion: date("2025-02-01"),
-            diagnosticos_principales: ["J06.9"],
-            ipress_codigo: "00000066",
-        };
-        const ctx = new FuaContext({
-            fua: buildFuaMinimo() as any,
-            historial_asegurado: {
-                fuas_previos: [resumen],
-                prestaciones_periodo: { "301": [resumen] },
-            },
-        });
-        expect(ctx.prestacionesDelMismoCodigo).toHaveLength(1);
+    it("falla con datos invalidos", () => {
+        expect(() => {
+            new ValidationContext({ visit: {} as any });
+        }).toThrow("ValidationContext: datos invalidos");
     });
 });
 
 // --- Results ---
 
 describe("consolidateResults", () => {
+    const visitUuid = "549e5078-ec89-41b5-9691-adb8e16999e4";
+
     it("allowed es true sin bloqueos", () => {
         const results = [
             createRuleResult({
@@ -258,9 +321,10 @@ describe("consolidateResults", () => {
                 action: "BLOCK",
             }),
         ];
-        const validation = consolidateResults("001-00001", results);
+        const validation = consolidateResults(visitUuid, results);
         expect(validation.allowed).toBe(true);
         expect(validation.blocks).toHaveLength(0);
+        expect(validation.visit_uuid).toBe(visitUuid);
     });
 
     it("allowed es false con al menos un bloqueo fallido", () => {
@@ -273,7 +337,7 @@ describe("consolidateResults", () => {
                 message: "FUA bloqueado",
             }),
         ];
-        const validation = consolidateResults("001-00001", results);
+        const validation = consolidateResults(visitUuid, results);
         expect(validation.allowed).toBe(false);
         expect(validation.blocks).toHaveLength(1);
     });
@@ -288,7 +352,7 @@ describe("consolidateResults", () => {
                 message: "Advertencia",
             }),
         ];
-        const validation = consolidateResults("001-00001", results);
+        const validation = consolidateResults(visitUuid, results);
         expect(validation.allowed).toBe(true);
         expect(validation.warnings).toHaveLength(1);
     });
@@ -310,7 +374,7 @@ describe("consolidateResults", () => {
                 details: { field_name: "insumos" },
             }),
         ];
-        const validation = consolidateResults("001-00001", results);
+        const validation = consolidateResults(visitUuid, results);
         expect(validation.enabled_fields).toEqual({
             medicamentos: true,
             insumos: false,
