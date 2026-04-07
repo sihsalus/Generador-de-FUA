@@ -68,7 +68,7 @@ const EntityScriptCrudController = {
 
   async getById(req: Request, res: Response): Promise<void> {
     try {
-      const record = await EntityScriptService.getByIdOrUUID(req.params.id);
+      const record = await EntityScriptService.getByIdOrUUID(req.params.id as string);
       if (!record) {
         res.status(404).json({ success: false, error: "No encontrado." });
         return;
@@ -82,7 +82,7 @@ const EntityScriptCrudController = {
           logType: Logger_LogType.READ,
           environmentType: loggerInstance.enviroment.toString(),
           description: "Getting EntityScript by Id successful",
-          content: { objectName: ENTITY_NAME, id: req.params.id },
+          content: { objectName: ENTITY_NAME, id: req.params.id as string },
         }),
         LOG_TARGETS
       );
@@ -152,7 +152,7 @@ const EntityScriptCrudController = {
 
   async update(req: Request, res: Response): Promise<void> {
     try {
-      const record = await EntityScriptService.update(req.params.id, req.body);
+      const record = await EntityScriptService.update(req.params.id as string, req.body);
 
       loggerInstance.printLog(
         new Log({
@@ -162,7 +162,7 @@ const EntityScriptCrudController = {
           logType: Logger_LogType.EDIT,
           environmentType: loggerInstance.enviroment.toString(),
           description: "Updating EntityScript successful",
-          content: { objectName: ENTITY_NAME, id: req.params.id },
+          content: { objectName: ENTITY_NAME, id: req.params.id as string },
         }),
         LOG_TARGETS
       );
@@ -196,7 +196,7 @@ const EntityScriptCrudController = {
         return;
       }
 
-      const record = await EntityScriptService.softDelete(req.params.id, deletedBy);
+      const record = await EntityScriptService.softDelete(req.params.id as string, deletedBy);
 
       loggerInstance.printLog(
         new Log({
@@ -206,7 +206,7 @@ const EntityScriptCrudController = {
           logType: Logger_LogType.DELETE,
           environmentType: loggerInstance.enviroment.toString(),
           description: "Soft-deleting EntityScript successful",
-          content: { objectName: ENTITY_NAME, id: req.params.id },
+          content: { objectName: ENTITY_NAME, id: req.params.id as string },
         }),
         LOG_TARGETS
       );

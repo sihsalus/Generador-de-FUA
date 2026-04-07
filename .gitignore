@@ -39,3 +39,7 @@ Thumbs.db
 .npm/
 .cache/
 coverage/
+
+# Binary documents (spreadsheets, etc.)
+*.xlsx
+*.xls

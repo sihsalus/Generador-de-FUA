@@ -93,7 +93,7 @@ app.get('/', (req, res) => {
 
 // Ruta para obtener un paciente por ID
 app.get('/patient/:id', async (req, res) => {
-  const { id } = req.params;
+  const id = req.params.id as string;
   const patient = await getPatient(id);
   if (patient) {
     res.json(patient);

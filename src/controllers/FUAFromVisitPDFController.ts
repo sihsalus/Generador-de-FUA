@@ -17,7 +17,7 @@ const FUAFromVisitPDFController = {
     },
 
     async getPDF (req: Request, res: Response): Promise<void> {
-        const id = req.params.id;
+        const id = req.params.id as string;
         try{
             const pdfBytes = await FUAFromVisitPDFService.getPDF(id);
 

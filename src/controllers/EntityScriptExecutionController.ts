@@ -65,7 +65,7 @@ const EntityScriptExecutionController = {
 
   async executeStored(req: Request, res: Response): Promise<void> {
     try {
-      const { id } = req.params;
+      const id = req.params.id as string;
       const { entity, payload } = req.body;
 
       const result = await EntityScriptService.executeStored(id, entity, payload);
