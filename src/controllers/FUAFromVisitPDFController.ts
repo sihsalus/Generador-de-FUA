@@ -1,11 +1,15 @@
 import { Request, Response} from 'express';
 import FUAFromVisitPDFService from '../services/FUAFromVisitPDFService';
+import { paginationWrapper } from '../utils/newPaginationWrapper';
 
 const FUAFromVisitPDFController = {
 
     async listAll (req: Request, res: Response): Promise<void> {
         try {
-            const listFUAFromVisitPDF = await FUAFromVisitPDFService.listAll();
+            const listFUAFromVisitPDF = await paginationWrapper(
+                req,
+                FUAFromVisitPDFService.listAll
+            );
             res.status(200).json(listFUAFromVisitPDF);
         } catch (err: any) {
             res.status(500).json({

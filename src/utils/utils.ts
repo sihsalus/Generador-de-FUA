@@ -7,6 +7,7 @@ import puppeteer from "puppeteer";
 const archiver = require('archiver');
 import { PassThrough } from 'stream';
 import { importPayloadToMapping } from "./mappingUtils";
+import { createPackage, sumAux } from '../services/SETISIS_PackageGenerator';
 
 
 
@@ -240,33 +241,9 @@ export function decryptBuffer(encrypted: Buffer, password: string): Buffer {
   return plain;
 }
 
-
-
-
-
-
-
-// export async function createZipFromAttentions(): Promise<void>{
-
-// }
-
-//Tests of hash functions
-
-/* const record = { patientId: "123", name: "Alice" };
-
-const hash = generateSHA256Hash(JSON.stringify(record));
-
-console.log("Hash:", hash);
-console.log("Verify:", verifyHash(JSON.stringify(record), hash)); // true
-console.log("Verify with wrong content:", verifyHash(JSON.stringify({ patientId: "456" }), hash)); // false
- */
-
-
-
-
 export type FactoryTypesTarget = 'integer' | 'boolean' | 'string';
 
-export function parseAs(value: string, target: FactoryTypesTarget): number | boolean | string {
+export function parseAs(value: string | null, target: FactoryTypesTarget): null | number | boolean | string {
   if (value === null || value === undefined) {
     return value;
   }
@@ -298,4 +275,32 @@ export function parseAs(value: string, target: FactoryTypesTarget): number | boo
     }
   }
 
+}
+
+/**
+ * Executes a frame-mapping script file directly through require (no VM).
+ * @param filePath Relative path to a mapping script file (for example: ./src/utils/FUA_FrameMapping_Examples/test_1.0.js)
+ * @param payloadArray Input array available in the VM as payloadArray
+ * @param extraUtils Additional utility functions to expose under utils by their function name
+ * @returns Whatever the script returns
+ */
+export function debugFrameMapping(filePath: string, payloadArray: any[], extraUtils: Function[] = []): any {
+  const mappingPath = path.resolve(process.cwd(), filePath);
+
+  if (!fs.existsSync(mappingPath)) {
+    throw new Error(`debugFrameMapping: file not found: ${mappingPath}`);
+  }
+
+
+  const utilsToUse = [sumAux, isValidUUIDv4, ...extraUtils];
+  const utils = Object.freeze(
+    utilsToUse
+      .filter((fn: any) => typeof fn === 'function' && fn.name)
+      .reduce((acc: Record<string, Function>, fn: Function) => { acc[fn.name] = fn; return acc; }, {})
+  );
+
+  delete require.cache[mappingPath];
+  const mappingFunction = require(mappingPath);
+
+  return mappingFunction(payloadArray, utils);
 }
