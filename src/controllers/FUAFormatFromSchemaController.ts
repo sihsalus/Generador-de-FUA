@@ -4,8 +4,8 @@ const fs = require('fs');
 const path = require('path');
 import { parse } from 'jsonc-parser';
 import FUAFormatFromSchemaService from '../services/FUAFormatFromSchemaService';
-import { inspect } from "util";
 import { pdfMetadataHashSignatureVerification } from '../utils/PDF_HASH_Signature';
+
 
 // Other imports
 import {Log} from '../middleware/logger/models/typescript/Log';
@@ -14,10 +14,8 @@ import { Logger_LogLevel } from '../middleware/logger/models/typescript/LogLevel
 import { Logger_SecurityLevel } from '../middleware/logger/models/typescript/SecurityLevel';
 import { Logger_LogType } from '../middleware/logger/models/typescript/LogType';
 import { transactionInst } from '../middleware/globalTransaction';
-import { UUID } from 'sequelize';
-import { paginationWrapper } from '../utils/newPaginationWrapper';
+import { baseEntityPaginationParamObject, paginationWrapper } from '../utils/newPaginationWrapper';
 import dotenv from "dotenv";
-import { log } from 'console';
 dotenv.config();
 
 
@@ -103,30 +101,15 @@ class FUAFormatFromSchemaController {
         try {
 
             // pagination object (passed through listAll)
-            const paginationParams = {
-                page: req.query.page,
-                pageSize: req.query.pageSize,
-            };
 
-            const baseEntityPaginationParams = {
-                id: req.query.id,
-                uuid: req.query.uuid,
-                createdBy: req.query.createdBy,
-                updatedBy: req.query.updatedBy,
-                active: req.query.active,
-                includeInactive : req.query.includeInactive,
-                inactiveBy: req.query.inactiveBy,
-                inactiveAt: req.query.inactiveAt,
-                beforeInactiveAt: req.query.beforeInactiveAt,
-                afterInactiveAt: req.query.afterInactiveAt,
-                inactiveReason: req.query.inactiveReason,
-                beforeCreatedAt: req.query.beforeCreatedAt,
-                afterCreatedAt: req.query.afterCreatedAt,
-                beforeUpdatedAt: req.query.beforeUpdatedAt,
-                afterUpdatedAt: req.query.afterUpdatedAt
-            };
+            // Build paginationParam
+            //let paramObject = baseEntityPaginationParamObject(req);
 
-            const listFUAFormats = await paginationWrapper(paginationParams, baseEntityPaginationParams);
+            const listFUAFormats = await paginationWrapper(
+                req, 
+                FUAFormatFromSchemaService.listAll.bind(FUAFormatFromSchemaService)
+            );
+
             let auxLog = new Log({
                 timeStamp: new Date(),
                 logLevel: Logger_LogLevel.INFO,
@@ -135,7 +118,7 @@ class FUAFormatFromSchemaController {
                 environmentType: loggerInstance.enviroment.toString(),
                 content: {
                     objectName: this.entityName,
-                    object: listFUAFormats.rows.map( (auxFuaFormat : any) => ({
+                    object: listFUAFormats.results.map( (auxFuaFormat : any) => ({
                         uuid:  auxFuaFormat.uuid
                     }))
                 },
@@ -147,13 +130,7 @@ class FUAFormatFromSchemaController {
                 { name: "database" }
             ]);   
 
-            res.status(200).json({
-                results: listFUAFormats.rows,
-                page: paginationParams.page,
-                pageSize: paginationParams.pageSize,
-                totalPages: listFUAFormats.pages,
-                totalResults: listFUAFormats.total
-            });
+            res.status(200).json(listFUAFormats);
         } catch (err: any) {
             res.status(500).json({
                 error: 'Failed to list FUA Formats From Schema. (Controller)', 

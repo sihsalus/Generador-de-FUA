@@ -1,6 +1,7 @@
 import { Request, Response} from 'express';
 
 import FUAFromVisitService from '../services/FUAFromVisitService';
+import { paginationWrapper } from '../utils/newPaginationWrapper';
 
 
 
@@ -110,9 +111,13 @@ const FUAFromVisitController = {
 
     // Pending pagination
     async listAll (req: Request, res: Response): Promise<void> {
+        
         try {
-            const listFUASection = await FUAFromVisitService.listAll();
-            res.status(200).json(listFUASection);
+            const listFUAs = await paginationWrapper(
+                req,
+                FUAFromVisitService.listAll.bind(FUAFromVisitService)
+            );
+            res.status(200).json(listFUAs);
         } catch (err: any) {
             res.status(500).json({
                 error: 'Failed to list FUA From Visit. (Controller)', 

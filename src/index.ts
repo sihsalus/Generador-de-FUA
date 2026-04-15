@@ -8,6 +8,7 @@ import { pdfMetadataAccess } from './utils/PDF_HASH_Signature';
 import { pdfMetadataHashSignature } from './utils/PDF_HASH_Signature';
 import { pdfMetadataHashSignatureVerification } from './utils/PDF_HASH_Signature';
 import * as utils from './utils/utils';
+import fs from 'fs';
 
 // PDF Generation
 import puppeteer, { Browser } from "puppeteer";
@@ -30,6 +31,7 @@ import { Logger_LogLevel } from './utils/LegLevelEnum';
 import { Logger_SecurityLevel } from './middleware/logger/models/typescript/SecurityLevel';
 import { Logger_LogType } from './middleware/logger/models/typescript/LogType';
 import { multerErrorHandler, upload } from './middleware/multerMemory';
+import { createPackage, sumAux } from './services/SETISIS_PackageGenerator';
 
 
 // Parameters and other options
@@ -305,24 +307,69 @@ app.post(
 );
 
 
+app.get('/testFrameMapping',(req, res) => {
+  utils.debugFrameMapping(
+    './src/utils/FUA_FrameMapping_Examples/test_1.0.js',
+    [{
+            attentionId: "ATN0000001",              // 10 chars
+            RENIPRESS_code: "12345678",             // 8 chars
+            batchCode: "AB",
+            FUA_prePrinted: "1",
+            DISA_Code: "15",
+            batchSISPatient: "01",
+            formatCodeInsuredPatient: "00012345",
+            insuredContractTableType: "A"
+        },
+        {
+            attentionId: "ATN0000002",
+            RENIPRESS_code: "87654321",
+            batchCode: "BC",
+            FUA_prePrinted: "0",
+            DISA_Code: null,                        // tests optional field
+            batchSISPatient: "02",
+            formatCodeInsuredPatient: "00067890",
+            insuredContractTableType: null          // tests optional field
+        }],
+  );
+  res.sendFile(path.resolve(__dirname, './public/FUA_Previsualization.html'));
+});
 
-//TESTING LOGGER DB
-/* app.get('/logger-db', async (req, res) => { //test in DB
-  try {
-    //const aux = logger.testDB(auxLog);
-    const aux = logger.printLog(auxLog, [
-    { name: "terminal" },
-    { name: "file", file: "./logs/auxLog.log" },
-    { name: "database" }
-    ]);
-    res.status(200).send('okay');
-  } catch (err: unknown) {
-    console.error(err);
-    res.status(500).json({
-      error: 'Failed to create log. ', 
-      message: (err as (Error)).message,
-      details: (err as any).details ?? null,
-    });
-  }
-}); */
+
+app.get('/testFrameMappingVM', (_req, res) => {
+  const scriptPath = path.resolve(process.cwd(), './src/utils/FUA_FrameMapping_Examples/test_1.0.js');
+  const scriptString = fs.readFileSync(scriptPath, 'utf-8');
+  const dataInput = [
+    {
+      attentionId: "ATN0000001",
+      RENIPRESS_code: "12345678",
+      batchCode: "AB",
+      FUA_prePrinted: "1",
+      DISA_Code: "15",
+      batchSISPatient: "01",
+      formatCodeInsuredPatient: "00012345",
+      insuredContractTableType: "A"
+    },
+    {
+      attentionId: "ATN0000002",
+      RENIPRESS_code: "87654321",
+      batchCode: "BC",
+      FUA_prePrinted: "0",
+      DISA_Code: null,
+      batchSISPatient: "02",
+      formatCodeInsuredPatient: "00067890",
+      insuredContractTableType: null
+    }
+  ];
+  const result = createPackage([sumAux, utils.isValidUUIDv4], dataInput, scriptString, { scriptName: 'test_1.0.js' });
+  res.send(result);
+});
+
+app.get('/testFrameMapping2', (req, res) => {
+  const fs = require('fs');
+  const scriptString = fs.readFileSync(
+    './src/utils/FUA_FrameMapping_Examples/test_1.0.js', 'utf-8'
+  );
+  const result = createPackage([sumAux, utils.isValidUUIDv4], [], scriptString);
+  res.send(result);
+});
 
