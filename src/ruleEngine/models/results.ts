@@ -52,6 +52,35 @@ export function createEmptyValidationResult(visitUuid: string): ValidationResult
     };
 }
 
+// --- Registro persistido en BD (RuleValidationResultModel) ---
+
+export const RuleValidationRecordSchema = z.object({
+    visit_uuid: z.string(),
+    allowed: z.boolean(),
+    blocks: z.array(RuleResultSchema),
+    warnings: z.array(RuleResultSchema),
+    enabled_fields: z.record(z.string(), z.boolean()),
+    rules_evaluated: z.number().int().min(0),
+    execution_time_ms: z.number().int().min(0),
+});
+export type RuleValidationRecord = z.infer<typeof RuleValidationRecordSchema>;
+
+export function toRuleValidationRecord(
+    result: ValidationResult,
+    rulesEvaluated: number,
+    executionTimeMs: number
+): RuleValidationRecord {
+    return {
+        visit_uuid: result.visit_uuid,
+        allowed: result.allowed,
+        blocks: result.blocks,
+        warnings: result.warnings,
+        enabled_fields: result.enabled_fields,
+        rules_evaluated: rulesEvaluated,
+        execution_time_ms: executionTimeMs,
+    };
+}
+
 export function consolidateResults(
     visitUuid: string,
     results: RuleResult[]

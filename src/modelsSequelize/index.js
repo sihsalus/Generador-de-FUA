@@ -13,6 +13,7 @@ import BaseEntityVersionModel from "./BaseEntityVersionModel.js";
 import BaseEntityVersion_MiddleTableModel from './BaseEntityVersion_MiddleTableModel.js';
 import FUAFormatFromSchemaModel from './FUAFormatFromSchemaModel';
 import EntityScriptModel from './EntityScriptModel';
+import RuleValidationResultModel from './RuleValidationResultModel';
 
 
 // Foreign keys
@@ -119,5 +120,6 @@ export {
     FUAFromVisitPDFModel,
     BaseEntityVersionModel,
     BaseEntityVersion_MiddleTableModel,
-    EntityScriptModel
+    EntityScriptModel,
+    RuleValidationResultModel,
 };
