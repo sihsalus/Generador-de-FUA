@@ -11,7 +11,7 @@ const createEntityScriptSchema = z.object({
   description: z.string().optional(),
   scriptContent: z.string().min(1),
   targetEntity: z.string().min(1),
-  maxChars: z.number().int().min(50).max(10000).default(2000),
+  maxChars: z.number().int().min(50).max(50000).default(2000),
   maxTimeMs: z.number().int().min(50).max(5000).default(1000),
   createdBy: z.string().min(1),
 });
@@ -21,7 +21,7 @@ const updateEntityScriptSchema = z.object({
   description: z.string().optional(),
   scriptContent: z.string().min(1).optional(),
   targetEntity: z.string().min(1).optional(),
-  maxChars: z.number().int().min(50).max(10000).optional(),
+  maxChars: z.number().int().min(50).max(50000).optional(),
   maxTimeMs: z.number().int().min(50).max(5000).optional(),
   updatedBy: z.string().min(1),
 });
@@ -30,7 +30,7 @@ const executeAdHocSchema = z.object({
   entity: z.record(z.any()),
   payload: z.record(z.any()),
   script: z.string().min(1),
-  maxChars: z.number().int().min(50).max(10000).default(2000),
+  maxChars: z.number().int().min(50).max(50000).default(2000),
   maxTimeMs: z.number().int().min(50).max(5000).default(1000),
 });
 

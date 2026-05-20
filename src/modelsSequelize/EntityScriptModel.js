@@ -39,7 +39,7 @@ const EntityScriptModel = sequelize.define(
       allowNull: false,
       defaultValue: 2000,
       field: "max_chars",
-      validate: { min: 50, max: 10000 },
+      validate: { min: 50, max: 50000 },
     },
     maxTimeMs: {
       type: DataTypes.INTEGER,

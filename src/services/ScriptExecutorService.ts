@@ -189,10 +189,7 @@ export class ScriptExecutorService {
         stringify: JSON.stringify,
       },
       Math,
-      Date: {
-        now: () => Date.now(),
-        toISOString: (ms: number) => new Date(ms).toISOString(),
-      },
+      Date,
       String,
       Number,
       Boolean,
