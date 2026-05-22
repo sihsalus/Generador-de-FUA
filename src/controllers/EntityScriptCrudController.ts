@@ -188,6 +188,65 @@ const EntityScriptCrudController = {
     }
   },
 
+  async createFromFile(req: Request, res: Response): Promise<void> {
+    try {
+      const file = req.file;
+      if (!file) {
+        res.status(400).json({ success: false, error: "Se requiere el archivo JS (campo 'scriptFile')." });
+        return;
+      }
+
+      const scriptContent = file.buffer.toString("utf-8");
+      const { name, description, targetEntity, maxChars, maxTimeMs, createdBy } = req.body;
+
+      const record = await EntityScriptService.create({
+        name,
+        description,
+        scriptContent,
+        targetEntity,
+        maxChars: maxChars ? parseInt(maxChars) : undefined,
+        maxTimeMs: maxTimeMs ? parseInt(maxTimeMs) : undefined,
+        createdBy,
+      });
+
+      loggerInstance.printLog(
+        new Log({
+          timeStamp: new Date(),
+          logLevel: Logger_LogLevel.INFO,
+          securityLevel: Logger_SecurityLevel.Admin,
+          logType: Logger_LogType.CREATE,
+          environmentType: loggerInstance.enviroment.toString(),
+          description: `EntityScript created from file: ${name}`,
+          content: { objectName: ENTITY_NAME, name: record.name },
+        }),
+        LOG_TARGETS
+      );
+
+      res.status(201).json({ success: true, data: record });
+    } catch (err: any) {
+      if (err.name === "SequelizeUniqueConstraintError") {
+        res.status(409).json({ success: false, error: "Ya existe un script con ese nombre." });
+        return;
+      }
+      loggerInstance.printLog(
+        new Log({
+          timeStamp: new Date(),
+          logLevel: Logger_LogLevel.ERROR,
+          securityLevel: Logger_SecurityLevel.Admin,
+          logType: Logger_LogType.CREATE,
+          environmentType: loggerInstance.enviroment.toString(),
+          description: `EntityScript createFromFile error: ${err.message}`,
+        }),
+        LOG_TARGETS
+      );
+      res.status(500).json({
+        error: "Failed to create EntityScript from file. (Controller)",
+        message: (err as Error).message,
+        details: (err as any).details ?? null,
+      });
+    }
+  },
+
   async softDelete(req: Request, res: Response): Promise<void> {
     try {
       const deletedBy = req.body.deletedBy;

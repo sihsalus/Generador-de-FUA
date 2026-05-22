@@ -35,6 +35,34 @@ import { multerErrorHandler, upload } from './middleware/multerMemory';
 // Parameters and other options
 const app = express();
 
+import swaggerUi from 'swagger-ui-express';
+import swaggerJsdoc from 'swagger-jsdoc';
+
+const swaggerOptions = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'Generador de FUA API',
+      version: '1.0.0',
+    },
+    servers: [{ url: 'http://localhost:3000' }],
+    components: {
+      securitySchemes: {
+        fuagentoken: {
+          type: 'apiKey',
+          in: 'header',
+          name: 'fuagentoken',
+        },
+      },
+    },
+  },
+  apis: ['./src/routes/*.ts'],
+};
+
+const swaggerSpec = swaggerJsdoc(swaggerOptions);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+
 
 const port = process.env.PORT || 3000;
 
@@ -166,7 +194,7 @@ app.get('/demopdf', async (req, res) => {
     // 2) Charger le HTML (équiv. à wkhtmltopdf qui lit une string)
     //    Si ton HTML référence des CSS/images relatives, passe un baseURL (file://… ou http://…)
     await page.setContent(demoAnswer, {
-      waitUntil: "networkidle0",
+      waitUntil: "load",
     });
 
     // 4) Deux façons de fixer la taille 210×306 mm :

@@ -126,6 +126,10 @@ function sexoCoincide(sexo_tabla, sexo_paciente) {
 // Lógica principal
 // ---------------------------------------------------------------------------
 
+if (!payload || !payload.fua) {
+    entity.passed = false; entity.action = "SKIP"; entity.message = "Payload vacío (dry-run)";
+} else {
+
 var cod = payload.fua.codigo_prestacional;
 var fila = null;
 for (var i = 0; i < TABLA_RC01.length; i++) {
@@ -202,3 +206,5 @@ if (!fila) {
     entity.action    = "BLOCK";
     entity.message   = error !== null ? error : "Código prestacional " + cod + " válido para el paciente";
 }
+
+} // end dry-run guard
