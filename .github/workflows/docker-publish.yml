@@ -15,7 +15,6 @@ permissions:
   actions: write
   contents: read
   packages: write
-  actions: write
 
 env:
   REGISTRY: ghcr.io
