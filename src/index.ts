@@ -168,7 +168,7 @@ app.get('/demopdf', async (req, res) => {
     // 2) Charger le HTML (équiv. à wkhtmltopdf qui lit une string)
     //    Si ton HTML référence des CSS/images relatives, passe un baseURL (file://… ou http://…)
     await page.setContent(demoAnswer, {
-      waitUntil: "networkidle0",
+      waitUntil: "load",
     });
 
     // 4) Deux façons de fixer la taille 210×306 mm :
