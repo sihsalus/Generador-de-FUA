@@ -10,6 +10,11 @@ services:
      # - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # Optional initialization
     ports:
       - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${FuaGen_DB__USER:-fuagenerator} -d ${FuaGen_DB_NAME:-fuagenerator}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
 
   app:
@@ -19,9 +24,9 @@ services:
         condition: service_healthy
     environment:
       DB_HOST: db
-      DB_USER: ${DB_USER:-postgres}
-      DB_PASSWORD: ${DB_PASSWORD:-postgres}
-      DB_NAME: ${DB_NAME:-mydatabase}
+      DB_USER: ${FuaGen_DB__USER:-fuagenerator}
+      DB_PASSWORD: ${FuaGen_DB_PASSWORD:-fuagenerator}
+      DB_NAME: ${FuaGen_DB_NAME:-fuagenerator}
       DB_PORT: 5432
     ports:
       - "3000:3000"

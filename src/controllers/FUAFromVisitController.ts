@@ -35,7 +35,7 @@ const FUAFromVisitController = {
     },
 
     async render (req: Request, res: Response) : Promise<void>{
-        const id = req.params.id;
+        const id = req.params.id as string;
 
         let htmlRender : string = "";
 
@@ -87,7 +87,7 @@ const FUAFromVisitController = {
     },
 
     async generateSignedPdf(req: Request, res: Response): Promise<void> {
-        const id = req.params.id;
+        const id = req.params.id as string;
         
         let pdfBytes = null;
         
@@ -128,7 +128,7 @@ const FUAFromVisitController = {
     },
 
     async getById (req: Request, res: Response): Promise<void> {
-        const payload = req.params.id;
+        const payload = req.params.id as string;
 
         let searchedFUA = null;
 
@@ -154,8 +154,8 @@ const FUAFromVisitController = {
     },
 
     async addFUAinQueue(req: Request, res: Response): Promise<void>{
-        const fuaUUID = req.query.uuid;
-        const fuaVisitUUID = req.query.visitUuid;
+        const fuaUUID = req.query.uuid as string;
+        const fuaVisitUUID = req.query.visitUuid as string;
         try{
             FUAFromVisitService.addFUAinQueue(fuaUUID, fuaVisitUUID);
             res.status(200).json({result : `FUA ${fuaUUID} added in the queue.`});
@@ -169,7 +169,7 @@ const FUAFromVisitController = {
     },
 
     async addFUAinQueueFromDatabase(req: Request, res: Response): Promise<void>{
-        const fuaUUID = req.params.id;
+        const fuaUUID = req.params.id as string;
         let fuaVisitUUID = null;
         try{
             const fuaFromVisitFromDatabase = await FUAFromVisitService.getByIdOrUUID(fuaUUID as string);
@@ -194,7 +194,7 @@ const FUAFromVisitController = {
     },
     
     async removeFUAFromQueue(req: Request, res: Response): Promise<void>{
-        const fuaUUID = req.query.uuid;
+        const fuaUUID = req.query.uuid as string;
         try{
             const fuaReference = FUAFromVisitService.removeFUAfromQueue(fuaUUID);
             res.status(200).json({uuid: (await fuaReference).getUUID()});
