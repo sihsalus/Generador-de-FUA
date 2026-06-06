@@ -28,6 +28,13 @@ services:
       DB_PASSWORD: ${FuaGen_DB_PASSWORD:-fuagenerator}
       DB_NAME: ${FuaGen_DB_NAME:-fuagenerator}
       DB_PORT: 5432
+      TOKEN: ${TOKEN}
+      SECRET_KEY: ${SECRET_KEY}
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY}
+      HMAC_SECRET: ${HMAC_SECRET}
+      BACKEND_USERNAME: ${BACKEND_USERNAME}
+      BACKEND_PASSWORD: ${BACKEND_PASSWORD}
+      BACKEND_BASEURL: ${BACKEND_BASEURL}
     ports:
       - "3000:3000"
     links:
