@@ -2522,8 +2522,8 @@
                     "age": 0,
                     "birthdate": "2025-11-26T00:00:00.000+0000",
                     "birthdateEstimated": false,
-                    "dead": false,
-                    "deathDate": null,
+                    "dead": true,
+                    "deathDate": "2025-12-15T00:00:00.000+0000",
                     "causeOfDeath": null,
                     "preferredName": {
                         "uuid": "b433cb04-afbf-4db5-ba6c-1b69c4dd9ba0",

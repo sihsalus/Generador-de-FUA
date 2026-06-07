@@ -343,25 +343,25 @@ module.exports = {
                             fieldType: "Table",
                             mappings: [
                                 {
-                                    // DIA (col 1, row 1)
+                                    // DIA (col 2, row 1)
                                     target: "payload.patient.person.birthdate",
-                                    column: 1,
+                                    column: 2,
                                     row: 1,
                                     valueType: "String",
                                     extraProcessing: (value) => value?.substring(8, 10) || ""
                                 },
                                 {
-                                    // MES (col 2, row 1)
+                                    // MES (col 3, row 1)
                                     target: "payload.patient.person.birthdate",
-                                    column: 2,
+                                    column: 3,
                                     row: 1,
                                     valueType: "String",
                                     extraProcessing: (value) => value?.substring(5, 7) || ""
                                 },
                                 {
-                                    // AÑO (col 3, row 1)
+                                    // AÑO (col 4, row 1)
                                     target: "payload.patient.person.birthdate",
-                                    column: 3,
+                                    column: 4,
                                     row: 1,
                                     valueType: "String",
                                     extraProcessing: (value) => value?.substring(0, 4) || ""
@@ -383,6 +383,37 @@ module.exports = {
                                         if(ch !== undefined) return ch.display.slice("N° Historia Clínica = ".length).trim();
                                         return "???"
                                     }
+                                }
+                            ]
+                        },
+                        {
+                            // Fecha de Fallecimiento
+                            codeName: "DATE OF DEATH",
+                            fieldType: "Table",
+                            mappings: [
+                                {
+                                    // DIA (col 2, row 1)
+                                    target: "payload.patient.person.deathDate",
+                                    column: 2,
+                                    row: 1,
+                                    valueType: "String",
+                                    extraProcessing: (value) => value?.substring(8, 10) || ""
+                                },
+                                {
+                                    // MES (col 3, row 1)
+                                    target: "payload.patient.person.deathDate",
+                                    column: 3,
+                                    row: 1,
+                                    valueType: "String",
+                                    extraProcessing: (value) => value?.substring(5, 7) || ""
+                                },
+                                {
+                                    // AÑO (col 4, row 1)
+                                    target: "payload.patient.person.deathDate",
+                                    column: 4,
+                                    row: 1,
+                                    valueType: "String",
+                                    extraProcessing: (value) => value?.substring(0, 4) || ""
                                 }
                             ]
                         },
