@@ -338,6 +338,37 @@ module.exports = {
                             ]
                         },
                         {
+                            // Fecha de Nacimiento
+                            codeName: "BIRTHDATE",
+                            fieldType: "Table",
+                            mappings: [
+                                {
+                                    // DIA (col 1, row 1)
+                                    target: "payload.patient.person.birthdate",
+                                    column: 1,
+                                    row: 1,
+                                    valueType: "String",
+                                    extraProcessing: (value) => value?.substring(8, 10) || ""
+                                },
+                                {
+                                    // MES (col 2, row 1)
+                                    target: "payload.patient.person.birthdate",
+                                    column: 2,
+                                    row: 1,
+                                    valueType: "String",
+                                    extraProcessing: (value) => value?.substring(5, 7) || ""
+                                },
+                                {
+                                    // AÑO (col 3, row 1)
+                                    target: "payload.patient.person.birthdate",
+                                    column: 3,
+                                    row: 1,
+                                    valueType: "String",
+                                    extraProcessing: (value) => value?.substring(0, 4) || ""
+                                }
+                            ]
+                        },
+                        {
                             // Nro de Historia CLinica
                             codeName: "CLINIC HISTORY NUMBER",
                             fieldType: "Box",
@@ -351,51 +382,182 @@ module.exports = {
                                         );
                                         if(ch !== undefined) return ch.display.slice("N° Historia Clínica = ".length).trim();
                                         return "???"
-                                    }           
+                                    }
                                 }
                             ]
                         },
-                    ]
-                },
-                {
-                    codeName: "Triages Data",
-                    // Triages Data
-                    fields: [
                         {
-                            codeName: "Basic Triage",
+                            // Gestante y Puerpera
+                            codeName: "MATERNAL HEALTH",
                             fieldType: "Table",
                             mappings: [
                                 {
-                                    // Peso Value
+                                    // GESTANTE (row 1, col 2)
                                     target: "payload.encounters",
                                     column: 2,
                                     row: 1,
                                     valueType: "String",
                                     extraProcessing: (value) => {
                                         if (!Array.isArray(value)) return "";
-
-                                        const triage = value.find(
-                                            (item) => item?.encounterType?.name === "Triaje"
+                                        const consulta = value.find(
+                                            (item) => item?.encounterType?.name === "Consulta Médica"
                                         );
-
-                                        if (!triage) return "";
-  
-                                        const obsToFind = triage.obs.find(
-                                            (o) => o?.concept?.uuid === "5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                                        if (!consulta) return "";
+                                        const obs = consulta.obs?.find(
+                                            (o) => o?.concept?.display === "Gestante"
                                         );
-
-                                        if (!obsToFind || obsToFind.value === undefined || obsToFind.value === null) return "";
-                                        
-                                        if (isNaN(obsToFind.value)) 
-                                            return "";
-                                        else
-                                            return obsToFind.value.toFixed(1);
+                                        return obs?.value === true ? "X" : "";
+                                    }
+                                },
+                                {
+                                    // PUERPERA (row 2, col 2)
+                                    target: "payload.encounters",
+                                    column: 2,
+                                    row: 2,
+                                    valueType: "String",
+                                    extraProcessing: (value) => {
+                                        if (!Array.isArray(value)) return "";
+                                        const consulta = value.find(
+                                            (item) => item?.encounterType?.name === "Consulta Médica"
+                                        );
+                                        if (!consulta) return "";
+                                        const obs = consulta.obs?.find(
+                                            (o) => o?.concept?.display === "Puérpera"
+                                        );
+                                        return obs?.value === true ? "X" : "";
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            // Hospitalización
+                            codeName: "HOSPITALISATION",
+                            fieldType: "Table",
+                            mappings: [
+                                {
+                                    // SI (col 2, row 2)
+                                    target: "payload.encounters",
+                                    column: 2,
+                                    row: 2,
+                                    valueType: "String",
+                                    extraProcessing: (value) => {
+                                        if (!Array.isArray(value)) return "";
+                                        const consulta = value.find(
+                                            (item) => item?.encounterType?.name === "Consulta Médica"
+                                        );
+                                        if (!consulta) return "";
+                                        const obs = consulta.obs?.find(
+                                            (o) => o?.concept?.display === "Hospitalización"
+                                        );
+                                        return obs?.value === true ? "X" : "";
+                                    }
+                                },
+                                {
+                                    // NO (col 3, row 2)
+                                    target: "payload.encounters",
+                                    column: 3,
+                                    row: 2,
+                                    valueType: "String",
+                                    extraProcessing: (value) => {
+                                        if (!Array.isArray(value)) return "";
+                                        const consulta = value.find(
+                                            (item) => item?.encounterType?.name === "Consulta Médica"
+                                        );
+                                        if (!consulta) return "";
+                                        const obs = consulta.obs?.find(
+                                            (o) => o?.concept?.display === "Hospitalización"
+                                        );
+                                        return obs?.value === false ? "X" : "";
                                     }
                                 }
                             ]
                         }
                     ]
-
+                },
+                {
+                    codeName: "Triages Data",
+                    fields: [
+                        {
+                            codeName: "Basic Triage",
+                            fieldType: "Table",
+                            mappings: [
+                                {
+                                    target: "payload.encounters",
+                                    column: 2,
+                                    row: 1,
+                                    valueType: "String",
+                                    extraProcessing: (value) => {
+                                        if (!Array.isArray(value)) return "";
+                                        const triage = value.find(
+                                            (item) => item?.encounterType?.name === "Triaje"
+                                        );
+                                        if (!triage) return "";
+                                        const obsToFind = triage.obs.find(
+                                            (o) => o?.concept?.uuid === "5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                                        );
+                                        if (!obsToFind || obsToFind.value === undefined || obsToFind.value === null) return "";
+                                        if (isNaN(obsToFind.value)) return "";
+                                        return obsToFind.value.toFixed(1);
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    codeName: "Diagnostics data",
+                    fields: [
+                        {
+                            codeName: "Basic Triage",
+                            fieldType: "Table",
+                            mappings: [
+                                {
+                                    // DX INGRESO CIE-10 (columna 4, fila 2 = primer diagnóstico)
+                                    target: "payload.encounters",
+                                    column: 4,
+                                    row: 2,
+                                    valueType: "String",
+                                    extraProcessing: (value) => {
+                                        if (!Array.isArray(value)) return "";
+                                        const consulta = value.find(
+                                            (item) => item?.encounterType?.name === "Consulta Médica"
+                                        );
+                                        if (!consulta) return "";
+                                        const dx = consulta.obs?.find(
+                                            (o) => o?.concept?.uuid === "159947AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                                        );
+                                        return dx?.value ?? "";
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    codeName: "Visit Data",
+                    fields: [
+                        {
+                            codeName: "ATTENTION CODE",
+                            fieldType: "Box",
+                            mappings: [
+                                {
+                                    target: "payload.encounters",
+                                    valueType: "String",
+                                    extraProcessing: (value) => {
+                                        if (!Array.isArray(value)) return "";
+                                        const consulta = value.find(
+                                            (item) => item?.encounterType?.name === "Consulta Médica"
+                                        );
+                                        if (!consulta) return "";
+                                        const cod = consulta.obs?.find(
+                                            (o) => o?.concept?.uuid === "PRESCODE-0001-AAAAAAAAAAAAAAAAAAAAAAA"
+                                        );
+                                        return cod?.value ?? "";
+                                    }
+                                }
+                            ]
+                        }
+                    ]
                 }
             ]
         }

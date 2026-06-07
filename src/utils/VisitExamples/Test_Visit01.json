@@ -2408,6 +2408,51 @@
                             "groupMembers": null,
                             "value": "0101",
                             "obsDatetime": "2025-12-10T17:10:00.000+0000"
+                        },
+                        {
+                            "uuid": "c3d4e5f6-a7b8-9012-cdef-333333333301",
+                            "concept": {
+                                "uuid": "HOSPITALIZACION-0001-AAAAAAAAAAAAAAAAAAA",
+                                "display": "Hospitalización",
+                                "conceptClass": {
+                                    "uuid": "8d492774-c2cc-11de-8d13-0010c6dffd0f",
+                                    "display": "Misc"
+                                }
+                            },
+                            "display": "Hospitalización: No",
+                            "groupMembers": null,
+                            "value": false,
+                            "obsDatetime": "2025-12-10T17:10:00.000+0000"
+                        },
+                        {
+                            "uuid": "d4e5f6a7-b8c9-0123-defa-333333333302",
+                            "concept": {
+                                "uuid": "GESTANTE-0001-AAAAAAAAAAAAAAAAAAAAAAA",
+                                "display": "Gestante",
+                                "conceptClass": {
+                                    "uuid": "8d492774-c2cc-11de-8d13-0010c6dffd0f",
+                                    "display": "Misc"
+                                }
+                            },
+                            "display": "Gestante: Si",
+                            "groupMembers": null,
+                            "value": true,
+                            "obsDatetime": "2025-12-10T17:10:00.000+0000"
+                        },
+                        {
+                            "uuid": "e5f6a7b8-c9d0-1234-efab-333333333303",
+                            "concept": {
+                                "uuid": "PUERPERA-0001-AAAAAAAAAAAAAAAAAAAAAAA",
+                                "display": "Puérpera",
+                                "conceptClass": {
+                                    "uuid": "8d492774-c2cc-11de-8d13-0010c6dffd0f",
+                                    "display": "Misc"
+                                }
+                            },
+                            "display": "Puérpera: Si",
+                            "groupMembers": null,
+                            "value": true,
+                            "obsDatetime": "2025-12-10T17:10:00.000+0000"
                         }
                     ],
                     "encounterType": {
