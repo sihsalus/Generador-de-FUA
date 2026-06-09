@@ -105,6 +105,18 @@ class EntityScriptImplementation {
     }
   }
 
+  async getByNameSequelize(name: string) {
+    try {
+      return await EntityScriptModel.findOne({
+        where: { name, active: true },
+      });
+    } catch (err: any) {
+      err.message = `Error in EntityScript Implementation - getByNameSequelize (name=${name}): ` + err.message;
+      err.details = inspect(err, { depth: 10, colors: false });
+      throw err;
+    }
+  }
+
   async softDeleteSequelize(data: SoftDeleteData) {
     const record = await EntityScriptModel.findOne({
       where: { uuid: data.uuid, active: true },
