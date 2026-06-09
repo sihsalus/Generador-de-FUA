@@ -13,7 +13,7 @@ export type GroupResult<T> =
 
 export function runGroups(
     payload: Record<string, unknown>,
-    groups: Group<unknown>[]
+    groups: Group<any>[]
 ): GroupResult<unknown>[] {
     return groups.map((group) => {
         try {
