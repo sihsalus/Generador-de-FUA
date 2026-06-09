@@ -6,7 +6,7 @@ const UUID_HOSPITALIZACION = "HOSPITALIZACION-0001-AAAAAAAAAAAAAAAAAAA";
 const UUID_GESTANTE = "GESTANTE-0001-AAAAAAAAAAAAAAAAAAAAAAA";
 const UUID_PUERPERA = "PUERPERA-0001-AAAAAAAAAAAAAAAAAAAAAAA";
 
-type VisitDataFields =
+type RC01Fields =
     | "codigo_prestacional"
     | "fecha_nac"
     | "fecha_ingreso"
@@ -34,7 +34,7 @@ function getObsValue(payload: Record<string, unknown>, conceptUuid: string): unk
     return match?.value;
 }
 
-export const visitDataFieldMap: FieldMap<VisitDataFields> = {
+export const RC_01FieldMap: FieldMap<RC01Fields> = {
     codigo_prestacional: (p) => getObsValue(p, UUID_CODIGO_PRESTACIONAL),
 
     fecha_nac: (p) =>
