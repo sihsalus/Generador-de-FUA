@@ -55,8 +55,12 @@ const EntityScriptController = {
 
   async update(req: Request, res: Response): Promise<void> {
     const id = String(req.params.id);
+    const scriptContent: string | undefined = req.file
+      ? req.file.buffer.toString('utf-8')
+      : req.body.scriptContent;
+
     try {
-      const result = await EntityScriptService.update({ ...req.body, uuid: id });
+      const result = await EntityScriptService.update({ ...req.body, uuid: id, scriptContent });
       if (!result) {
         res.status(404).json({ error: `EntityScript '${id}' not found.` });
         return;

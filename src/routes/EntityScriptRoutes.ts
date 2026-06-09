@@ -13,7 +13,12 @@ EntityScriptRouter.post(
 );
 EntityScriptRouter.get('/', authenticate, EntityScriptController.listAll);
 EntityScriptRouter.get('/:id', authenticate, EntityScriptController.getById);
-EntityScriptRouter.put('/:id', authenticate, EntityScriptController.update);
+EntityScriptRouter.put(
+  '/:id',
+  authenticate,
+  multerErrorHandler(upload.single('scriptFile'), 'EntityScriptRoutes - PUT /:id'),
+  EntityScriptController.update
+);
 EntityScriptRouter.delete('/:id', authenticate, EntityScriptController.softDelete);
 
 export default EntityScriptRouter;
