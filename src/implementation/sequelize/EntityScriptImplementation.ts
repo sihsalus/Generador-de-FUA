@@ -1,5 +1,4 @@
 import { inspect } from 'util';
-import { isValidUUIDv4 } from '../../utils/utils';
 import EntityScriptModel from '../../modelsSequelize/EntityScriptModel';
 
 interface CreateEntityScriptData {
