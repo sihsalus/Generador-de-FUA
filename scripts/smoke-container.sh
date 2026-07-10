@@ -32,8 +32,29 @@ cleanup() {
 }
 trap cleanup EXIT
 
+# Registries occasionally return transient 5xx/timeout errors on pulls. Retry so a
+# flaky registry does not falsely block the production publish gate.
+pull_with_retry() {
+  local reference="$1"
+  local attempt
+  for attempt in 1 2 3 4 5; do
+    if docker pull "${reference}"; then
+      return 0
+    fi
+    echo "Pulling ${reference} failed (attempt ${attempt}/5); retrying..." >&2
+    sleep $(( attempt * 5 ))
+  done
+  echo "Could not pull ${reference} after multiple attempts." >&2
+  return 1
+}
+
+# Pre-pull the database image (with retries) so the implicit pull performed by
+# `docker compose up` cannot fail the smoke on a transient registry error.
+db_image="$("${compose[@]}" config --format json | jq --exit-status --raw-output '.services.db.image')"
+pull_with_retry "${db_image}"
+
 if [[ -n "${FUA_SMOKE_IMAGE:-}" ]]; then
-  docker image inspect "${FUA_SMOKE_IMAGE}" >/dev/null 2>&1 || docker pull "${FUA_SMOKE_IMAGE}"
+  docker image inspect "${FUA_SMOKE_IMAGE}" >/dev/null 2>&1 || pull_with_retry "${FUA_SMOKE_IMAGE}"
   docker tag "${FUA_SMOKE_IMAGE}" "${project_name}-app:latest"
   "${compose[@]}" up --no-build --wait --wait-timeout 240
 else
