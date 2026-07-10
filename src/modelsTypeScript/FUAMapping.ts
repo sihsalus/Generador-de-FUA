@@ -1,8 +1,5 @@
 
-import { sumAux } from "../services/SETISIS_PackageGenerator";
 import BaseEntity, { BaseEntityInterface } from "./BaseEntity";
-
-import * as vm from 'vm';
 
 export interface FUAMappingInterface extends BaseEntityInterface {
     name: string;
@@ -24,7 +21,6 @@ class FUAMapping extends BaseEntity {
         utils: any,
 
     ){
-        const context = { module: { exports: {} as any }, exports: {} as any };
 
     }
 

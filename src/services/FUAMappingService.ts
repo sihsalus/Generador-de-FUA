@@ -1,12 +1,11 @@
 import {z} from "zod";
-import { parse } from 'jsonc-parser';
 
 
 import { isValidUUIDv4 } from "../utils/utils";
 import FUAFormatFromSchemaImplementation from "../implementation/sequelize/FUAFormatFromSchemaImplementation";
 import { inspect } from "util";
 import BaseEntityVersionService from "./BaseEntityVersionService";
-import FUAFormat, { FUAFormatSchema } from "../modelsTypeScript/FUAFormat";
+import FUAFormat from "../modelsTypeScript/FUAFormat";
 import { Version_Actions } from "../utils/VersionConstants";
 import FUAMappingImplementation from "../implementation/sequelize/FUAMappingImplementation";
 import FUAMapping from "../modelsTypeScript/FUAMapping";
@@ -83,7 +82,7 @@ class FUAMappingService {
 
         // Insert version 
         try{
-            let newVersion = await BaseEntityVersionService.create(
+            await BaseEntityVersionService.create(
                 new FUAMapping(returnedFUAMapping.dataValues),
                 "FUAMapping",
                 Version_Actions.CREATE,
@@ -288,7 +287,7 @@ class FUAMappingService {
 
         // Insert version
         try{
-            let newVersion = await BaseEntityVersionService.create(
+            await BaseEntityVersionService.create(
                 new FUAFormat(returnedFUAFormat.dataValues),
                 "FUAFormatFromSchema",
                 Version_Actions.EDIT,

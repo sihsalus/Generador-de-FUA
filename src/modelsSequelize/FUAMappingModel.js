@@ -1,8 +1,5 @@
- import { DataTypes, Model } from 'sequelize';
+ import { DataTypes } from 'sequelize';
 import { sequelize } from './database';
-
-import { generateHMAC } from './utils';
-import { encryptBuffer, decryptBuffer } from '../middleware/dataEncryption';
 
 
 
