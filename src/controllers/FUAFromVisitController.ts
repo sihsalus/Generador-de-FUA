@@ -66,8 +66,9 @@ const FUAFromVisitController = {
             
             if (!process.env.SECRET_KEY) {
                 throw new Error("Missing SECRET_KEY environment variable");
-            }
+                }
             const secretKey: string = process.env.SECRET_KEY;
+            console.log(secretKey);
 
             if (!file) {
             res.status(400).json({ error: "No PDF provided (field 'pdf')." });
@@ -211,3 +212,4 @@ const FUAFromVisitController = {
 
 
 export default FUAFromVisitController;
+

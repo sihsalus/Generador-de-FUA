@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { parse } from 'jsonc-parser';
 import FUAFormat from "../modelsTypeScript/FUAFormat";
-import puppeteer, { Browser } from "puppeteer";
+import puppeteer from "puppeteer";
 const archiver = require('archiver');
 import { PassThrough } from 'stream';
 import { importPayloadToMapping } from "./mappingUtils";
@@ -129,9 +129,8 @@ export function computeHmacHex(bytes: Uint8Array | Buffer, secretKey: string): s
   return crypto.createHmac('sha256', secretKey).update(Buffer.from(bytes)).digest('hex');
 }
 
-let browserPromise: Promise<Browser> | null = null;
-
 export async function getBrowser() {
+  let browserPromise = null;
   if (!browserPromise) {
     browserPromise = puppeteer.launch({
       headless: true, 

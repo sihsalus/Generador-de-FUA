@@ -32,11 +32,6 @@ import { Logger_SecurityLevel } from './middleware/logger/models/typescript/Secu
 import { Logger_LogType } from './middleware/logger/models/typescript/LogType';
 import { multerErrorHandler, upload } from './middleware/multerMemory';
 import { createPackage, sumAux } from './services/SETISIS_PackageGenerator';
-import { authenticate } from './middleware/authentication';
-import {
-  getRequiredEnvironment,
-  validateRuntimeConfiguration,
-} from './config/runtimeConfig';
 import { startApplication } from './startup';
 
 
@@ -54,7 +49,7 @@ app.use(express.json());
 
 
 // Importing Routes
-app.use('/ws', authenticate, globalRouter);
+app.use('/ws', globalRouter);
 
 
 // Comentario para marcelo: Ya funciona el getter del patients a través de la API de OpenMRS, faltarian ajustar algunas cosas como el cors y la seguridad, revisar servicios de getPatient.
@@ -73,7 +68,7 @@ app.get('/health', async (_req, res) => {
 
 
 // Ruta para obtener un paciente por ID
-app.get('/patient/:id', authenticate, async (req, res) => {
+app.get('/patient/:id', async (req, res) => {
   const { id } = req.params;
   const patient = await getPatient(id);
   if (patient) {
@@ -84,7 +79,7 @@ app.get('/patient/:id', authenticate, async (req, res) => {
 });
 
 // Serve index.html
-app.get('/FUA', authenticate, (req, res) => {
+app.get('/FUA', (req, res) => {
   res.sendFile(path.resolve(__dirname, './public/FUA_Previsualization.html'));
 });
 
@@ -118,7 +113,7 @@ async function getBrowser() {
   return browserPromise;
 }
 
-app.get('/demopdf', authenticate, async (req, res) => {
+app.get('/demopdf', async (req, res) => {
   let demoAnswer = '';
   try {
     demoAnswer = await createDemoFormat(true);
@@ -178,10 +173,12 @@ app.get('/demopdf', authenticate, async (req, res) => {
 
     // Temporary PDF HASH signing solution 
 
-    const signatureKey = getRequiredEnvironment('SECRET_KEY');
-    const pdfBytesSigned = await pdfMetadataHashSignature(pdfBytes, signatureKey);
+    //const pdfBufferSigned = await signPdfBuffer(pdfBuffer, "evan");
+    //console.log(await verifyPdfBuffer(pdfBufferSigned, "evan"));
 
-    await pdfMetadataHashSignatureVerification(pdfBytesSigned, signatureKey);
+    const pdfBytesSigned = await pdfMetadataHashSignature(pdfBytes, "evan");
+
+    const signatureVerificationResult = pdfMetadataHashSignatureVerification(pdfBytesSigned, "evan");
 
     await pdfMetadataAccess(pdfBytesSigned);
 
@@ -225,7 +222,7 @@ app.get('/demopdf', authenticate, async (req, res) => {
   }
 });
 
-app.post('/demoZipTxt', authenticate, async (req, res) => {
+app.post('/demoZipTxt', async (req, res) => {
   
   try {
     const rawBuffers = utils.generateTxtFiles();
@@ -249,7 +246,6 @@ app.post('/demoZipTxt', authenticate, async (req, res) => {
 
 app.post(
   '/zip-decrypt',
-  authenticate,
   multerErrorHandler(upload.single('encFile'), '/zip-decrypt'),
   async (req, res) => {
     try {
@@ -281,7 +277,7 @@ app.post(
 );
 
 
-app.get('/testFrameMapping', authenticate, (req, res) => {
+app.get('/testFrameMapping',(req, res) => {
   utils.debugFrameMapping(
     './src/utils/FUA_FrameMapping_Examples/test_1.0.js',
     [{
@@ -309,7 +305,7 @@ app.get('/testFrameMapping', authenticate, (req, res) => {
 });
 
 
-app.get('/testFrameMappingVM', authenticate, (_req, res) => {
+app.get('/testFrameMappingVM', (_req, res) => {
   const scriptPath = path.resolve(process.cwd(), './src/utils/FUA_FrameMapping_Examples/test_1.0.js');
   const scriptString = fs.readFileSync(scriptPath, 'utf-8');
   const dataInput = [
@@ -338,7 +334,7 @@ app.get('/testFrameMappingVM', authenticate, (_req, res) => {
   res.send(result);
 });
 
-app.get('/testFrameMapping2', authenticate, (req, res) => {
+app.get('/testFrameMapping2', (req, res) => {
   const fs = require('fs');
   const scriptString = fs.readFileSync(
     './src/utils/FUA_FrameMapping_Examples/test_1.0.js', 'utf-8'
@@ -347,8 +343,7 @@ app.get('/testFrameMapping2', authenticate, (req, res) => {
   res.send(result);
 });
 
-export async function startServer(): Promise<void> {
-  validateRuntimeConfiguration();
+async function startServer(): Promise<void> {
   console.log('\nTesting connection with database ...\n');
 
   await startApplication({
@@ -387,8 +382,4 @@ async function handleStartupFailure(error: unknown): Promise<void> {
   process.exitCode = 1;
 }
 
-if (require.main === module) {
-  void startServer().catch(handleStartupFailure);
-}
-
-export { app };
+void startServer().catch(handleStartupFailure);
