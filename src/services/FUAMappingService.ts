@@ -21,7 +21,6 @@ const newFUAFormatFromSchemaZod = z.object({
     createdBy: z.string(),
 });
 
-/*
 const editFUAFormatFromSchemaZod = z.object({
     // Format Data
     uuid: z.string(),
@@ -43,7 +42,6 @@ const deleteFUAFormatFromSchemaZod = z.object({
     inactiveBy: z.string(),
     inactiveReason: z.string()
 });
-*/
 
 
 class FUAMappingService {
@@ -365,14 +363,24 @@ class FUAMappingService {
         };
     };
 
-    async loadMappingFromUUID(iuuidReceived: string){
-        // Get FUAMapping from Databse
-        const result = editFUAFormatFromSchemaZod.safeParse(data);
-        if( !result.success ){
-            const newError = new Error('Error in FUA Format From Schema Service - editFUAFormat: ZOD validation. ');
-            (newError as any).details = result.error;
-            throw newError;
+    async loadMappingFromUUID(uuidReceived: string){
+        // Validate UUID Format
+        if (!isValidUUIDv4(uuidReceived)) {
+            throw new Error("Error in FUA Mapping Service - loadMappingFromUUID: Invalid UUID format. ");
         }
+
+        // Get FUAMapping from Database
+        let returnedFUAMapping = null;
+        try {
+            returnedFUAMapping = await FUAMappingImplementation.getByUUIDSequelize(uuidReceived);
+        } catch (err: unknown){
+            console.error('Error in FUA Mapping Service - loadMappingFromUUID: ', err);
+            (err as Error).message = 'Error in FUA Mapping Service - loadMappingFromUUID: ' + (err as Error).message;
+            throw err;
+        }
+
+        // If nothing was found, it will return a null
+        return returnedFUAMapping;
     }
 };
 
