@@ -18,6 +18,7 @@ import {FUAReference} from "../utils/queueImplementation";
 //Instance import 
 import fuaQueue from "../utils/queueImplementation";
 import { importPayloadToMapping } from "../utils/mappingUtils";
+import { getRequiredEnvironment } from "../config/runtimeConfig";
 
 // Schemas
 const newFUAFromVisitSchema = z.object({
@@ -129,7 +130,10 @@ class FUAFromVisitService {
             const aux = new FUAFormat(auxFUAFormat as FUAFormatInterface);
             const htmlPreview : string = await aux.renderHtmlContent(false);
             const auxPDF_Uint8Array = await this.generatePdf(htmlPreview); // Need the pdf byte stream
-            const auxPDF_Uint8ArraySigned = await this.pdfMetadataHashSignature(auxPDF_Uint8Array, "evan");
+            const auxPDF_Uint8ArraySigned = await this.pdfMetadataHashSignature(
+                auxPDF_Uint8Array,
+                getRequiredEnvironment('SECRET_KEY')
+            );
             const auxPDFBuffer = Buffer.from(auxPDF_Uint8ArraySigned);
 
             console.log(returnedFUA.dataValues.id);

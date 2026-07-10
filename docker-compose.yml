@@ -28,8 +28,18 @@ services:
       DB_PASSWORD: ${FuaGen_DB_PASSWORD:-fuagenerator}
       DB_NAME: ${FuaGen_DB_NAME:-fuagenerator}
       DB_PORT: 5432
+      TOKEN: ${TOKEN:-}
+      SECRET_KEY: ${SECRET_KEY:-}
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY:-}
+      HMAC_SECRET: ${HMAC_SECRET:-}
     ports:
       - "3000:3000"
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:3000/health').then(response => process.exit(response.ok ? 0 : 1)).catch(() => process.exit(1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
     links:
       - db
 

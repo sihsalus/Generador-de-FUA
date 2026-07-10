@@ -32,6 +32,12 @@ import { Logger_SecurityLevel } from './middleware/logger/models/typescript/Secu
 import { Logger_LogType } from './middleware/logger/models/typescript/LogType';
 import { multerErrorHandler, upload } from './middleware/multerMemory';
 import { createPackage, sumAux } from './services/SETISIS_PackageGenerator';
+import { authenticate } from './middleware/authentication';
+import {
+  getRequiredEnvironment,
+  validateRuntimeConfiguration,
+} from './config/runtimeConfig';
+import { startApplication } from './startup';
 
 
 // Parameters and other options
@@ -42,49 +48,13 @@ const port = process.env.PORT || 3000;
 
 
 
-// Testing database connection
-// Consider to envelope main in a async function
-console.log(`\nTesting connection with database ...\n`);
-sequelize.authenticate()
-.then((): void => {
-  console.log(`\nConnection has been established with database successfully.\n`);  
-  // Syncronize models
-  console.log('\n Syncronizing models ... \n');
-  sequelize.sync({ force: true })
-  //sequelize.sync({ alter: true })
-  .then( () : void => {
-    console.log('\nEnded syncronizing models ...\n');
-  } );  
-})
-.catch((error: unknown): void => {
-  // Log in case of failure
-  let auxLog = new Log({
-    timeStamp: new Date(),
-    logLevel: Logger_LogLevel.ERROR,
-    securityLevel: Logger_SecurityLevel.Admin,
-    logType: Logger_LogType.CREATE,
-    environmentType: loggerInstance.enviroment.toString(),
-    description: 'DATABSE CONNECTTION FAILURE :('
-  });
-
-  loggerInstance.printLog(auxLog, [
-    { name: "terminal" },
-    { name: "file", file: "./logs/auxLog.log" }
-    ]);
-  console.error('Unable to connect to the database: ');
-  console.log("CALLED BY INDEX, NOT ANY OTHER PART");
-  console.error(error);
-});
-
-
-
 // Importing utilities for Express
 app.use(express.static(path.resolve(__dirname, './public')));
 app.use(express.json());
 
 
 // Importing Routes
-app.use('/ws', globalRouter);
+app.use('/ws', authenticate, globalRouter);
 
 
 // Comentario para marcelo: Ya funciona el getter del patients a través de la API de OpenMRS, faltarian ajustar algunas cosas como el cors y la seguridad, revisar servicios de getPatient.
@@ -92,9 +62,18 @@ app.get('/', (req, res) => {
   res.send('¡Servidor Express en funcionamiento!');
 });
 
+app.get('/health', async (_req, res) => {
+  try {
+    await sequelize.authenticate();
+    res.status(200).json({ status: 'ok' });
+  } catch (_error) {
+    res.status(503).json({ status: 'unavailable' });
+  }
+});
+
 
 // Ruta para obtener un paciente por ID
-app.get('/patient/:id', async (req, res) => {
+app.get('/patient/:id', authenticate, async (req, res) => {
   const { id } = req.params;
   const patient = await getPatient(id);
   if (patient) {
@@ -104,12 +83,8 @@ app.get('/patient/:id', async (req, res) => {
   }
 });
 
-app.listen(port, () => {
-  console.log(`\nServidor corriendo en http://localhost:${port} \n`);
-});
-
 // Serve index.html
-app.get('/FUA', (req, res) => {
+app.get('/FUA', authenticate, (req, res) => {
   res.sendFile(path.resolve(__dirname, './public/FUA_Previsualization.html'));
 });
 
@@ -143,7 +118,7 @@ async function getBrowser() {
   return browserPromise;
 }
 
-app.get('/demopdf', async (req, res) => {
+app.get('/demopdf', authenticate, async (req, res) => {
   let demoAnswer = '';
   try {
     demoAnswer = await createDemoFormat(true);
@@ -203,12 +178,10 @@ app.get('/demopdf', async (req, res) => {
 
     // Temporary PDF HASH signing solution 
 
-    //const pdfBufferSigned = await signPdfBuffer(pdfBuffer, "evan");
-    //console.log(await verifyPdfBuffer(pdfBufferSigned, "evan"));
+    const signatureKey = getRequiredEnvironment('SECRET_KEY');
+    const pdfBytesSigned = await pdfMetadataHashSignature(pdfBytes, signatureKey);
 
-    const pdfBytesSigned = await pdfMetadataHashSignature(pdfBytes, "evan");
-
-    const signatureVerificationResult = pdfMetadataHashSignatureVerification(pdfBytesSigned, "evan");
+    await pdfMetadataHashSignatureVerification(pdfBytesSigned, signatureKey);
 
     await pdfMetadataAccess(pdfBytesSigned);
 
@@ -252,7 +225,7 @@ app.get('/demopdf', async (req, res) => {
   }
 });
 
-app.post('/demoZipTxt', async (req, res) => {
+app.post('/demoZipTxt', authenticate, async (req, res) => {
   
   try {
     const rawBuffers = utils.generateTxtFiles();
@@ -276,6 +249,7 @@ app.post('/demoZipTxt', async (req, res) => {
 
 app.post(
   '/zip-decrypt',
+  authenticate,
   multerErrorHandler(upload.single('encFile'), '/zip-decrypt'),
   async (req, res) => {
     try {
@@ -307,7 +281,7 @@ app.post(
 );
 
 
-app.get('/testFrameMapping',(req, res) => {
+app.get('/testFrameMapping', authenticate, (req, res) => {
   utils.debugFrameMapping(
     './src/utils/FUA_FrameMapping_Examples/test_1.0.js',
     [{
@@ -335,7 +309,7 @@ app.get('/testFrameMapping',(req, res) => {
 });
 
 
-app.get('/testFrameMappingVM', (_req, res) => {
+app.get('/testFrameMappingVM', authenticate, (_req, res) => {
   const scriptPath = path.resolve(process.cwd(), './src/utils/FUA_FrameMapping_Examples/test_1.0.js');
   const scriptString = fs.readFileSync(scriptPath, 'utf-8');
   const dataInput = [
@@ -364,7 +338,7 @@ app.get('/testFrameMappingVM', (_req, res) => {
   res.send(result);
 });
 
-app.get('/testFrameMapping2', (req, res) => {
+app.get('/testFrameMapping2', authenticate, (req, res) => {
   const fs = require('fs');
   const scriptString = fs.readFileSync(
     './src/utils/FUA_FrameMapping_Examples/test_1.0.js', 'utf-8'
@@ -373,3 +347,48 @@ app.get('/testFrameMapping2', (req, res) => {
   res.send(result);
 });
 
+export async function startServer(): Promise<void> {
+  validateRuntimeConfiguration();
+  console.log('\nTesting connection with database ...\n');
+
+  await startApplication({
+    database: sequelize,
+    listen: () =>
+      new Promise<void>((resolve, reject) => {
+        const server = app.listen(port, () => {
+          console.log(`\nServidor corriendo en http://localhost:${port} \n`);
+          resolve();
+        });
+        server.once('error', reject);
+      }),
+  });
+
+  console.log('\nDatabase connection and non-destructive schema sync completed.\n');
+}
+
+async function handleStartupFailure(error: unknown): Promise<void> {
+  const startupLog = new Log({
+    timeStamp: new Date(),
+    logLevel: Logger_LogLevel.ERROR,
+    securityLevel: Logger_SecurityLevel.Admin,
+    logType: Logger_LogType.CREATE,
+    environmentType: loggerInstance.enviroment.toString(),
+    description: 'DATABASE STARTUP FAILURE',
+  });
+
+  loggerInstance.printLog(startupLog, [
+    { name: 'terminal' },
+    { name: 'file', file: './logs/auxLog.log' },
+  ]);
+  console.error('Unable to initialize the database; the HTTP server was not started.');
+  console.error(error);
+
+  await sequelize.close().catch(() => undefined);
+  process.exitCode = 1;
+}
+
+if (require.main === module) {
+  void startServer().catch(handleStartupFailure);
+}
+
+export { app };

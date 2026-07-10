@@ -7,6 +7,7 @@ import { inspect } from "util";
 import BaseEntityVersionImplementation, { relatedEntity } from "../implementation/sequelize/BaseEntityVersionImplementation";
 import BaseEntity from "../modelsTypeScript/BaseEntity";
 import { Version_Actions } from "../utils/VersionConstants";
+import { getRequiredEnvironment } from "../config/runtimeConfig";
 
 
 function isBaseEntity(obj: unknown): obj is BaseEntity {
@@ -69,7 +70,9 @@ class BaseEntityVersionService {
         } */
         
         // Gedatanerate Hash
-        let newHash = generateSHA256Hash(JSON.stringify(data)+data.action+(process.env.HMAC_SECRET ?? 'fuagenerator'));
+        let newHash = generateSHA256Hash(
+            JSON.stringify(data)+data.action+getRequiredEnvironment('HMAC_SECRET')
+        );
         
         // BaseEnitityVersion creation
 

@@ -1,13 +1,12 @@
 const { DataTypes} = require('sequelize');
 import { sequelize } from './database';
-import { generateHMAC } from './utils';
 import { encryptBuffer, decryptBuffer } from '../middleware/dataEncryption';
+import { getRequiredEnvironment } from '../config/runtimeConfig';
 
 
 
 // Base Entity Inheritance
 const BaseEntity = require('./BaseEntityModel');
-const ENCRYPTION_KEY = process.env.ENCRYPTION_KEY ?? '123456789012';
 
 function encryptPayload(instance) {
     const payload = instance.getDataValue('payload');
@@ -15,7 +14,10 @@ function encryptPayload(instance) {
         return;
     }
 
-    const encryptedPayload = encryptBuffer(ENCRYPTION_KEY, Buffer.from(payload, 'utf8'));
+    const encryptedPayload = encryptBuffer(
+        getRequiredEnvironment('ENCRYPTION_KEY'),
+        Buffer.from(payload, 'utf8')
+    );
     instance.setDataValue('payload', encryptedPayload.toString('base64'));
 }
 
@@ -35,7 +37,10 @@ function decryptPayload(instance) {
             return;
         }
 
-        const decryptedPayload = decryptBuffer(ENCRYPTION_KEY, encryptedPayload);
+        const decryptedPayload = decryptBuffer(
+            getRequiredEnvironment('ENCRYPTION_KEY'),
+            encryptedPayload
+        );
         if (decryptedPayload) {
             instance.setDataValue('payload', decryptedPayload.toString('utf8'));
             instance.changed('payload', false);

@@ -1,8 +1,5 @@
 
 import { FUAFromVisitModel } from "../../modelsSequelize";
-import { encryptBuffer } from "../../middleware/dataEncryption";
-
-const ENCRYPTION_KEY = process.env.ENCRYPTION_KEY ?? '123456789012';
 
 class FUAFromVisitImplementation {
 
