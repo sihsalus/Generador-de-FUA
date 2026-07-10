@@ -21,3 +21,8 @@ Este proyecto es una API en Node.js (Express) construida con TypeScript que gene
 - Postgre SQL:  docker run --name sih-salus-fua-db -e POSTGRES_USER=fuagenerator -e POSTGRES_PASSWORD=fuagenerator  -e POSTGRES_DB=fuagenerator -p 5433:5432 -d postgres:15
 
 Test
+
+El servidor solo empieza a escuchar después de autenticar PostgreSQL y crear
+las tablas que falten. El arranque no elimina ni altera tablas existentes.
+`GET /health` devuelve `200` únicamente cuando la conexión a PostgreSQL está
+disponible.
