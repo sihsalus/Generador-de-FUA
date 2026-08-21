@@ -425,6 +425,7 @@ class FUAFormatFromSchemaController {
     };
 
 
+    
 }
 
 export default new FUAFormatFromSchemaController();
