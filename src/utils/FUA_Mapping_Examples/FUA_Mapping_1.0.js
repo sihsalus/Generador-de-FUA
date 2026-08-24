@@ -151,7 +151,7 @@ module.exports = {
                                     row: 1,
                                     valueType: "String",
                                     //value: "X",
-                                    extraProcessing: (value) => ( value?.name?.startsWith("Consulta Ambulatoria") ? "X" : "" )
+                                    extraProcessing: (value) => ( value?.name?.startsWith("Atención Ambulatoria") ? "X" : "" )
                                 },
                                 {
                                     // TODO: Agregar visita por referencia
@@ -162,7 +162,7 @@ module.exports = {
                                     row: 1,
                                     valueType: "String",
                                     //value: "X",
-                                    extraProcessing: (value) => ( value?.name?.startsWith("Consulta Por Referencia") ? "X" : "" )
+                                    extraProcessing: (value) => ( value?.name?.startsWith("Referencia") ? "X" : "" )
                                 },
                                 {
                                     // EMERGENCIA
