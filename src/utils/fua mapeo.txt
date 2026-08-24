@@ -1,29 +1,29 @@
-Fecha atencion (dia)			startDatetime
-Fecha atencion (mes)			startDatetime
-Fecha atencion (año)			startDatetime
-Fecha atencion (hora)			startDatetime
-Apellido Materno				patient.person.preferredName.familyName2
-Apellido Paterno				patient.person.preferredName.familyName
-Otros nombre/2do nombre			patient.person.preferredName.middleName
-Primer Nombre					patient.person.preferredName.givenName
-Fecha de nacimiento (dia)		patient.person.birthdate
-Fecha de nacimiento (mes)		patient.person.birthdate
-Fecha de nacimiento (año)		patient.person.birthdate
-codigo prestacional				Si en encounters.obs.concept.display == "Código prestacional de la consulta SIH.SALUS", entonces las primeras 3 letras de encounters.obs.value.name.name
-codigo del asegurado (2 codi)	Si en patient.identifiers.person.attributes.attributeType.display == "Código de Seguro", entonces el "value" de ese concepto en "patient.identifiers.person.attributes.value" es el codigo Ej "2-99990010" (Por cierto, marcelo ya habia tratado con este pero no creo que lo consiguiera con identifiers)
-peso							Si en encounters.obs.concept.display == "Peso Corporal (kg)", entonces el "value" de ese concepto es el peso
-talla							Si en encounters.obs.concept.display == "Talla (cm)", entonces el "value" de ese concepto es la talla
-perimetro abdominal				Si en encounters.obs.concept.display == "Perímetro abdominal", entonces el "value" de ese concepto es el perimetro abdominal
-presion sistolica				Si en encounters.obs.concept.display == "Presión sistólica", entonces el "value" de ese concepto es la presion sistolica
-presion diastolica				Si en encounters.obs.concept.display == "Presión diastólica", entonces el "value" de ese concepto es la presion diastolica
-frecuencia cardiaca				Si en encounters.obs.concept.display == "Frecuencia Cardíaca", entonces el "value" de ese concepto es la frecuencia cardiaca
-saturacion de oxigeno			Si en encounters.obs.concept.display == "Saturación de oxígeno", entonces el "value" de ese concepto es la saturacion de oxigeno
-frecuencia respiratoria			Si en encounters.obs.concept.display == "Frecuencia Respiratoria", entonces el "value" de ese concepto es la frecuencia respiratoria
-temperatura						Si en encounters.obs.concept.display == "Temperatura (C°)", entonces el "value" de ese concepto es la temperatura
+Codename: "Visit Date", 			Fecha atencion (dia),			startDatetime
+Codename: "Visit Date", 			Fecha atencion (mes),			startDatetime
+Codename: "Visit Date", 			Fecha atencion (año),			startDatetime
+Codename: "Visit Date", 			Fecha atencion (hora),			startDatetime
+Codename: "Maternal Lastname", 		Apellido Materno,				patient.person.preferredName.familyName2
+Codename: "Paternal Lastname", 		Apellido Paterno,				patient.person.preferredName.familyName
+Codename: "Other names", 			Otros nombre/2do nombre,		patient.person.preferredName.middleName
+Codename: "Firstname", 				Primer Nombre,					patient.person.preferredName.givenName
+Codename: "Birthday", 				Fecha de nacimiento (dia),		patient.person.birthdate
+Codename: "Birthday", 				Fecha de nacimiento (mes),		patient.person.birthdate
+Codename: "Birthday", 				Fecha de nacimiento (año),		patient.person.birthdate
+Codename: "Codigo Prestacional", 	codigo prestacional,			Si en encounters.obs.concept.display == "Código prestacional de la consulta SIH.SALUS", entonces las primeras 3 letras de encounters.obs.value.name.name
+Codename: "Healthcare Coverage", 	codigo del asegurado (2 codi),	Si en patient.identifiers.person.attributes.attributeType.display == "Código de Seguro", entonces el "value" de ese concepto en "patient.identifiers.person.attributes.value" es el codigo Ej "2-99990010" (Por cierto, marcelo ya habia tratado con este pero no creo que lo consiguiera con identifiers)
+Codename: "Basic Triage", 			peso,							Si en encounters.obs.concept.display == "Peso Corporal (kg)", entonces el "value" de ese concepto es el peso
+Codename: "Basic Triage", 			talla,							Si en encounters.obs.concept.display == "Talla (cm)", entonces el "value" de ese concepto es la talla
+Codename: "Basic Triage", 			perimetro abdominal,			Si en encounters.obs.concept.display == "Perímetro abdominal", entonces el "value" de ese concepto es el perimetro abdominal
+Codename: "Basic Triage",			presion sistolica,				Si en encounters.obs.concept.display == "Presión sistólica", entonces el "value" de ese concepto es la presion sistolica
+Codename: "Basic Triage", 			presion diastolica,				Si en encounters.obs.concept.display == "Presión diastólica", entonces el "value" de ese concepto es la presion diastolica
+Codename: "Basic Triage", 			frecuencia cardiaca,			Si en encounters.obs.concept.display == "Frecuencia Cardíaca", entonces el "value" de ese concepto es la frecuencia cardiaca
+Codename: "Basic Triage", 			saturacion de oxigeno,			Si en encounters.obs.concept.display == "Saturación de oxígeno", entonces el "value" de ese concepto es la saturacion de oxigeno
+Codename: "Basic Triage", 			frecuencia respiratoria,		Si en encounters.obs.concept.display == "Frecuencia Respiratoria", entonces el "value" de ese concepto es la frecuencia respiratoria
+Codename: "Basic Triage",			temperatura,					Si en encounters.obs.concept.display == "Temperatura (C°)", entonces el "value" de ese concepto es la temperatura
 
 
-Documento de identidad(2 codi)	Si patient.identifiers.identifierType.name == "DNI" o "CE" o "PASS" o "DIE" o "CNV", entonces el "identifier" de ese concepto en "patient.identifiers.identifier" es el codigo Ej: "78341234"
-N Historia Clinica				Si patient.identifiers.identifierType.name == "N° Historia Clínica", entonces el "identifier" de ese concepto en "patient.identifiers.identifier" es el codigo Ej: "93745328"
+Codename: "Patient Identifiers", 	Documento de identidad(2 codi),	Si patient.identifiers.identifierType.name == "DNI" o "CE" o "PASS" o "DIE" o "CNV", entonces el "identifier" de ese concepto en "patient.identifiers.identifier" es el codigo Ej: "78341234"
+Codename: "CLINIC HISTORY NUMBER",	N Historia Clinica,				Si patient.identifiers.identifierType.name == "N° Historia Clínica", entonces el "identifier" de ese concepto en "patient.identifiers.identifier" es el codigo Ej: "93745328"
 
 
 
