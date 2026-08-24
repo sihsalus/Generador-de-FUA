@@ -4,7 +4,7 @@ import FUAPage, { FUAPageInterface } from "./FUAPage";
 import { any, z } from "zod";
 import { FUAPageSchema } from "./FUAPage";
 import FUARenderingUtils from "../utils/FUARendering";
-import { parse } from "jsonc-parser";
+import { parse, printParseErrorCode } from "jsonc-parser";
 
 
 
@@ -79,9 +79,9 @@ class FUAFormat extends BaseFieldFormEntity {
     get getPages() { return this.pages; }
     set setPages(value: Array<FUAPage>) { this.pages = value; }
 
-    public async renderHtmlContent(printMode : boolean, mapping?: any ) : Promise<string> {
+    public async renderHtmlContent(printMode : boolean, mapping?: any, printReference? : boolean ) : Promise<string> {
         try{
-            const content =  await FUARenderingUtils.renderFUAFormatFromSchema(this, printMode, mapping);
+            const content =  await FUARenderingUtils.renderFUAFormatFromSchema(this, printMode, mapping, printReference);
             return content;
         }catch(err : any){
             console.error(err);

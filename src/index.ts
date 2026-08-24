@@ -113,11 +113,31 @@ app.get('/FUA', (req, res) => {
   res.sendFile(path.resolve(__dirname, './public/FUA_Previsualization.html'));
 });
 
+function parseOptionalBooleanQueryParam(value: unknown): boolean | undefined {
+  if (value === undefined || value === null) {
+    return undefined;
+  }
+
+  if (typeof value === 'string') {
+    const normalized = value.trim().toLowerCase();
+    if (normalized === 'true' || normalized === '1') {
+      return true;
+    }
+    if (normalized === 'false' || normalized === '0') {
+      return false;
+    }
+    throw new Error("Invalid boolean query value. Use 'true', 'false', '1' or '0'.");
+  }
+
+  throw new Error("Invalid query value type for printReference.");
+}
+
 
 //TESTING ENTITIES
 app.get('/demo', async (req, res) => {
   try {
-    const demoAnswer = await createDemoFormat(false);
+    const printReference = parseOptionalBooleanQueryParam(req.query.printReference);
+    const demoAnswer = await createDemoFormat(false, printReference);
     res.status(200).send(demoAnswer);
   } catch (err: unknown) {
     console.error(err);
@@ -146,7 +166,8 @@ async function getBrowser() {
 app.get('/demopdf', async (req, res) => {
   let demoAnswer = '';
   try {
-    demoAnswer = await createDemoFormat(true);
+    const printReference = parseOptionalBooleanQueryParam(req.query.printReference);
+    demoAnswer = await createDemoFormat(true, printReference);
    
     //res.status(200).send(demoAnswer);
   } catch (err: unknown) {

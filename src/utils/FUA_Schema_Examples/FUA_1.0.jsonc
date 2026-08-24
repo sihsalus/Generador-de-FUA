@@ -12,9 +12,9 @@
       "versionTag": "11.0",
       // Page Attributes
       "pageNumber": 1,
-      "height": 306.0,
+      "height": 340.0,
       "width": 210.0,
-      "padding_top": 12.0,
+      "padding_top": 10.0,
       "padding_left": 11.0,
       "extraStyles":  "",
       // Page sections
@@ -26,8 +26,8 @@
           // Section Atributes
           "title": "",
           "showTitle": false,
-          "titleHeight": 3.0,
-          "bodyHeight": 10.0,
+          "titleHeight": 7.0,
+          "bodyHeight": 9.0,
           "bodyWidth": 192.0,
           "top": 0.0,
           "left": 0.0,
@@ -44,7 +44,7 @@
           "titleHeight": 1.0,
           "bodyHeight": 58.0,
           "bodyWidth": 192.0,
-          "top": 7.7,
+          "top": 13,
           "left": 0.0,
           "extraStyles": "",
           // Section fields
@@ -97,6 +97,47 @@
                 }
               ]
             },
+            // DEMO FIELD FOR TAKING MEASURES
+            // DE LA INSTITUCION PRESTRADORA DE SALUD
+            {
+              "codeName": "TEMO FIELD FOR TAKING MEASURES",
+              "versionTag": "1.0",
+              "top": 11.4,
+              "left": 0.0,
+              "showLabel": true,
+              "label": "DE LA INSTITUCION PRESTRADORA DE SERVICIOS SALUD",
+              "labelOrientation": "Horizontal",
+              "labelPosition": "Top",
+              "labelHeight": 4.0,
+              "width": 196.0,
+              "valueType": "Table",
+              "columns": [
+                { "width": 85.9},
+                { "width": 110.0}
+              ],
+              "rows": [
+                {
+                  // Row 1
+                  "index": 1,
+                  "height": 3.5,
+                  "isHeader": true,
+                  "cells": [
+                    { "text": "CÓDIGO RENIPRESS DE LA IPRESS" },
+                    { "text": "NOMBRE DE LA IPRESS QUE REALIZA LA ATENCIÓN" }
+                  ]
+                },
+                {
+                  // Row 2
+                  "index": 2,
+                  "height": 7.0,
+                  "isHeader": false,
+                  "cells": [
+                    { "text": "00000066" },
+                    { "text": "SANTA CLOTILDE" }
+                  ]
+                }
+              ]
+            },
             {
               // Base Field Form Attribute
               "codeName": "Visit Time",
@@ -110,7 +151,7 @@
               "labelPosition": "Top",
               "labelHeight": 5.6,
               "valueType": "Box",
-              "width": 12.0,
+              "width": 9.0,
               "height": 4.0
             },
             {
@@ -480,7 +521,7 @@
               "labelPosition": "Top",
               "labelHeight": 2.3,
               "columns": [
-                { "width": 12.6},
+                { "width": 9.6},
                 { "width": 39.0}
               ],
               "rows": [
@@ -1101,7 +1142,7 @@
               "labelHeight": 2.2,
               "valueType": "Field",
               "width": 190.0,
-              "height": 12.0,
+              "height": 9.0,
               "fields": [
                 {
                   // Base Field Form Attribute
@@ -1329,7 +1370,7 @@
                   "columns": [
                     { "width": 17.5},
                     { "width": 8.5},
-                    { "width": 12.7},
+                    { "width": 9.7},
                     { "width": 8.5},
                     { "width": 9.0},
                     { "width": 9.2}
@@ -1451,7 +1492,7 @@
               "labelHeight": 2.0,
               "valueType": "Table",
               "columns": [
-                { "width": 12.0},
+                { "width": 9.0},
                 { "width": 8.5},
                 { "width": 17.0},
                 { "width": 8.1},
@@ -1634,7 +1675,7 @@
                 { "width": 24.6},
                 { "width": 14.2},
                 { "width": 23.6}, 
-                { "width": 12.2},
+                { "width": 9.2},
                 { "width": 31.1},
                 { "width": 13.5}
               ],
@@ -1812,7 +1853,7 @@
               "valueType": "Table",
               "columns": [
                 { "width": 19.0},
-                { "width": 12.0}
+                { "width": 9.0}
               ],
               "rows": [
                 {
@@ -3050,7 +3091,7 @@
                       ]
                     },
                     {
-                      "index": 12,
+                      "index": 9,
                       "height": 1.9,
                       "isHeader": true,
                       "cells": [
@@ -5281,7 +5322,7 @@
                       ]
                     },
                     {
-                      "index": 12,
+                      "index": 9,
                       "height": 1.9,
                       "isHeader": true,
                       "cells": [
@@ -7485,7 +7526,7 @@
                       ]
                     },
                     {
-                      "index": 12,
+                      "index": 9,
                       "height": 1.7,
                       "isHeader": true,
                       "cells": [
@@ -8067,7 +8108,7 @@
                       ]
                     },
                     {
-                      "index": 12,
+                      "index": 9,
                       "height": 1.7,
                       "isHeader": true,
                       "cells": [
@@ -8667,7 +8708,7 @@
                       ]
                     },
                     {
-                      "index": 12,
+                      "index": 9,
                       "height": 1.6,
                       "isHeader": true,
                       "cells": [
@@ -9777,7 +9818,7 @@
                       ]
                     },
                     {
-                      "index": 12,
+                      "index": 9,
                       "height": 1.7,
                       "isHeader": true,
                       "cells": [

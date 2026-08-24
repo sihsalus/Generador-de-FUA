@@ -25,7 +25,7 @@ export function isValidUUIDv4(uuid: string): boolean {
 
 
 
-export async function createDemoFormat(printMode : boolean){
+export async function createDemoFormat(printMode : boolean, printReference?: boolean){
   try{
     const jsoncPath = path.resolve(process.cwd(), "./src/utils/FUA_Schema_Examples/FUA_1.0.jsonc");
     const jsoncContent = fs.readFileSync(jsoncPath, 'utf-8');
@@ -58,7 +58,7 @@ export async function createDemoFormat(printMode : boolean){
     //html
   
     //html = await FUARenderingUtils.renderFUAFormatFromSchema(parsed, printMode);
-    html  = await auxFormat.renderHtmlContent(false, mappingObject);
+    html  = await auxFormat.renderHtmlContent(false, mappingObject, printReference);
     return html
   }catch(error: unknown){
     console.error('Error in Utils - createDemoFormat: ', error);
