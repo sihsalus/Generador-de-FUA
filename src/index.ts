@@ -18,6 +18,7 @@ import puppeteer, { Browser } from "puppeteer";
 
 // Sequelize and models
 import { sequelize } from './modelsSequelize/database';
+import { DATABASE_SYNC_OPTIONS } from './config/databaseConfig';
 
 // Services
 import { getPatient } from './services/fhirService';
@@ -25,6 +26,7 @@ import { getPatient } from './services/fhirService';
 // Import Routes
 import globalRouter from './routes/indexRoutes';
 import { createDemoFormat } from './utils/utils';
+import { createHealthHandler } from './routes/healthRoute';
 import { loggerInstance } from './middleware/logger/models/typescript/Logger';
 import { Log } from './middleware/logger/models/typescript/Log';
 import { Logger_LogLevel } from './utils/LegLevelEnum';
@@ -50,7 +52,7 @@ sequelize.authenticate()
   console.log(`\nConnection has been established with database successfully.\n`);  
   // Syncronize models
   console.log('\n Syncronizing models ... \n');
-  sequelize.sync({ force: true })
+  sequelize.sync(DATABASE_SYNC_OPTIONS)
   //sequelize.sync({ alter: true })
   .then( () : void => {
     console.log('\nEnded syncronizing models ...\n');
@@ -85,6 +87,8 @@ app.use(express.json());
 
 // Importing Routes
 app.use('/ws', globalRouter);
+
+app.get('/health', createHealthHandler(() => sequelize.authenticate()));
 
 
 // Comentario para marcelo: Ya funciona el getter del patients a través de la API de OpenMRS, faltarian ajustar algunas cosas como el cors y la seguridad, revisar servicios de getPatient.
