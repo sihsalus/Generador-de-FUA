@@ -35,7 +35,7 @@ class FUARenderingUtils {
 
     // Render a FUA Format using HTML header and body from jsonc schema
     // Pending to validate
-    public static async renderFUAFormatFromSchema( FUAFormat : FUAFormat, printMode : boolean, mapping?: any ) : Promise<string> {
+    public static async renderFUAFormatFromSchema( FUAFormat : FUAFormat, printMode : boolean, mapping?: any, printReference? : boolean ) : Promise<string> {
 
         let formatContent = '';
         let pageSizes = {
@@ -64,6 +64,24 @@ class FUARenderingUtils {
             throw error;
         }
 
+
+        const anversoImagePath = path.resolve(process.cwd(), "./src/public/FUA_ANVERSO.jpg");
+        const reversoImagePath = path.resolve(process.cwd(), "./src/public/FUA_REVERSO.jpg");
+        let anversoImageBase64 = "";
+        let reversoImageBase64 = "";
+
+        try {
+            anversoImageBase64 = fs.readFileSync(anversoImagePath).toString("base64");
+            reversoImageBase64 = fs.readFileSync(reversoImagePath).toString("base64");
+        } catch (err) {
+            console.error("Error in FUA Rendering Utils - renderFUAFormat: Could not read background image files from public directory.", err);
+            throw new Error("Error in FUA Rendering Utils - renderFUAFormat: Could not read background image files from public directory.");
+        }
+
+        let backgroundImage = `
+            <img src="data:image/jpeg;base64,${anversoImageBase64}" alt="" style="position: absolute; top: -1.3mm; left:1.0mm; height: 340mm; width: 210mm;" />
+            <img src="data:image/jpeg;base64,${reversoImageBase64}" alt="" style="position: absolute; top: 340mm; left: 0; height: 340mm; width: 215mm;" />
+        `;
         let htmlContent = dedentCustom(`
             <!DOCTYPE html>
             <html lang="es">
@@ -78,7 +96,8 @@ class FUARenderingUtils {
                 </head>
                 <body>
                     
-                        ${ formatContent }
+                    ${ printReference != null && printReference === true ? backgroundImage : "" }           
+                    ${ formatContent }        
                                         
                 </body>
             </html>
@@ -245,7 +264,7 @@ class FUARenderingUtils {
      
                         
                         font-weight: bold;
-                        background-color: lightgray;
+                        /*background-color: lightgray;*/
                         ${auxFUAField.labelHeight ? `height: ${auxFUAField.labelHeight.toFixed(1)}mm;` : ''}
                         ${auxFUAField.labelHeight ? `line-height: ${auxFUAField.labelHeight.toFixed(1)}mm;` : ''}
                         ${auxFUAField.labelExtraStyles ? (printMode == true ? removeBackgroundColor(auxFUAField.labelExtraStyles) : auxFUAField.labelExtraStyles) : ``}

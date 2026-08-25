@@ -32,7 +32,6 @@ import { Logger_SecurityLevel } from './middleware/logger/models/typescript/Secu
 import { Logger_LogType } from './middleware/logger/models/typescript/LogType';
 import { multerErrorHandler, upload } from './middleware/multerMemory';
 import { createPackage, sumAux } from './services/SETISIS_PackageGenerator';
-import { startApplication } from './startup';
 
 
 // Parameters and other options
@@ -40,6 +39,42 @@ const app = express();
 
 
 const port = process.env.PORT || 3000;
+
+
+
+// Testing database connection
+// Consider to envelope main in a async function
+console.log(`\nTesting connection with database ...\n`);
+sequelize.authenticate()
+.then((): void => {
+  console.log(`\nConnection has been established with database successfully.\n`);  
+  // Syncronize models
+  console.log('\n Syncronizing models ... \n');
+  sequelize.sync({ force: true })
+  //sequelize.sync({ alter: true })
+  .then( () : void => {
+    console.log('\nEnded syncronizing models ...\n');
+  } );  
+})
+.catch((error: unknown): void => {
+  // Log in case of failure
+  let auxLog = new Log({
+    timeStamp: new Date(),
+    logLevel: Logger_LogLevel.ERROR,
+    securityLevel: Logger_SecurityLevel.Admin,
+    logType: Logger_LogType.CREATE,
+    environmentType: loggerInstance.enviroment.toString(),
+    description: 'DATABSE CONNECTTION FAILURE :('
+  });
+
+  loggerInstance.printLog(auxLog, [
+    { name: "terminal" },
+    { name: "file", file: "./logs/auxLog.log" }
+    ]);
+  console.error('Unable to connect to the database: ');
+  console.log("CALLED BY INDEX, NOT ANY OTHER PART");
+  console.error(error);
+});
 
 
 
@@ -57,15 +92,6 @@ app.get('/', (req, res) => {
   res.send('¡Servidor Express en funcionamiento!');
 });
 
-app.get('/health', async (_req, res) => {
-  try {
-    await sequelize.authenticate();
-    res.status(200).json({ status: 'ok' });
-  } catch (_error) {
-    res.status(503).json({ status: 'unavailable' });
-  }
-});
-
 
 // Ruta para obtener un paciente por ID
 app.get('/patient/:id', async (req, res) => {
@@ -78,16 +104,40 @@ app.get('/patient/:id', async (req, res) => {
   }
 });
 
+app.listen(port, () => {
+  console.log(`\nServidor corriendo en http://localhost:${port} \n`);
+});
+
 // Serve index.html
 app.get('/FUA', (req, res) => {
   res.sendFile(path.resolve(__dirname, './public/FUA_Previsualization.html'));
 });
 
+function parseOptionalBooleanQueryParam(value: unknown): boolean | undefined {
+  if (value === undefined || value === null) {
+    return undefined;
+  }
+
+  if (typeof value === 'string') {
+    const normalized = value.trim().toLowerCase();
+    if (normalized === 'true' || normalized === '1') {
+      return true;
+    }
+    if (normalized === 'false' || normalized === '0') {
+      return false;
+    }
+    throw new Error("Invalid boolean query value. Use 'true', 'false', '1' or '0'.");
+  }
+
+  throw new Error("Invalid query value type for printReference.");
+}
+
 
 //TESTING ENTITIES
 app.get('/demo', async (req, res) => {
   try {
-    const demoAnswer = await createDemoFormat(false);
+    const printReference = parseOptionalBooleanQueryParam(req.query.printReference);
+    const demoAnswer = await createDemoFormat(false, printReference);
     res.status(200).send(demoAnswer);
   } catch (err: unknown) {
     console.error(err);
@@ -116,7 +166,8 @@ async function getBrowser() {
 app.get('/demopdf', async (req, res) => {
   let demoAnswer = '';
   try {
-    demoAnswer = await createDemoFormat(true);
+    const printReference = parseOptionalBooleanQueryParam(req.query.printReference);
+    demoAnswer = await createDemoFormat(true, printReference);
    
     //res.status(200).send(demoAnswer);
   } catch (err: unknown) {
@@ -138,7 +189,7 @@ app.get('/demopdf', async (req, res) => {
     // 2) Charger le HTML (équiv. à wkhtmltopdf qui lit une string)
     //    Si ton HTML référence des CSS/images relatives, passe un baseURL (file://… ou http://…)
     await page.setContent(demoAnswer, {
-      waitUntil: "load",
+      waitUntil: "networkidle0",
     });
 
     // 4) Deux façons de fixer la taille 210×306 mm :
@@ -343,43 +394,3 @@ app.get('/testFrameMapping2', (req, res) => {
   res.send(result);
 });
 
-async function startServer(): Promise<void> {
-  console.log('\nTesting connection with database ...\n');
-
-  await startApplication({
-    database: sequelize,
-    listen: () =>
-      new Promise<void>((resolve, reject) => {
-        const server = app.listen(port, () => {
-          console.log(`\nServidor corriendo en http://localhost:${port} \n`);
-          resolve();
-        });
-        server.once('error', reject);
-      }),
-  });
-
-  console.log('\nDatabase connection and non-destructive schema sync completed.\n');
-}
-
-async function handleStartupFailure(error: unknown): Promise<void> {
-  const startupLog = new Log({
-    timeStamp: new Date(),
-    logLevel: Logger_LogLevel.ERROR,
-    securityLevel: Logger_SecurityLevel.Admin,
-    logType: Logger_LogType.CREATE,
-    environmentType: loggerInstance.enviroment.toString(),
-    description: 'DATABASE STARTUP FAILURE',
-  });
-
-  loggerInstance.printLog(startupLog, [
-    { name: 'terminal' },
-    { name: 'file', file: './logs/auxLog.log' },
-  ]);
-  console.error('Unable to initialize the database; the HTTP server was not started.');
-  console.error(error);
-
-  await sequelize.close().catch(() => undefined);
-  process.exitCode = 1;
-}
-
-void startServer().catch(handleStartupFailure);

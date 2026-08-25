@@ -12,9 +12,9 @@
       "versionTag": "11.0",
       // Page Attributes
       "pageNumber": 1,
-      "height": 306.0,
+      "height": 340.0,
       "width": 210.0,
-      "padding_top": 12.0,
+      "padding_top": 10.0,
       "padding_left": 11.0,
       "extraStyles":  "",
       // Page sections
@@ -26,13 +26,13 @@
           // Section Atributes
           "title": "",
           "showTitle": false,
-          "titleHeight": 3.0,
-          "bodyHeight": 10.0,
+          "bodyHeight": 9.0,
           "bodyWidth": 192.0,
           "top": 0.0,
           "left": 0.0,
           "extraStyles": "",
-          "fields": []
+          "fields": [],
+          
         },
         {
           // Base Field Form Attribute
@@ -41,118 +41,107 @@
           // Section Atributes
           "title": "FORMATO UNICO DE ATENCIÓN - FUA",
           "showTitle": true,
-          "titleHeight": 1.0,
-          "bodyHeight": 58.0,
+          "titleHeight": 3.5,
+          "bodyHeight": 48.0,
           "bodyWidth": 192.0,
-          "top": 7.7,
+          "top": 9.5,
           "left": 0.0,
           "extraStyles": "",
           // Section fields
           "fields": [
             {
               // Base Field Form Attribute
-              "codeName": "Visit Date",
+              "codeName": "FUA Information",
               "versionTag": "1.0",
-              // Field data
-              "top": 2.4,
-              "left": 0,
-              "labelPosition": "Top",
-              "label": "FECHA DE ATENCIÓN",
-              "showLabel": true,
-              "labelOrientation": "Horizontal",
-              "labelHeight": 2.5,
+              "top": 0.8,
+              "left": 42.3,
+              "showLabel": false,
               "valueType": "Table",
               "columns": [
-                { "width": 10.1},
-                { "width": 10.7},
-                { "width": 29.2}
+                { "width": 39.7},
+                { "width": 13.7},
+                { "width": 54.4}
+          ],
+          "rows": [
+            {
+              // Row 1
+              "index": 1,
+              "height": 3.0,
+              "isHeader": true,
+              "cells": [
+                {
+                  "text": "RENIPRESS"
+                },
+                {
+                  "text": "LOTE"
+                },
+                {
+                  "text": "NÙMERO DE FORMATO"
+                }
+              ]
+            },
+            {
+              // Row 2
+              "index": 2,
+              "height": 7.7,
+              "isHeader": false,
+              "cells": [ 
+                {
+                  "text": "00000066"
+                },
+                {
+                  "text": "26"
+                },
+                {
+                  "text": "XXXXXXXX"
+                }
+              ]
+            }
+          ]
+            },
+            
+            // DEMO FIELD FOR TAKING MEASURES
+            // DE LA INSTITUCION PRESTRADORA DE SALUD
+            {
+              "codeName": "TEMO FIELD FOR TAKING MEASURES",
+              "versionTag": "1.0",
+              "top": 13.0,
+              "left": 0.0,
+              "showLabel": true,
+              "label": "DE LA INSTITUCION PRESTRADORA DE SERVICIOS SALUD",
+              "labelOrientation": "Horizontal",
+              "labelPosition": "Top",
+              "labelHeight": 4.0,
+              "width": 196.0,
+              "valueType": "Table",
+              "columns": [
+                { "width": 83.7},
+                { "width": 107.3}
               ],
               "rows": [
                 {
                   // Row 1
                   "index": 1,
-                  "height": 3.2,
+                  "height": 3.5,
                   "isHeader": true,
                   "cells": [
-                    {
-                      "text": "DIA",
-                      "extraStyles": "background-color: #F0F0F0;"
-                    },
-                    {
-                      "text": "MES",
-                      "extraStyles": "background-color: #F0F0F0;"
-                    },
-                    {
-                      "text": "AÑO",
-                      "extraStyles": "background-color: #F0F0F0;"
-                    }
+                    { "text": "CÓDIGO RENIPRESS DE LA IPRESS" },
+                    { "text": "NOMBRE DE LA IPRESS QUE REALIZA LA ATENCIÓN" }
                   ]
                 },
                 {
                   // Row 2
                   "index": 2,
-                  "height": 4.0,
-                  "isHeader": false,
-                  "cells": [ ]
-                }
-              ]
-            },
-            {
-              // Base Field Form Attribute
-              "codeName": "Visit Time",
-              "versionTag": "1.0",
-              // Field data
-              "top": 2.4,
-              "left": 54.0,
-              "label": "HORA",
-              "showLabel": true,
-              "labelOrientation": "Horizontal",
-              "labelPosition": "Top",
-              "labelHeight": 5.6,
-              "valueType": "Box",
-              "width": 12.0,
-              "height": 4.0
-            },
-            {
-              // Base Field Form Attribute
-              "codeName": "IPRESS provider",
-              "versionTag": "1.0",
-              // Field data
-              "top": 2.5,
-              "left": 69.0,
-              "label": "DE LA INSTITUCIÒN PRESTADORA DE SERVICIOS DE SALUD",
-              "showLabel": true,
-              "labelPosition": "Top",
-              "labelOrientation": "Horizontal",
-              "labelHeight": 2.4,
-              "valueType": "Table",
-              "columns": [
-                { "width": 41.0},
-                { "width": 80.0}
-              ],
-              "rows": [
-                {
-                  // Row 1
-                  "index": 1,
-                  "height": 3.2,
-                  "isHeader": true,
-                  "cells": [
-                    { "text": "CÓDIGO RENAES DE LA IPRESS", "extraStyles": "background-color: #F0F0F0;"},
-                    { "text": "NOMBRE DE LA IPRESS QUE REALIZA LA ATENCIÓN", "extraStyles": "background-color: #F0F0F0;"}
-                  ]
-                },
-                {
-                  // Row 2
-                  "index": 2,
-                  "height": 4.0,
+                  "height": 7.0,
                   "isHeader": false,
                   "cells": [
-                    { "text": "" },
-                    { "text": "" }
+                    { "text": "00000066" },
+                    { "text": "SANTA CLOTILDE" }
                   ]
                 }
               ]
             },
+      
             {
               // Base Field Form Attribute
               "codeName": "Provider Type",
@@ -164,10 +153,10 @@
               "showLabel": true,
               "labelOrientation": "Horizontal",
               "labelPosition": "Top",
-              "labelHeight": 4.0,
+              "labelHeight": 4.5,
               "valueType": "Field",
-              "width": 52.7,
-              "height": 22.5,
+              "width": 52.5,
+              "height": 14.0,
               "fields": [
                 {
                   //Field 1
@@ -184,14 +173,14 @@
                   "labelPosition": "Top",
                   "labelHeight": 5.6,
                   "columns": [
-                    { "width": 18.0},
-                    { "width": 5.0}
+                    { "width": 18.8},
+                    { "width": 5.3}
                   ],
                   "rows": [
                     {
                       // Row 1
                       "index": 1,
-                      "height": 4.38,
+                      "height": 4.9,
                       "isHeader": false,                      
                       "cells": [
                         {
@@ -220,31 +209,7 @@
                       "isHeader": false,
                       "cells": [
                         {
-                          "text": "PLAN MAS SALUD",
-                          "extraStyles": "font-size: 1.8mm; text-align: left;"
-                        }
-                      ]
-                    },
-                    {
-                      // Row 4
-                      "index": 4,
-                      "height": 4.5,
-                      "isHeader": false,
-                      "cells": [
-                        {
                           "text": "OFERTA FLEXIBLE",
-                          "extraStyles": "font-size: 1.8mm; text-align: left;"
-                        }
-                      ]
-                    },
-                    {
-                      // Row 5
-                      "index": 5,
-                      "height": 4.5,
-                      "isHeader": false,
-                      "cells": [
-                        {
-                          "text": "TELESALUD",
                           "extraStyles": "font-size: 1.8mm; text-align: left;"
                         }
                       ]
@@ -258,15 +223,15 @@
                   "versionTag": "1.0",
                   // Field data
                   "top": -0.2,
-                  "left": 22.8,
+                  "left": 23.8,
                   "showLabel": true,
                   "label": "CÓDIGO DE LA OFERTA<br>FLEXIBLE",
                   "labelPosition": "Top",
-                  "labelHeight": 4.2,
+                  "labelHeight": 4.8,
                   "labelExtraStyles": "line-height: 1.9mm;",
                   "valueType": "Box",
-                  "width": 29.5,
-                  "height": 17.9,
+                  "width": 28.5,
+                  "height": 8.9,
                   "text": ""                  
                 }
               ]
@@ -276,13 +241,13 @@
               "codeName": "Visit Location Type",
               "versionTag": "1.0",
               // Field data
-              "top": 28.0,
+              "top": 28.5,
               "left": 52.5,
               "label": "LUGAR DE ATENCIÓN",
               "showLabel": true,
               "labelOrientation": "Horizontal",
               "labelPosition": "Top",
-              "labelHeight": 4.0,
+              "labelHeight": 4.5,
               "valueType": "Table",
               "columns": [
                 { "width": 16.2},
@@ -292,23 +257,20 @@
                 {
                   // Row 1
                   "index": 1,
-                  "height": 4.0,
+                  "height": 4.9,
                   "isHeader": false,
                   "cells": [
-                    { "text": "INTRAMURAL","extraStyles": "background-color: #F0F0F0;"},
+                    { "text": "INTRAMURAL"},
                     { "text": "" }
                   ]
                 },
                 {
                   // Row 2
                   "index": 2,
-                  "height": 4.0,
+                  "height": 4.5,
                   "isHeader": false,
                   "cells": [
-                    {
-                      "text": "EXTRAMURAL",
-                      "extraStyles": "background-color: #F0F0F0;"
-                    }
+                    { "text": "EXTRAMURAL"  }
                   ]
                 }
               ]
@@ -318,51 +280,45 @@
               "codeName": "Visit Type",
               "versionTag": "1.0",
               // Field data
-              "top": 28.0,
+              "top": 28.5,
               "left": 74.7,
               "label": "ATENCIÓN",
               "showLabel": true,
               "labelOrientation": "Horizontal",
               "labelPosition": "Top",
-              "labelHeight": 4.0,
+              "labelHeight": 4.2,
               "valueType": "Table",
               "columns": [
-                { "width": 22.0 },
-                { "width": 5.0  }
+                { "width": 21.0 },
+                { "width": 5.7  }
               ],
               "rows": [
                 {
                   // Row 1
                   "index": 1,
-                  "height": 4.0,
+                  "height": 4.8,
                   "isHeader": false,
                   "cells": [
-                    { "text": "AMBULATORIA", "extraStyles": "background-color: #F0F0F0;"},
+                    { "text": "AMBULATORIA"},
                     { "text": "" }
                   ]
                 },
                 {
                   // Row 2
                   "index": 2,
-                  "height": 8.0,
+                  "height": 4.5,
                   "isHeader": false,
                   "cells": [
-                    {
-                      "text": "REFERENCIA",
-                      "extraStyles": "background-color: #F0F0F0;"
-                    }
+                    { "text": "REFERENCIA" }
                   ]
                 },
                 {
                   // Row 3
                   "index": 3,
-                  "height": 8.0,
+                  "height": 4.5,
                   "isHeader": false,
                   "cells": [
-                    {
-                      "text": "EMERGENCIA",
-                      "extraStyles": "background-color: #F0F0F0;"
-                    }
+                    { "text": "EMERGENCIA" }
                   ]
                 }
               ]
@@ -372,18 +328,18 @@
               "codeName": "IPRESS Info",
               "versionTag": "1.0",
               // Field data
-              "top": 28.0,
-              "left": 102.0,
+              "top": 28.5,
+              "left": 101.5,
               "label": "REFERENCIA REALIZADA POR",
               "showLabel": true,
               "labelPosition": "Top",
               "labelOrientation": "Horizontal",
-              "labelHeight": 4.0,
+              "labelHeight": 4.8,
               "valueType": "Table",
               "columns": [
                 { "width": 20.5},
                 { "width": 51.0},
-                { "width": 17.0}
+                { "width": 17.8}
               ],
               "rows": [
                 {
@@ -392,16 +348,15 @@
                   "height": 4.0,
                   "isHeader": true,
                   "cells": [
-                    { "text": "CÓD. RENAES", "extraStyles": "background-color: #F0F0F0;"},
-                    { "text": "NOMBRE DE LA IPRESS U OFERTA FLEXIBLE", "extraStyles": "background-color: #F0F0F0;"},
-                    { "text": "Nº DE HOJA DE<br> REFERENCIA", 
-                    "extraStyles": "background-color: #F0F0F0; line-height: 2.0mm;"}
+                    { "text": "CÓD. RENAES"},
+                    { "text": "NOMBRE DE LA IPRESS U OFERTA FLEXIBLE"},
+                    { "text": "Nº DE HOJA DE<br> REFERENCIA"}
                   ]
                 },
                 {
                   // Row 2
                   "index": 2,
-                  "height": 16.0,
+                  "height": 9.0,
                   "isHeader": false,
                   "cells": [
                     { "text": ""},
@@ -420,10 +375,10 @@
           // Section Atributes
           "title": "DEL ASEGURADO USUARIO",
           "showTitle": true,
-          "titleHeight": 2.2,
-          "bodyHeight": 55.7,
+          "titleHeight": 0.7,
+          "bodyHeight": 57.2,
           "bodyWidth": 192.0,
-          "top": 70.0,
+          "top": 61.0,
           "left": 0.0,
           "extraStyles": "",
           "fields": [
@@ -449,17 +404,17 @@
                 {
                   // Row 1
                   "index": 1,
-                  "height": 3.8,
+                  "height": 4.9,
                   "isHeader": false,
                   "cells": [
-                    { "text": "TDI", "extraStyles": "background-color: #F0F0F0;"},
-                    { "text": "Nº DOCUMENTO DE IDENTIDAD", "extraStyles": "background-color: #F0F0F0;"}
+                    { "text": "TDI" },
+                    { "text": "Nº DOCUMENTO DE IDENTIDAD" }
                   ]
                 },
                 {
                   // Row 2
                   "index": 2,
-                  "height": 3.9,
+                  "height": 4.8,
                   "isHeader": false,
                   "cells": [ ]
                 }                
@@ -472,7 +427,7 @@
               "versionTag": "1.0",
               // Field data
               "top": 0.0,
-              "left": 44.0,
+              "left": 43.5,
               "showLabel": true,
               "label": "CÓDIGO DEL ASEGURADO SIS",
               "valueType": "Table",
@@ -480,26 +435,64 @@
               "labelPosition": "Top",
               "labelHeight": 2.3,
               "columns": [
-                { "width": 12.6},
+                { "width": 12.8},
                 { "width": 39.0}
               ],
               "rows": [
                 {
                   // Row 1
                   "index": 1,
-                  "height": 3.8,
+                  "height": 4.5,
                   "isHeader": false,
                   "cells": [
-                    { "text": "DIRESA /<br>OTROS", "extraStyles": "background-color: #F0F0F0; line-height: 1.9mm;"},
-                    { "text": "NÚMERO", "extraStyles": "background-color: #F0F0F0;"}
+                    { "text": "DIRESA /<br>OTROS", "extraStyles": "line-height: 1.9mm;"},
+                    { "text": "NÚMERO"}
                   ]
                 },
                 {
                   // Row 2
                   "index": 2,
-                  "height": 3.9,
+                  "height": 4.8,
                   "isHeader": false,
                   "cells": [ ]
+                }                
+              ]
+            },
+            {
+              // Base Field Form Attribute
+              "codeName": "Other insurance",
+              "versionTag": "1.0",
+              // Field data
+              "top": 0.0,
+              "left": 97.0,
+              "showLabel": true,
+              "label": "ASEGURADO DE OTRAS IAFAS",
+              "valueType": "Table",
+              "labelOrientation": "Horizontal",
+              "labelPosition": "Top",
+              "labelHeight": 2.3,
+              "columns": [
+                { "width": 16.0},
+                { "width": 78.0}
+              ],
+              "rows": [
+                {
+                  // Row 1
+                  "index": 1,
+                  "height": 4.7,
+                  "isHeader": false,
+                  "cells": [
+                    { "text": "INSTITUCIÓN"}
+                  ]
+                },
+                {
+                  // Row 2
+                  "index": 2,
+                  "height": 4.8,
+                  "isHeader": false,
+                  "cells": [ 
+                    { "text": "CÒD SEGURO"}
+                  ]
                 }                
               ]
             },
@@ -508,7 +501,7 @@
               "codeName": "Paternal Lastname",
               "versionTag": "1.0",
               // Field data
-              "top": 13,
+              "top": 12.5,
               "left": 0.0,
               "label": "APELLIDO PATERNO",
               "showLabel": true,
@@ -516,24 +509,24 @@
               "labelPosition": "Top",
               "labelHeight": 2.7,
               "valueType": "Box",
-              "width": 96.0 ,
-              "height": 5.0
+              "width": 95.5 ,
+              "height": 6.4
             },
             {
               // Base Field Form Attribute
               "codeName": "Maternal Lastname",
               "versionTag": "1.0",
               // Field data
-              "top": 13,
-              "left": 97.5,
+              "top": 12.5,
+              "left": 97.0,
               "label": "APELLIDO MATERNO",
               "showLabel": true,
               "labelOrientation": "Horizontal",
               "labelPosition": "Top",
               "labelHeight": 2.7,
               "valueType": "Box",
-              "width": 92.0 ,
-              "height": 5.0
+              "width": 94.0 ,
+              "height": 6.4
             },
             {
               // Base Field Form Attribute
@@ -548,8 +541,8 @@
               "labelPosition": "Top",
               "labelHeight": 2.7,
               "valueType": "Box",
-              "width": 96.0 ,
-              "height": 5.0
+              "width": 95.5 ,
+              "height": 6.5
             },
             {
               // Base Field Form Attribute
@@ -557,55 +550,53 @@
               "versionTag": "1.0",
               // Field data
               "top": 21.5,
-              "left": 97.5,
+              "left": 97.0,
               "label": "OTROS NOMBRES",
               "showLabel": true,
               "labelOrientation": "Horizontal",
               "labelPosition": "Top",
               "labelHeight": 2.7,
               "valueType": "Box",
-              "width": 92.0 ,
-              "height": 5.0
+              "width": 94.0 ,
+              "height": 6.5
             },
             {
               // Base Field Form Attribute
               "codeName": "Patient Gender",
               "versionTag": "1.0",
               // Field data
-              "top": 32.3,
+              "top": 31.0,
               "left": 0,
               "label": "SEXO",
               "showLabel": true,
               "labelOrientation": "Horizontal",
               "labelPosition": "Top",
-              "labelHeight": 2.5,
+              "labelHeight": 2.9  ,
               "valueType": "Table",
               "columns": [
-                { "width": 14.6},
-                { "width": 8.9}
+                { "width": 13.9},
+                { "width": 8.5}
               ],
               "rows": [
                 {
                   // Row 1
                   "index": 1,
-                  "height": 3.3,
+                  "height": 3.5,
                   "isHeader": true,
                   "cells": [
                     {
-                      "text": "MASCULINO",
-                      "extraStyles": "background-color: #F0F0F0;"
+                      "text": "MASCULINO"
                     }    
                   ]
                 },
                 {
                   // Row 2
                   "index": 2,
-                  "height": 3.3,
+                  "height": 3.5,
                   "isHeader": true,
                   "cells": [
                     {
-                      "text": "FEMININO",
-                      "extraStyles": "background-color: #F0F0F0;"
+                      "text": "FEMININO"
                     } 
                   ]  
                 }
@@ -616,40 +607,38 @@
               "codeName": "MATERNAL HEALTH",
               "versionTag": "1.0",
               // Field data
-              "top": 42.0,
+              "top": 41.5,
               "left": 0,
               "label": "SALUD MATERNA",
               "showLabel": true,
               "labelOrientation": "Horizontal",
               "labelPosition": "Top",
-              "labelHeight": 2.5,
+              "labelHeight": 4.5,
               "valueType": "Table",
               "columns": [
-                { "width": 14.6},
-                { "width": 8.9}
+                { "width": 13.8},
+                { "width": 8.5}
               ],
               "rows": [
                 {
                   // Row 1
                   "index": 1,
-                  "height": 3.3,
+                  "height": 5.2,
                   "isHeader": true,
                   "cells": [
                     {
-                      "text": "GESTANTE",
-                      "extraStyles": "background-color: #F0F0F0;"
+                      "text": "GESTANTE"
                     }    
                   ]
                 },
                 {
                   // Row 2
                   "index": 2,
-                  "height": 3.3,
+                  "height": 4.7,
                   "isHeader": true,
                   "cells": [
                     {
-                      "text": "PUERPERA",
-                      "extraStyles": "background-color: #F0F0F0;"
+                      "text": "PUERPERA"
                     } 
                   ]  
                 }
@@ -660,8 +649,8 @@
               "codeName": "CLINIC HISTORY NUMBER",
               "versionTag": "1.0",
               // Field data
-              "top": 30.0,
-              "left": 111.0,
+              "top": 31.5,
+              "left": 106.0,
               "label": "N° DE HISTORIA CLÍNICA",
               "showLabel": true,
               "labelOrientation": "Horizontal",
@@ -669,15 +658,15 @@
               "labelHeight": 2.5,
               "valueType": "Box",
               "text": "",
-              "width": 37.3,
-              "height": 6.7
+              "width": 44.0,
+              "height": 6.9
             },
             {
               // Base Field Form Attribute
               "codeName": "ETHNICITY",
               "versionTag": "1.0",
               // Field data
-              "top": 30.0,
+              "top": 31.5,
               "left": 149.0,
               "label": "ETNIA",
               "showLabel": true,
@@ -693,54 +682,50 @@
               "codeName": "DATE OF DEATH",
               "versionTag": "1.0",
               // Field data
-              "top": 30.4,
-              "left": 25.0,
+              "top": 31.0,
+              "left": 23.4,
               "label": "FECHA DE FALLECIMIENTO",
               "showLabel": false,
               "labelOrientation": "Horizontal",
               "labelPosition": "Up",
-              "labelHeight": 2.5,
+              "labelHeight": 3.1,
               "valueType": "Table",
               "columns": [
-                { "width": 24.2},
-                { "width": 16.7},
-                { "width": 14.7},
-                { "width": 30.0}
+                { "width": 23.2},
+                { "width": 15.5},
+                { "width": 14.0},
+                { "width": 29.0}
               ],
               "rows": [
                 {
                   // Row 1
                   "index": 1,
-                  "height": 2.8,
+                  "height": 3.0,
                   "isHeader": true,
                   "cells": [
                     {
-                      "text": "FECHA",
-                      "extraStyles": "background-color: #F0F0F0;"
+                      "text": "FECHA"
                     },
                     {
-                      "text": "DIA",
-                      "extraStyles": "background-color: #F0F0F0;"
+                      "text": "DIA"
                     },
                     {
-                      "text": "MES",
-                      "extraStyles": "background-color: #F0F0F0;"
+                      "text": "MES"
                     },
                     {
-                      "text": "AÑO",
-                      "extraStyles": "background-color: #F0F0F0;"
+                      "text": "AÑO"
                     }  
                   ]
                 },
                 {
                   // Row 2
                   "index": 2,
-                  "height": 6.0,
+                  "height": 7.0,
                   "isHeader": true,
                   "cells": [
                     {
                       "text": "FECHA PROBABLE DE<br>PARTO / FECHA DE<br>PARTO",
-                      "extraStyles": "font-size: 1.55mm; padding: 0.2mm; background-color: #F0F0F0;"
+                      "extraStyles": "font-size: 1.55mm; padding: 0.2mm;"
                     },
                     {
                       "text": ""
@@ -760,30 +745,26 @@
               "codeName": "BIRTHDATE",
               "versionTag": "1.0",
               // Field data
-              "top": 40.0,
-              "left": 25.0,
+              "top": 41.3,
+              "left": 23.4,
               "label": "",
               "showLabel": false,
-              "labelOrientation": "Horizontal",
-              "labelPosition": "Up",
-              "labelHeight": 2.5,
               "valueType": "Table",
               "columns": [
-                { "width": 24.2},
-                { "width": 16.7},
-                { "width": 14.7},
-                { "width": 38.8}
+                { "width": 23.1 },
+                { "width": 15.8},
+                { "width": 14.0},
+                { "width": 29.0}
               ],
               "rows": [
                 {
                   // Row 1
                   "index": 1,
-                  "height": 6.5,
+                  "height": 7.1,
                   "isHeader": true,
                   "cells": [
                     {
-                      "text": "FECHA DE NACIMIENTO",
-                      "extraStyles": "background-color: #F0F0F0;"
+                      "text": "FECHA DE NACIMIENTO"
                     }    
                   ]
                 }
@@ -794,30 +775,26 @@
               "codeName": "DATE OF DEATH",
               "versionTag": "1.0",
               // Field data
-              "top": 46.0,
-              "left": 25.0,
+              "top": 48.5,
+              "left": 23.4,
               "label": "FECHA DE FALLECIMIENTO",
               "showLabel": false,
-              "labelOrientation": "Horizontal",
-              "labelPosition": "Up",
-              "labelHeight": 2.5,
               "valueType": "Table",
               "columns": [
-                { "width": 24.2},
-                { "width": 16.7},
-                { "width": 14.7},
-                { "width": 38.8}
+                { "width": 23.1 },
+                { "width": 15.8},
+                { "width": 14.0},
+                { "width": 29.0}
               ],
               "rows": [
                 {
                   // Row 1
                   "index": 1,
-                  "height": 6.5,
+                  "height": 7.1,
                   "isHeader": true,
                   "cells": [
                     {
-                      "text": "FECHA DE FALLECIMIENTO",
-                      "extraStyles": "background-color: #F0F0F0;"
+                      "text": "FECHA DE<br>FALLECIMIENTO"
                     }    
                   ]
                 }
@@ -895,6 +872,70 @@
           "left": 0.0,
           "extraStyles": "",
           "fields": [
+            {
+              // Base Field Form Attribute
+              "codeName": "Visit Time",
+              "versionTag": "1.0",
+              // Field data
+              "top": 2.4,
+              "left": 54.0,
+              "label": "HORA",
+              "showLabel": true,
+              "labelOrientation": "Horizontal",
+              "labelPosition": "Top",
+              "labelHeight": 5.6,
+              "valueType": "Box",
+              "width": 9.0,
+              "height": 4.0
+            },
+            {
+              // Base Field Form Attribute
+              "codeName": "Visit Date",
+              "versionTag": "1.0",
+              // Field data
+              "top": 10.0,
+              "left": 0,
+              "labelPosition": "Top",
+              "label": "FECHA DE ATENCIÓN",
+              "showLabel": true,
+              "labelOrientation": "Horizontal",
+              "labelHeight": 2.5,
+              "valueType": "Table",
+              "columns": [
+                { "width": 10.1},
+                { "width": 10.7},
+                { "width": 29.2}
+              ],
+              "rows": [
+                {
+                  // Row 1
+                  "index": 1,
+                  "height": 3.2,
+                  "isHeader": true,
+                  "cells": [
+                    {
+                      "text": "DIA",
+                      "extraStyles": "background-color: #F0F0F0;"
+                    },
+                    {
+                      "text": "MES",
+                      "extraStyles": "background-color: #F0F0F0;"
+                    },
+                    {
+                      "text": "AÑO",
+                      "extraStyles": "background-color: #F0F0F0;"
+                    }
+                  ]
+                },
+                {
+                  // Row 2
+                  "index": 2,
+                  "height": 4.0,
+                  "isHeader": false,
+                  "cells": [ ]
+                }
+              ]
+            },
             {
               // Base Field Form Attribute
               "codeName": "UPS",
@@ -1101,7 +1142,7 @@
               "labelHeight": 2.2,
               "valueType": "Field",
               "width": 190.0,
-              "height": 12.0,
+              "height": 9.0,
               "fields": [
                 {
                   // Base Field Form Attribute
@@ -1329,7 +1370,7 @@
                   "columns": [
                     { "width": 17.5},
                     { "width": 8.5},
-                    { "width": 12.7},
+                    { "width": 9.7},
                     { "width": 8.5},
                     { "width": 9.0},
                     { "width": 9.2}
@@ -1451,7 +1492,7 @@
               "labelHeight": 2.0,
               "valueType": "Table",
               "columns": [
-                { "width": 12.0},
+                { "width": 9.0},
                 { "width": 8.5},
                 { "width": 17.0},
                 { "width": 8.1},
@@ -1634,7 +1675,7 @@
                 { "width": 24.6},
                 { "width": 14.2},
                 { "width": 23.6}, 
-                { "width": 12.2},
+                { "width": 9.2},
                 { "width": 31.1},
                 { "width": 13.5}
               ],
@@ -1812,7 +1853,7 @@
               "valueType": "Table",
               "columns": [
                 { "width": 19.0},
-                { "width": 12.0}
+                { "width": 9.0}
               ],
               "rows": [
                 {
@@ -3050,7 +3091,7 @@
                       ]
                     },
                     {
-                      "index": 12,
+                      "index": 9,
                       "height": 1.9,
                       "isHeader": true,
                       "cells": [
@@ -5281,7 +5322,7 @@
                       ]
                     },
                     {
-                      "index": 12,
+                      "index": 9,
                       "height": 1.9,
                       "isHeader": true,
                       "cells": [
@@ -7485,7 +7526,7 @@
                       ]
                     },
                     {
-                      "index": 12,
+                      "index": 9,
                       "height": 1.7,
                       "isHeader": true,
                       "cells": [
@@ -8067,7 +8108,7 @@
                       ]
                     },
                     {
-                      "index": 12,
+                      "index": 9,
                       "height": 1.7,
                       "isHeader": true,
                       "cells": [
@@ -8667,7 +8708,7 @@
                       ]
                     },
                     {
-                      "index": 12,
+                      "index": 9,
                       "height": 1.6,
                       "isHeader": true,
                       "cells": [
@@ -9777,7 +9818,7 @@
                       ]
                     },
                     {
-                      "index": 12,
+                      "index": 9,
                       "height": 1.7,
                       "isHeader": true,
                       "cells": [

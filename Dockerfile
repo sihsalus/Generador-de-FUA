@@ -40,10 +40,5 @@ WORKDIR /FUA_Generator
 COPY package.json /FUA_Generator
 RUN npm install
 COPY . /FUA_Generator
-
-# Keep ts-node available during the current source-based startup while making
-# Express and the application run with production error handling.
-ENV NODE_ENV=production
-
 EXPOSE 3000
 CMD ["npm", "start"]

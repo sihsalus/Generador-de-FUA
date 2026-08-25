@@ -154,7 +154,7 @@ class FUAFormatFromSchemaController {
     };
 
     getById = async (req: Request, res: Response): Promise<void> => {
-        const payload = req.params.id as string;
+        const payload = req.params.id;
         
 
         let searchedFUAFormat = null;
@@ -209,7 +209,7 @@ class FUAFormatFromSchemaController {
 
     // Render FUA Format by Id or UUID
     render = async (req: Request, res: Response): Promise<void> => {
-        const formatidentifier = req.params.id as string;
+        const formatidentifier = req.params.id;
         //const visitpayload = req.body.payload;
      
         let htmlContent = null;
@@ -274,7 +274,7 @@ class FUAFormatFromSchemaController {
         try {
             transactionInst.renewTransaction()
             editFUAFormat = await FUAFormatFromSchemaService.edit({
-                uuid: req.params.id as string,
+                uuid: req.params.id,
                 name: controllerBody.name,
                 content: jsoncContent,
                 codeName: controllerBody.name  ?? controllerBody.name.toString(),
@@ -343,7 +343,7 @@ class FUAFormatFromSchemaController {
         try {
             transactionInst.renewTransaction()
             deleteFUAFormat = await FUAFormatFromSchemaService.delete({
-                uuid: req.params.id as string,
+                uuid: req.params.id,
                 active: false,
                 inactiveBy: controllerBody.inactiveBy,
                 inactiveReason: controllerBody.inactiveReason
@@ -425,6 +425,7 @@ class FUAFormatFromSchemaController {
     };
 
 
+    
 }
 
 export default new FUAFormatFromSchemaController();

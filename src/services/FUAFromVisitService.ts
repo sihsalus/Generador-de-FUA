@@ -225,7 +225,7 @@ class FUAFromVisitService {
             await page.emulateMediaType("print");
         
             await page.setContent(answer, {
-                waitUntil: "load",
+                waitUntil: "networkidle0",
             });
 
             const useCssPageSize = true;
