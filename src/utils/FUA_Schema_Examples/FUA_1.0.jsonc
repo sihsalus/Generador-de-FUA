@@ -655,7 +655,7 @@
               "showLabel": true,
               "labelOrientation": "Horizontal",
               "labelPosition": "Top",
-              "labelHeight": 2.5,
+              "labelHeight": 2.8,
               "valueType": "Box",
               "text": "",
               "width": 44.0,
@@ -667,15 +667,15 @@
               "versionTag": "1.0",
               // Field data
               "top": 31.5,
-              "left": 149.0,
+              "left": 152.4,
               "label": "ETNIA",
               "showLabel": true,
               "labelOrientation": "Horizontal",
               "labelPosition": "Top",
-              "labelHeight": 2.5,
+              "labelHeight": 2.8,
               "valueType": "Box",
-              "width": 40.3,
-              "height": 6.7
+              "width": 38.5,
+              "height": 6.9
             },
             {
               // Base Field Form Attribute
@@ -805,8 +805,8 @@
               "codeName": "DNI/Affiliation",
               "versionTag": "1.0",
               // Field data
-              "top": 40.0,
-              "left": 120.0,
+              "top": 41.7,
+              "left": 105.8,
               "label": "",
               "showLabel": false,
               "labelOrientation": "Horizontal",
@@ -814,43 +814,40 @@
               "labelHeight": 2.5,
               "valueType": "Table",
               "columns": [
-                { "width": 34.5},
-                { "width": 35.8}
+                { "width": 34.9 },
+                { "width": 50.0 }
               ],
               "rows": [
                 {
                   // Row 1
                   "index": 1,
-                  "height": 3.7,
+                  "height": 4.3,
                   "isHeader": true,
                   "cells": [
                     {
-                      "text": "DNI / CNV / AFILIACIÓN DEL RN 1",
-                      "extraStyles": "background-color: #F0F0F0;"
+                      "text": "DNI / CNV / AFILIACIÓN DEL RN 1"
                     }    
                   ]
                 },
                 {
                   // Row 2
                   "index": 2,
-                  "height": 4.6,
+                  "height": 5.4,
                   "isHeader": true,
                   "cells": [
                     {
-                      "text": "DNI / CNV / AFILIACIÓN DEL RN 2",
-                      "extraStyles": "background-color: #F0F0F0;"
+                      "text": "DNI / CNV / AFILIACIÓN DEL RN 2"
                     }    
                   ]
                 },
                 {
                   // Row 3
                   "index": 3,
-                  "height": 4.4,
+                  "height": 4.8,
                   "isHeader": true,
                   "cells": [
                     {
-                      "text": "DNI / CNV / AFILIACIÓN DEL RN 3",
-                      "extraStyles": "background-color: #F0F0F0;"
+                      "text": "DNI / CNV / AFILIACIÓN DEL RN 3"
                     }    
                   ]
                 }
@@ -865,10 +862,10 @@
           // Section Atributes
           "title": "DE LA ATENCIÓN",
           "showTitle": true,
-          "titleHeight": 2.4,
-          "bodyHeight": 37.5,
+          "titleHeight": 3.0,
+          "bodyHeight": 40.2,
           "bodyWidth": 192.0,
-          "top": 130.0,
+          "top": 121.0,
           "left": 0.0,
           "extraStyles": "",
           "fields": [
@@ -877,32 +874,32 @@
               "codeName": "Visit Time",
               "versionTag": "1.0",
               // Field data
-              "top": 2.4,
-              "left": 54.0,
+              "top": 0.0,
+              "left": 50.6,
               "label": "HORA",
               "showLabel": true,
               "labelOrientation": "Horizontal",
               "labelPosition": "Top",
-              "labelHeight": 5.6,
+              "labelHeight": 5.5,
               "valueType": "Box",
-              "width": 9.0,
-              "height": 4.0
+              "width": 14.5,
+              "height": 9.0
             },
             {
               // Base Field Form Attribute
               "codeName": "Visit Date",
               "versionTag": "1.0",
               // Field data
-              "top": 10.0,
+              "top": 0.0,
               "left": 0,
               "labelPosition": "Top",
               "label": "FECHA DE ATENCIÓN",
               "showLabel": true,
               "labelOrientation": "Horizontal",
-              "labelHeight": 2.5,
+              "labelHeight": 3.2,
               "valueType": "Table",
               "columns": [
-                { "width": 10.1},
+                { "width": 9.8},
                 { "width": 10.7},
                 { "width": 29.2}
               ],
@@ -910,27 +907,24 @@
                 {
                   // Row 1
                   "index": 1,
-                  "height": 3.2,
+                  "height": 3.8,
                   "isHeader": true,
                   "cells": [
                     {
-                      "text": "DIA",
-                      "extraStyles": "background-color: #F0F0F0;"
+                      "text": "DIA"
                     },
                     {
-                      "text": "MES",
-                      "extraStyles": "background-color: #F0F0F0;"
+                      "text": "MES"
                     },
                     {
-                      "text": "AÑO",
-                      "extraStyles": "background-color: #F0F0F0;"
+                      "text": "AÑO"
                     }
                   ]
                 },
                 {
                   // Row 2
                   "index": 2,
-                  "height": 4.0,
+                  "height": 7.4 ,
                   "isHeader": false,
                   "cells": [ ]
                 }
@@ -941,16 +935,16 @@
               "codeName": "UPS",
               "versionTag": "1.0",
               // Field data
-              "top": 0.5,
-              "left": 72.2,
+              "top": 0.0,
+              "left": 66.0,
               "label": "UPS",
               "showLabel": true,
               "labelOrientation": "Horizontal",
               "labelPosition": "Top",
-              "labelHeight": 4.8,
+              "labelHeight": 5.2,
               "valueType": "Box",
-              "width": 11.0,
-              "height": 9.0,
+              "width": 8.6,
+              "height": 9.4,
               "text": ""
             },
             {
@@ -958,18 +952,18 @@
               "codeName": "ATTENTION CODE",
               "versionTag": "1.0",
               // Field data
-              "top": 0.5,
-              "left": 84.9,
+              "top": 0.2,
+              "left": 75.4,
               "label": "CÓDIGO <br>PRESTACIONAL",
               "labelExtraStyles": "font-size: 1.8mm; line-height: 2.4mm;",
               "showLabel": true,
               "captionSide": "left",
               "labelOrientation": "Horizontal",
               "labelPosition": "Top",
-              "labelHeight": 4.8,
+              "labelHeight": 5.0,
               "valueType": "Box",
-              "width": 15.2,
-              "height": 9.0,
+              "width": 16.3,
+              "height": 9.4,
               "text": ""
             },
             {
@@ -977,17 +971,17 @@
               "codeName": "ADDITIONAL ATTENTION CODE",
               "versionTag": "1.0",
               // Field data
-              "top": 0.5,
-              "left": 102.6,
+              "top": 0.2,
+              "left": 92.5,
               "label": "<p style='line-height: 1.5mm; font-size: 1.5mm;'>CÓDIGO PRESTACIONAL(ES)<br>ADICIONAL(ES)</p>",
               "showLabel": true,
               "labelOrientation": "Horizontal",
               "labelPosition": "Top",
-              "labelHeight": 4.8,
+              "labelHeight": 5.0,
               "labelextraStyles": "line-height: 2.0mm; font-size: 1.5mm; vertical-align: middle;",
               "valueType": "Box",
-              "width": 26.5,
-              "height": 9.0,
+              "width": 29.4,
+              "height": 9.4,
               "text": ""
             },
             {
@@ -996,15 +990,15 @@
               "versionTag": "1.0",
               // Field data
               "top": 15.0,
-              "left": 72.2,
+              "left": 67.6,
               "label": "N° FUA A VINCULAR",
               "showLabel": true,
               "labelOrientation": "Horizontal",
               "labelPosition": "Top",
-              "labelHeight": 2.5,
+              "labelHeight": 2.8,
               "valueType": "Box",
-              "width": 56.7,
-              "height": 3.8
+              "width": 54.5,
+              "height": 4.1
             },
             {
               // Base Field Form Attribute
@@ -1013,20 +1007,20 @@
               // Field data
               "top": 15.0,
               "left": -0.2,
-              "label": "REPORTE VINCULADO",
+              "label": "REPORTE<br>VINCULADO",
               "showLabel": true,
               "labelOrientation": "Horizontal",
               "labelPosition": "Left",
-              "labelWidth": 30.5,
+              "labelWidth": 26.9,
               "valueType": "Table",
               "columns": [
-                { "width": 40.8}
+                { "width": 40.0}
               ],
               "rows": [
                 {
                   // Row 1
                   "index": 1,
-                  "height": 2.5,
+                  "height": 2.8,
                   "isHeader": true,
                   "cells": [
                     {
@@ -1038,7 +1032,7 @@
                 {
                   // Row 2
                   "index": 2,
-                  "height": 3.8,
+                  "height": 4.0,
                   "isHeader": true,
                   "cells": [
                     {
@@ -1054,7 +1048,7 @@
               "versionTag": "1.0",
               // Field data
               "top": 0.5,
-              "left": 129.5,
+              "left": 132.9,
               "label": "HOSPITALIZACIÓN",
               "showLabel": false,
               "labelOrientation": "Horizontal",
@@ -1063,10 +1057,10 @@
               "labelextraStyles": "background-color: #F0F0F0;",
               "valueType": "Table",
               "columns": [
-                { "width": 20.0},
-                { "width": 10.7},
-                { "width": 11.0},
-                { "width": 18.9}
+                { "width": 19.3},
+                { "width": 10.3},
+                { "width": 10.6},
+                { "width": 17.8}
               ],
               "rows": [
                 {
@@ -1076,8 +1070,7 @@
                   "isHeader": true,
                   "cells": [
                     {
-                      "text": "FECHA",
-                      "extraStyles": "background-color: #F0F0F0;"
+                      "text": "FECHA"
                     },
                     {
                       "text": "DIA"
@@ -1097,32 +1090,29 @@
                   "isHeader": true,
                   "cells": [
                     {
-                      "text": "DE INGRESO",
-                      "extraStyles": "background-color: #F0F0F0;"
+                      "text": "DE INGRESO"
                     } 
                   ]  
                 },
                 {
                   // Row 3
                   "index": 3,
-                  "height": 5.7,
+                  "height": 6.0,
                   "isHeader": true,
                   "cells": [
                     {
-                      "text": "DE ALTA",
-                      "extraStyles": "background-color: #F0F0F0;"
+                      "text": "DE ALTA"
                     } 
                   ]  
                 },
                 {
                   // Row 4
                   "index": 4,
-                  "height": 6.2,
+                  "height": 6.6,
                   "isHeader": true,
                   "cells": [
                     {
-                      "text": "DE CORTE<br>ADMINISTRATIVO",
-                      "extraStyles": "background-color: #F0F0F0;"
+                      "text": "DE CORTE<br>ADMINISTRATIVO"
                     }
                   ]  
                 }
@@ -1133,16 +1123,16 @@
               "codeName": "Attention concept",
               "versionTag": "1.0",
               // Field data
-              "top": 20.7,
+              "top": 22.7,
               "left": 0.0,
               "label": "CONCEPTO PRESTACIONAL",
               "showLabel": true,
               "labelOrientation": "Horizontal",
               "labelPosition": "Top",
-              "labelHeight": 2.2,
+              "labelHeight": 3.0,
               "valueType": "Field",
-              "width": 190.0,
-              "height": 9.0,
+              "width": 190.7,
+              "height": 13.1,
               "fields": [
                 {
                   // Base Field Form Attribute
@@ -1153,199 +1143,21 @@
                   "left": 0.0,
                   "label": "ATENCIÓN DIRECTA",
                   "showLabel": false,
-                  "labelOrientation": "Horizontal",
-                  "labelPosition": "Top",
-                  "labelHeight": 2.3,
                   "valueType": "Table",
                   "columns": [
-                    { "width": 14.5},
-                    { "width": 7.2}
+                    { "width": 13.4},
+                    { "width": 6.8},
+                    { "width": 93.5}
                   ],
                   "rows": [
                     {
                       // Row 1
                       "index": 1,
-                      "height": 11.9,
+                      "height": 12.9,
                       "isHeader": true,
                       "cells": [
                         {
-                          "text": "ATENCIÓN<br>DIRECTA",
-                          "extraStyles": "background-color: #F0F0F0;"
-                        },
-                        {
-                          "text": ""
-                        }
-                      ]
-                    } 
-                  ]
-                },
-                {
-                  // Base Field Form Attribute
-                  "codeName": "Extaordinary COB",
-                  "versionTag": "1.0",
-                  // Field data
-                  "top": -0.2,
-                  "left": 21.6,
-                  "label": "COB EXTRAORDINARIA",
-                  "showLabel": true,
-                  "labelOrientation": "Horizontal",
-                  "labelPosition": "Top",
-                  "labelHeight": 2.3,
-                  "valueType": "Table",
-                  "columns": [
-                    { "width": 22.6},
-                    { "width": 20.9}
-                  ],
-                  "rows": [
-                    {
-                      // Row 1
-                      "index": 1,
-                      "height": 3.8,
-                      "isHeader": true,
-                      "cells": [
-                        {
-                          "text": "N° Autorización",
-                          "extraStyles": "background-color: #F0F0F0;"
-                        },
-                        {
-                          "text": ""
-                        }
-                      ]
-                    } 
-                  ]
-                },
-                {
-                  // Base Field Form Attribute
-                  "codeName": "Amount",
-                  "versionTag": "1.0",
-                  // Field data
-                  "top": 6.0,
-                  "left": 21.6,
-                  "label": "Monto S/.",
-                  "showLabel": false,
-                  "labelOrientation": "Horizontal",
-                  "labelPosition": "Top",
-                  "labelHeight": 2.3,
-                  "valueType": "Table",
-                  "columns": [
-                    { "width": 19.1},
-                    { "width": 24.4}
-                  ],
-                  "rows": [
-                    {
-                      // Row 1
-                      "index": 1,
-                      "height": 5.8,
-                      "isHeader": true,
-                      "cells": [
-                        {
-                          "text": "Monto S/.",
-                          "extraStyles": "background-color: #F0F0F0;"
-                        },
-                        {
-                          "text": ""
-                        }
-                      ]
-                    } 
-                  ]
-                },
-                {
-                  // Base Field Form Attribute
-                  "codeName": "Warranty card",
-                  "versionTag": "1.0",
-                  // Field data
-                  "top": -0.2,
-                  "left": 65.1,
-                  "label": "CARTA DE GARANTIA",
-                  "showLabel": true,
-                  "labelOrientation": "Horizontal",
-                  "labelPosition": "Top",
-                  "labelHeight": 2.3,
-                  "valueType": "Table",
-                  "columns": [
-                    { "width": 18.7},
-                    { "width": 19.8}
-                  ],
-                  "rows": [
-                    {
-                      // Row 1
-                      "index": 1,
-                      "height": 3.8,
-                      "isHeader": true,
-                      "cells": [
-                        {
-                          "text": "N° Autorización",
-                          "extraStyles": "background-color: #F0F0F0;"
-                        },
-                        {
-                          "text": ""
-                        }
-                      ]
-                    } 
-                  ]
-                },
-                {
-                  // Base Field Form Attribute
-                  "codeName": "Amount2",
-                  "versionTag": "1.0",
-                  // Field data
-                  "top": 6.0,
-                  "left": 65.1,
-                  "label": "Monto S/.",
-                  "showLabel": false,
-                  "labelOrientation": "Horizontal",
-                  "labelPosition": "Top",
-                  "labelHeight": 2.3,
-                  "valueType": "Table",
-                  "columns": [
-                    { "width": 14.5},
-                    { "width": 24.0}
-                  ],
-                  "rows": [
-                    {
-                      // Row 1
-                      "index": 1,
-                      "height": 5.6,
-                      "isHeader": true,
-                      "cells": [
-                        {
-                          "text": "Monto S/.",
-                          "extraStyles": "background-color: #F0F0F0;"
-                        },
-                        {
-                          "text": ""
-                        }
-                      ]
-                    } 
-                  ]
-                },
-                {
-                  // Base Field Form Attribute
-                  "codeName": "Transfer",
-                  "versionTag": "1.0",
-                  // Field data
-                  "top": -0.2,
-                  "left": 103.6,
-                  "label": "TRASLADO",
-                  "showLabel": false,
-                  "labelOrientation": "Horizontal",
-                  "labelPosition": "Top",
-                  "labelHeight": 2.3,
-                  "valueType": "Table",
-                  "columns": [
-                    { "width": 15.3},
-                    { "width": 5.3}
-                  ],
-                  "rows": [
-                    {
-                      // Row 1
-                      "index": 1,
-                      "height": 11.9,
-                      "isHeader": true,
-                      "cells": [
-                        {
-                          "text": "TRASLADO",
-                          "extraStyles": "background-color: #F0F0F0;"
+                          "text": "ATENCIÓN<br>DIRECTA"
                         },
                         {
                           "text": ""
@@ -1360,18 +1172,18 @@
                   "versionTag": "1.0",
                   // Field data
                   "top": -0.2,
-                  "left": 124.2,
+                  "left": 119.2,
                   "label": "SEPELIO",
                   "showLabel": true,
                   "labelOrientation": "Horizontal",
                   "labelPosition": "Top",
-                  "labelHeight": 2.3,
+                  "labelHeight": 3.0,
                   "valueType": "Table",
                   "columns": [
-                    { "width": 17.5},
-                    { "width": 8.5},
-                    { "width": 9.7},
-                    { "width": 8.5},
+                    { "width": 21.1},
+                    { "width": 9.0},
+                    { "width": 12.8},
+                    { "width": 10.5},
                     { "width": 9.0},
                     { "width": 9.2}
                   ],
@@ -1379,26 +1191,23 @@
                     {
                       // Row 1
                       "index": 1,
-                      "height": 9.3,
+                      "height": 10.0,
                       "isHeader": true,
                       "cells": [
                         {
-                          "text": "NATIMUERTO",
-                          "extraStyles": "background-color: #F0F0F0;"
+                          "text": "NATIMUERTO"
                         },
                         {
                           "text": ""
                         },
                         {
-                          "text": "OBITO",
-                          "extraStyles": "background-color: #F0F0F0;"
+                          "text": "OBITO"
                         },
                         {
                           "text": ""
                         },
                         {
-                          "text": "OTRO",
-                          "extraStyles": "background-color: #F0F0F0;"
+                          "text": "OTRO"
                         },
                         {
                           "text": ""
@@ -1418,10 +1227,10 @@
           // Section Atributes
           "title": "DEL DESTINO DEL ASEGURADO/USUARIO",
           "showTitle": true,
-          "titleHeight": 2.3,
-          "bodyHeight": 20.0,
+          "titleHeight": 3.0,
+          "bodyHeight": 70.1,
           "bodyWidth": 192.0,
-          "top": 171.0,
+          "top": 164.0,
           "left": 0.0,
           "extraStyles": "",
           "fields": [
@@ -1430,8 +1239,8 @@
               "codeName": "Normal Destiny",
               "versionTag": "1.0",
               // Field data
-              "top": 0.3,
-              "left": 0.1,
+              "top": 0.0,
+              "left": 0.0,
               "label": "",
               "showLabel": false,
               "labelOrientation": "Horizontal",
@@ -1439,37 +1248,36 @@
               "labelHeight": 2.3,
               "valueType": "Table",
               "columns": [
-                { "width": 5.9},
-                { "width": 6.1},
-                { "width": 10.3},
-                { "width": 6.7},
-                { "width": 22.4},
-                { "width": 6.5}
+                { "width": 4.5},
+                { "width": 5.3},
+                { "width": 10.2},
+                { "width": 6.6},
+                { "width": 19.5},
+                { "width": 6.0}
               ],
               "rows": [
                 {
                   // Row 1
                   "index": 1,
-                  "height": 7.0,
+                  "height": 6.2,
                   "isHeader": true,
                   "cells": [
                     {
-                      "text": "ALTA",
-                      "extraStyles": "font-size: 1.8mm; padding: 0.3mm; background-color: #F0F0F0;"
+                      "text": "ALTA", "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"
                     },
                     {
                       "text": ""
                     },
                     {
                       "text": "CITA",
-                      "extraStyles": "font-size: 1.8mm; padding: 0.3mm; background-color: #F0F0F0;"
+                      "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"
                     },
                     {
                       "text": ""
                     },
                     {
                       "text": "HOSPITALIZACIÓN",
-                      "extraStyles": "font-size: 1.8mm; padding: 0.3mm; background-color: #F0F0F0;"
+                      "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"
                     },
                     {
                       "text": ""
@@ -1483,8 +1291,8 @@
               "codeName": "REFFERED DESTINY",
               "versionTag": "1.0",
               // Field data
-              "top": 0.3,
-              "left": 58.0,
+              "top": 0.0,
+              "left": 52.0,
               "label": "REFERIDO",
               "showLabel": true,
               "labelOrientation": "Horizontal",
@@ -1492,23 +1300,23 @@
               "labelHeight": 2.0,
               "valueType": "Table",
               "columns": [
-                { "width": 9.0},
-                { "width": 8.5},
-                { "width": 17.0},
-                { "width": 8.1},
-                { "width": 13.8},
-                { "width": 7.9}
+                { "width": 15.2},
+                { "width": 6.6},
+                { "width": 21.5},
+                { "width": 5.5},
+                { "width": 21.0},
+                { "width": 6.4}
               ],
               "rows": [
                 {
                   // Row 1
                   "index": 1,
-                  "height": 4.7,
+                  "height": 4.5,
                   "isHeader": true,
                   "cells": [
                     {
                       "text": "EMERGENCIA",
-                      "extraStyles": "font-size: 1.5mm; padding: 0.2mm; background-color: #F0F0F0;" 
+                      "extraStyles": "font-size: 1.5mm; padding: 0.2mm;" 
                     },
                     {
                       "text": ""
@@ -1536,8 +1344,8 @@
               "codeName": "COUNTER REFERRED",
               "versionTag": "1.0",
               // Field data
-              "top": 0.3,
-              "left": 129.6,
+              "top": 0.0,
+              "left": 128.2,
               "label": "",
               "showLabel": false,
               "labelOrientation": "Horizontal",
@@ -1545,37 +1353,37 @@
               "labelHeight": 2.3,
               "valueType": "Table",
               "columns": [
-                { "width": 5.9},
-                { "width": 6.1},
-                { "width": 10.3},
-                { "width": 6.7},
-                { "width": 22.4},
-                { "width": 6.5}
+                { "width": 17.0},
+                { "width": 4.6},
+                { "width": 17.8},
+                { "width": 5.3},
+                { "width": 8.8},
+                { "width": 9.0}
               ],
               "rows": [
                 {
                   // Row 1
                   "index": 1,
-                  "height": 7.0,
+                  "height": 6.6,
                   "isHeader": true,
                   "cells": [
                     {
                       "text": "CONTRA<br>RREFERIDO",
-                      "extraStyles": "font-size: 1.8mm; padding: 0.3mm; background-color: #F0F0F0;"
+                      "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"
                     },
                     {
                       "text": ""
                     },
                     {
                       "text": "FALLECIDO",
-                      "extraStyles": "font-size: 1.8mm; padding: 0.3mm; background-color: #F0F0F0;"
+                      "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"
                     },
                     {
                       "text": ""
                     },
                     {
                       "text": "CORTE<br>ADMINIS.",
-                      "extraStyles": "font-size: 1.8mm; padding: 0.3mm; background-color: #F0F0F0;"
+                      "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"
                     },
                     {
                       "text": ""
@@ -1589,24 +1397,24 @@
               "codeName": "REFFERS / COUNTERREFERS TO",
               "versionTag": "1.0",
               // Field data
-              "top": 8.0,
+              "top": 7.4,
               "left": 0.0,
               "label": "SE REFIERE / CONTRARREFIERE A:",
               "showLabel": true,
               "labelOrientation": "Horizontal",
               "labelPosition": "Top",
-              "labelHeight": 2.0,
+              "labelHeight": 2.9,
               "valueType": "Table",
               "columns": [
-                { "width": 40.0},
-                { "width": 99.0},
-                { "width": 52.0}
+                { "width": 38.0},
+                { "width": 107.0},
+                { "width": 46.0}
               ],
               "rows": [
                 {
                   // Row 1
                   "index": 1,
-                  "height": 2.8,
+                  "height": 3.3,
                   "isHeader": true,
                   "cells": [
                      {
@@ -1626,7 +1434,7 @@
                 {
                   // Row 2
                   "index": 2,
-                  "height": 4.7,
+                  "height": 4.9,
                   "isHeader": true,
                   "cells": [
                     {
@@ -1652,9 +1460,9 @@
           "title": "ACTIVIDADES PREVENTIVAS Y OTROS",
           "showTitle": true,
           "titleHeight": 2.5,
-          "bodyHeight": 40.0,
-          "bodyWidth": 120.0,
-          "top": 194.0,
+          "bodyHeight": 47.0,
+          "bodyWidth": 119.5,
+          "top": 187.0,
           "left": 0.0,
           "extraStyles": "",
           "fields": [
@@ -1667,31 +1475,36 @@
               "left": 0.0,
               "label": "ACTIVIDADES PREVENTIVAS",
               "showLabel": false,
-              "labelOrientation": "Horizontal",
-              "labelPosition": "Top",
-              "labelHeight": 2.5,
               "valueType": "Table",
               "columns": [
-                { "width": 24.6},
-                { "width": 14.2},
-                { "width": 23.6}, 
-                { "width": 9.2},
-                { "width": 31.1},
-                { "width": 13.5}
+                { "width": 13.6},
+                { "width": 10.5},
+                { "width": 11.6}, 
+                { "width": 10.3},
+                { "width": 13.1},
+                { "width": 14.5},
+                { "width": 10.0},
+                { "width": 11.9},
+                { "width": 9.9},
+                { "width": 12.9}
               ],
               "rows": [
                 {
                   // Row 1
                   "index": 1,
-                  "height": 4.0,
+                  "height": 5.0,
                   "isHeader": true,
                   "cells": [
-                    { "text": "PESO (kg)", "extraStyles": "background-color: #F0F0F0;"},
+                    { "text": "PESO (kg)"},
                     { "text": "" },
-                    { "text": "TALLA (cm)", "extraStyles": "background-color: #F0F0F0;"},
+                    { "text": "TALLA (cm)"},
                     { "text": "" },
-                    { "text": "P.A. (mmHg)", "extraStyles": "background-color: #F0F0F0;"},
+                    { "text": "P.A. (mmHg)"},
                     { "text": "" },
+                    { "text": "IMC<br>(Kg/m2)"},
+                    { "text": "" },
+                    { "text": "PAB (cm)"},
+                    { "text": "" }
                   ]
                 }
               ]
@@ -1701,27 +1514,27 @@
               "codeName": "Young Adult Eval",
               "versionTag": "1.0",
               // Field data
-              "top": 4.1,
-              "left": 102.1,
-              "label": "<p style='line-height: 1.5mm; font-size: 1.6mm; padding: 0.1mm'>JOVEN Y <br> ADULTO</p>",
+              "top": 5.1,
+              "left": 100.1,
+              "label": "<p style='line-height: 1.5mm; font-size: 1.6mm; padding: 0.1mm'>JOVEN Y<br>ADULTO</p>",
               "showLabel": true,
               "labelOrientation": "Horizontal",
               "labelPosition": "Top",
-              "labelHeight": 4.5,
+              "labelHeight": 5.5,
               "valueType": "Table",
               "columns": [
-                { "width": 11.4},
-                { "width": 5.0}
+                { "width": 12.7},
+                { "width": 5.7}
               ],
               "rows": [
                 {
                   // Row 1
                   "index": 1,
-                  "height": 5.0,
+                  "height": 6.1,
                   "isHeader": false,
                   "cells": [
                     { "text": "EVALUACIÓN <br> INTEGRAL",
-                      "extraStyles": "font-size: 1.4mm; padding: 0.3mm; background-color: #F0F0F0;"
+                      "extraStyles": "font-size: 1.4mm; padding: 0.3mm;"
                     }
                   ]
                 }                
@@ -1732,39 +1545,78 @@
               "codeName": "Young Adult Eval",
               "versionTag": "1.0",
               // Field data
-              "top": 15.0,
-              "left": 103.0,
-              "label": "<p style='line-height: 1.5mm; font-size: 1.6mm; padding: 0.1mm'>ADULTO MAYOR</p>",
+              "top": 16.8,
+              "left": 100.2,
+              "label": "ADULTO<br>MAYOR",
               "showLabel": true,
               "labelOrientation": "Horizontal",
               "labelPosition": "Top",
-              "labelHeight": 4.5,
+              "labelHeight": 5.5,
+              "labelExtraStyles":"font-size: 1.8mm; line-height: 2.4mm;",
               "valueType": "Table",
               "columns": [
-                { "width": 10.0},
+                { "width": 12.6},
                 { "width": 5.5}
               ],
               "rows": [
                 {
                   // Row 1
                   "index": 1,
-                  "height": 5.0,
+                  "height": 6.5,
                   "isHeader": false,
                   "cells": [
                     { "text": "VACAM",
-                  "extraStyles": "font-size: 1.6mm; padding: 0.3mm; background-color: #F0F0F0;"}
+                  "extraStyles": "font-size: 1.6mm; padding: 0.3mm;"}
                   ]
                 },
                 {
                   // Row 2
                   "index": 2,
-                  "height": 5.0,
+                  "height": 7.6,
                   "isHeader": false,
                   "cells": [
                     { "text": "TAMIZAJE<br>DE SALUD<br>MENTAL",
-                  "extraStyles": "font-size: 1.6mm; padding: 0.3mm; background-color: #F0F0F0;"}
+                  "extraStyles": "font-size: 1.6mm; padding: 0.3mm;"}
                   ]
                 }                
+              ]
+            },
+            {
+              // Base Field Form Attribute
+              "codeName": "Cronic Pathologies Screening",
+              "versionTag": "1.0",
+              // Field data
+              "top": 36.3,
+              "left": 18.2,
+              "label": "TAMIZAJE DE PATOLOGÍAS CRÓNICAS",
+              "showLabel": true,
+              "labelOrientation": "Horizontal",
+              "labelPosition": "Top",
+              "labelHeight": 2.8,
+              "labelExtraStyles":"font-size: 1.8mm; line-height: 2.4mm;",
+              "valueType": "Table",
+              "columns": [
+                { "width": 20.3},
+                { "width": 10.7},
+                { "width": 24.3},
+                { "width": 9.8},
+                { "width": 25.4},
+                { "width": 9.6}
+              ],
+              "rows": [
+                {
+                  // Row 1
+                  "index": 1,
+                  "height": 7.2,
+                  "isHeader": false,
+                  "cells": [
+                    { "text": "HB. GLICOSILADA<br>(MG/DL)"},
+                    { "text": ""},
+                    { "text": "DOSAJE DE ALBUMINA<br>EN ORINA (UG/ML)"},
+                    { "text": ""},
+                    { "text": "DEPURACIÓN DE<br>CREATININA (ML/MIN)"}
+                  ]
+                }
               ]
             },
             {
@@ -1772,68 +1624,68 @@
               "codeName": "Of the pregnant woman",
               "versionTag": "1.0",
               // Field data
-              "top": 4.1,
+              "top": 5.1,
               "left": 0.0,
               "label": "DE LA<br>GESTANTE",
               "labelExtraStyles": "line-height: 2.2mm;",
               "showLabel": true,
               "labelOrientation": "Horizontal",
               "labelPosition": "Top",
-              "labelHeight": 4.5,
+              "labelHeight": 5.3,
               "valueType": "Table",
               "columns": [
-                { "width": 11.0},
-                { "width": 7.7}
+                { "width": 9.5},
+                { "width": 7.1}
               ],
               "rows": [
                 {
                   // Row 1
                   "index": 1,
-                  "height": 5.4,
+                  "height": 6.2,
                   "isHeader": false,
                   "cells": [
                     { "text": "CPN (N°)",
-                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm; background-color: #F0F0F0;"}
+                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"}
                   ]
                 },
                 {
                   // Row 2
                   "index": 2,
-                  "height": 5.4,
+                  "height": 5.6,
                   "isHeader": false,
                   "cells": [
                     { "text": "EDAD<br>GEST",
-                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm; background-color: #F0F0F0;"}
+                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"}
                   ]
                 },
                 {
                   // Row 3
                   "index": 3,
-                  "height": 5.4,
+                  "height": 6.4,
                   "isHeader": false,
                   "cells": [
                     { "text": "ALTURA<br>UTERIA",
-                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm; background-color: #F0F0F0;"}
+                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"}
                   ]
                 },
                 {
                   // Row 4
                   "index": 4,
-                  "height": 5.4,
+                  "height": 7.4,
                   "isHeader": false,
                   "cells": [
                     { "text": "PARTO<br>VERTICAL",
-                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm; background-color: #F0F0F0;"}
+                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"}
                   ]
                 },
                 {
                   // Row 5
                   "index": 5,
-                  "height": 5.4,
+                  "height": 10.2,
                   "isHeader": false,
                   "cells": [
-                    { "text": "CONTROL<br>PUERP (N°)",
-                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm; background-color: #F0F0F0;"}
+                    { "text": "CONTROL<br>PUERP<br>(N°)",
+                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"}
                   ]
                 }                
               ]
@@ -1843,13 +1695,13 @@
               "codeName": "Of the newborn",
               "versionTag": "1.0",
               // Field data
-              "top": 4.1,
-              "left": 19.3,
+              "top": 5.0,
+              "left": 18.3,
               "label": "DEL RECIEN NACIDO",
               "showLabel": true,
               "labelOrientation": "Horizontal",
               "labelPosition": "Top",
-              "labelHeight": 4.5,
+              "labelHeight": 5.8,
               "valueType": "Table",
               "columns": [
                 { "width": 19.0},
@@ -1859,11 +1711,11 @@
                 {
                   // Row 1
                   "index": 1,
-                  "height": 5.4,
+                  "height": 5.8,
                   "isHeader": false,
                   "cells": [
                     { "text": "EDAD GEST RN<br>(SEM)",
-                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm; background-color: #F0F0F0;"}
+                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"}
                   ]
                 }            
               ]
@@ -1873,36 +1725,33 @@
               "codeName": "Apgar",
               "versionTag": "1.0",
               // Field data
-              "top": 15.0,
-              "left": 19.3,
+              "top": 16.6,
+              "left": 18.3,
               "label": "APGAR",
               "showLabel": false,
-              "labelOrientation": "Horizontal",
-              "labelPosition": "Top",
-              "labelHeight": 4.5,
               "valueType": "Table",
               "columns": [
-                { "width": 9.1},
-                { "width": 3.3},
-                { "width": 6.8},
-                { "width": 3.3},
-                { "width": 8.5}
+                { "width": 8.1},
+                { "width": 3.1},
+                { "width": 6.1},
+                { "width": 3.1},
+                { "width": 7.6}
               ],
               "rows": [
                 {
                   // Row 1
                   "index": 1,
-                  "height": 11.0,
+                  "height": 12.4,
                   "isHeader": false,
                   "cells": [
                     { "text": "APGAR",
                   "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"},
                   { "text": "1°",
-                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm; background-color: #F0F0F0;"},
+                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"},
                   { "text": "",
                   "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"},
                   { "text": "5°",
-                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm; background-color: #F0F0F0;"}
+                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"}
                   ]
                 }            
               ]
@@ -1912,8 +1761,8 @@
               "codeName": "Corte Tardío de Cordón",
               "versionTag": "1.0",
               // Field data
-              "top": 27.0,
-              "left": 19.3,
+              "top": 28.9,
+              "left": 18.3,
               "label": "Corte Tardío de Cordón",
               "showLabel": false,
               "labelOrientation": "Horizontal",
@@ -1921,18 +1770,18 @@
               "labelHeight": 6.8,
               "valueType": "Table",
               "columns": [
-                { "width": 22.5},
-                { "width": 8.5}
+                { "width": 20.1},
+                { "width": 7.9}
               ],
               "rows": [
                 {
                   // Row 1
                   "index": 1,
-                  "height": 6.8,
+                  "height": 7.2,
                   "isHeader": false,
                   "cells": [
-                    { "text": "Corte Tardío de Cordón<br>(2 a 3min)",
-                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm; background-color: #F0F0F0;"}
+                    { "text": "CORTE TARDÍO DE<br>CORDÓN (2 A 3 MIN)",
+                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"}
                   ]
                 }            
               ]
@@ -1942,33 +1791,39 @@
               "codeName": "PREGNANT/IN/CHILD/ADOLESCENT/YOUNG AND ADULT/OLDER ADULT",
               "versionTag": "1.0",
               // Field data
-              "top": 4.1,
-              "left": 50.8,
+              "top": 5.0,
+              "left": 47.5,
               "label": "<p style='line-height: 1.5mm; font-size: 1.6mm; padding: 0.1mm'>GESTANTE /RN/NIÑO/ADOLESCENTE/JOVEN Y<br>ADULTO/ADULTO MAYOR </p>",
               "showLabel": true,
               "labelOrientation": "Horizontal",
               "labelPosition": "Top",
-              "labelHeight": 4.5,
+              "labelHeight": 5.6,
               "valueType": "Table",
               "columns": [
-                { "width": 13.2},
-                { "width": 11.7},
-                { "width": 9.3},
-                { "width": 16.2}
+                { "width": 14.7},
+                { "width": 11.5},
+                { "width": 9.6},
+                { "width": 15.9 }
               ],
               "rows": [
                 {
                   // Row 1
                   "index": 1,
-                  "height": 5.4,
+                  "height": 6.0,
                   "isHeader": false,
                   "cells": [
-                    { "text": "CRED N°",
-                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm; background-color: #F0F0F0;"},
-                  { "text": "",
-                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"},
-                  { "text": "PAB(cm)",
-                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm; background-color: #F0F0F0;"}
+                    { 
+                      "text": "CRED N°",
+                      "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"
+                    },
+                    {  
+                      "text": "",
+                      "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"
+                    },
+                    { 
+                      "text": "",
+                      "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"
+                    }
                   ]
                 }            
               ]
@@ -1978,8 +1833,8 @@
               "codeName": "Premature, LOW BIRTH WEIGHT",
               "versionTag": "1.0",
               // Field data
-              "top": 15.0,
-              "left": 50.8,
+              "top": 16.5,
+              "left": 47.5,
               "label": "R.N. PREMATURO, BAJO PESO AL NACER",
               "showLabel": false,
               "labelOrientation": "Horizontal",
@@ -1987,28 +1842,32 @@
               "labelHeight": 4.5,
               "valueType": "Table",
               "columns": [
-                { "width": 18.7},
-                { "width": 6.2}
+                { "width": 19.6},
+                { "width": 6.4}
               ],
               "rows": [
                 {
                   // Row 1
                   "index": 1,
-                  "height": 5.4,
+                  "height": 5.7,
                   "isHeader": false,
                   "cells": [
-                    { "text": "R.N. PREMATURO",
-                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm; background-color: #F0F0F0;"}
+                    { 
+                      "text": "R.N. PREMATURO",
+                      "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"
+                    }
                   ]
                 },
                 {
                   // Row 2
                   "index": 2,
-                  "height": 5.4,
+                  "height": 6.3,
                   "isHeader": false,
                   "cells": [
-                    { "text": "BAJO PESO AL NACER",
-                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm; background-color: #F0F0F0;"}
+                    { 
+                      "text": "BAJO PESO A<br>NACER",
+                      "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"
+                    }
                   ]
                 }        
               ]
@@ -2018,8 +1877,8 @@
               "codeName": "CONGENITAL DISEASE / SEQUEL AT BIRTH, NUMBER OF RELATIVES AT GEST / PUERP. MAT. HOME",
               "versionTag": "1.0",
               // Field data
-              "top": 26.2,
-              "left": 50.8,
+              "top": 28.5,
+              "left": 47.5,
               "label": "ENFER. CONGENITA / SECUELA AL NACER, N° FAMILIARES DE GEST / PUERP. CASA MAT.",
               "showLabel": false,
               "labelOrientation": "Horizontal",
@@ -2027,30 +1886,20 @@
               "labelHeight": 4.5,
               "valueType": "Table",
               "columns": [
-                { "width": 18.7},
+                { "width": 19.6},
                 { "width": 6.2}
               ],
               "rows": [
                 {
                   // Row 1
                   "index": 1,
-                  "height": 5.4,
+                  "height": 7.8,
                   "isHeader": false,
                   "cells": [
                     { "text": "ENFER. CONGENITA /<br>SECUELA AL NACER",
-                  "extraStyles": "font-size: 1.6mm; padding: 0.3mm; background-color: #F0F0F0;"}
+                  "extraStyles": "font-size: 1.6mm; padding: 0.3mm;"}
                   ]
-                },
-                {
-                  // Row 2
-                  "index": 2,
-                  "height": 5.4,
-                  "isHeader": false,
-                  "cells": [
-                    { "text": "N° FAMILIARES DE<br>GEST / PUERP. CASA<br>MAT.",
-                  "extraStyles": "font-size: 1.6mm; padding: 0.3mm; background-color: #F0F0F0;"}
-                  ]
-                }        
+                }
               ]
             },
             {
@@ -2058,37 +1907,36 @@
               "codeName": "Nutritional Counseling, TAP/EEDP or TEPSI",
               "versionTag": "1.0",
               // Field data
-              "top": 15.0,
-              "left": 76.1,
+              "top": 16.5,
+              "left": 73.5,
               "label": "CONSEJERIA NUTRICIONAL, TAP/EEDP o TEPSI",
               "showLabel": false,
-              "labelOrientation": "Horizontal",
-              "labelPosition": "Up",
-              "labelHeight": 4.5,
               "valueType": "Table",
               "columns": [
-                { "width": 18.7},
-                { "width": 6.2}
+                { "width": 16.2},
+                { "width": 9.2}
               ],
               "rows": [
                 {
                   // Row 1
                   "index": 1,
-                  "height": 5.4,
+                  "height": 5.7,
                   "isHeader": false,
                   "cells": [
-                    { "text": "TAP/EEDP o<br>TEPSI",
-                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm; background-color: #F0F0F0;"}
+                    { 
+                      "text": "TAP/EEDP O<br>TEPST",
+                      "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"
+                    }
                   ]
                 },
                 {
                   // Row 2
                   "index": 2,
-                  "height": 5.4,
+                  "height": 6.4,
                   "isHeader": false,
                   "cells": [
                     { "text": "CONSEJERIA<br>NUTRICIONAL",
-                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm; background-color: #F0F0F0;"}
+                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"}
                   ]
                 }        
               ]
@@ -2098,8 +1946,8 @@
               "codeName": "NUTRITIONAL COUNSELING, BMI (Kg/M²)",
               "versionTag": "1.0",
               // Field data
-              "top": 26.2,
-              "left": 76.1,
+              "top": 28.7,
+              "left": 73.6,
               "label": "CONSEJERIA NUTRICIONAL, IMC (Kg/M²)",
               "showLabel": false,
               "labelOrientation": "Horizontal",
@@ -2107,30 +1955,20 @@
               "labelHeight": 4.5,
               "valueType": "Table",
               "columns": [
-                { "width": 18.7},
-                { "width": 6.2}
+                { "width": 16.1},
+                { "width": 9.2}
               ],
               "rows": [
                 {
                   // Row 1
                   "index": 1,
-                  "height": 5.4,
+                  "height": 7.6,
                   "isHeader": false,
                   "cells": [
                     { "text": "CONSEJERIA<br>INTEGRAL",
-                  "extraStyles": "font-size: 1.6mm; padding: 0.3mm; background-color: #F0F0F0;"}
+                  "extraStyles": "font-size: 1.6mm; padding: 0.3mm;"}
                   ]
-                },
-                {
-                  // Row 2
-                  "index": 2,
-                  "height": 5.4,
-                  "isHeader": false,
-                  "cells": [
-                    { "text": "IMC (Kg/M²)",
-                  "extraStyles": "font-size: 1.6mm; padding: 0.3mm; background-color: #F0F0F0;"}
-                  ]
-                }        
+                }
               ]
             }
           ]
@@ -2144,10 +1982,10 @@
           "showTitle": true,
           "width": 72.0, 
           "titleHeight": 2.5,
-          "bodyHeight": 40.0,
+          "bodyHeight": 47.0,
           "bodyWidth": 72.0,
           "extraStyles": "",
-          "top": 194.0,
+          "top": 187.0,
           "left": 120.0,
           "fields": [
             {
@@ -2155,7 +1993,7 @@
               "codeName": "Immunisation data",
               "versionTag": "1.0",
               // Field data
-              "top": 0.0,
+              "top": 0.0 ,
               "left": 0.0,
               "label": "IMMUNIZACIÓN DATA",
               "showLabel": false,
@@ -2164,140 +2002,140 @@
               "labelHeight": 4.5,
               "valueType": "Table",
               "columns": [
-                { "width": 13.9},
-                { "width": 7.5},
-                { "width": 16.6},
-                { "width": 7.5},
-                { "width": 16.7},
-                { "width": 7.5}
+                { "width": 12.9},
+                { "width": 9.9},
+                { "width": 14.6},
+                { "width": 10.0},
+                { "width": 14.7},
+                { "width": 8.8}
               ],
               "rows": [
                 {
                   // Row 1
                   "index": 1,
-                  "height": 4.5,
+                  "height": 4.7,
                   "isHeader": false,
                   "cells": [
                     { "text": "BCG",
-                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm; background-color: #F0F0F0;"},
+                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"},
                   { "text": "",
                   "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"},
                   { "text": "INFLUENZA",
-                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm; background-color: #F0F0F0;"},
+                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"},
                   { "text": "",
                   "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"},
-                  { "text": "ANTIAMARILICA",
-                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm; background-color: #F0F0F0;"}
+                  { "text": "ANTIMARILICA",
+                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"}
                   ]
                 },
                 {
                   // Row 2
                   "index": 2,
-                  "height": 4.5,
+                  "height": 6.2,
                   "isHeader": false,
                   "cells": [
                     { "text": "DPT",
-                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm; background-color: #F0F0F0;"},
+                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"},
                   { "text": "",
                   "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"},
                   { "text": "PAROTID",
-                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm; background-color: #F0F0F0;"},
+                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"},
                   { "text": "",
                   "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"},
                   { "text": "ANTINEUMOC",
-                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm; background-color: #F0F0F0;"}
+                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm; "}
                   ]
                 },
                 {
                   // Row 3
                   "index": 3,
-                  "height": 4.5,
+                  "height": 5.5,
                   "isHeader": false,
                   "cells": [
                     { "text": "APO",
-                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm; background-color: #F0F0F0;"},
+                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"},
                   { "text": "",
                   "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"},
                   { "text": "RUBEOLA",
-                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm; background-color: #F0F0F0;"},
+                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"},
                   { "text": "",
                   "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"},
                   { "text": "ANTITETANICA",
-                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm; background-color: #F0F0F0;"}
+                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"}
                   ]
                 },
                 {
                   // Row 4
                   "index": 4,
-                  "height": 4.5,
+                  "height": 5.5,
                   "isHeader": false,
                   "cells": [
                     { "text": "ASA",
-                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm; background-color: #F0F0F0;"},
+                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm; "},
                   { "text": "",
                   "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"},
                   { "text": "ROTAVIRUS",
-                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm; background-color: #F0F0F0;"},
+                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm; "},
                   { "text": "",
                   "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"},
                   { "text": "COMPLETAS<br>PARA LA EDAD",
-                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm; background-color: #F0F0F0;"},
-                  { "text": "SI | NO",
+                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"},
+                  { "text": "SI _ NO",
                   "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"}
                   ]
                 },
                 {
                   // Row 5
                   "index": 5,
-                  "height": 4.5,
+                  "height": 6.3,
                   "isHeader": false,
                   "cells": [
                     { "text": "SPR",
-                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm; background-color: #F0F0F0;"},
+                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"},
                   { "text": "",
                   "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"},
-                  { "text": "DT ADULTO (N°<br>DOSIS)",
-                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm; background-color: #F0F0F0;"},
+                  { "text": "DT ADULTO<br>(N° DOSIS)",
+                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"},
                   { "text": "",
                   "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"},
                   { "text": "VPH",
-                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm; background-color: #F0F0F0;"}
+                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"}
                   ]
                 },
                 {
                   // Row 6
                   "index": 6,
-                  "height": 4.5,
+                  "height": 3.8,
                   "isHeader": false,
                   "cells": [
                     { "text": "SR",
-                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm; background-color: #F0F0F0;"},
+                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"},
                   { "text": "",
                   "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"},
                   { "text": "IPV",
-                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm; background-color: #F0F0F0;"},
+                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"},
                   { "text": "",
                   "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"},
                   { "text": "VARICELA",
-                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm; background-color: #F0F0F0;"}
+                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"}
                   ]
                 },
                 {
                   // Row 7
                   "index": 7,
-                  "height": 4.5,
+                  "height": 6.5,
                   "isHeader": false,
                   "cells": [
                     { "text": "HVB",
-                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm; background-color: #F0F0F0;"},
+                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"},
                   { "text": "",
                   "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"},
                   { "text": "PENTAVAL",
-                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm; background-color: #F0F0F0;"},
+                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm; "},
                   { "text": "",
                   "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"},
-                  { "text": "OTRA VACUNA",
-                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm; background-color: #F0F0F0;"}
+                  { "text": "OTRA VACUNA<br>______",
+                  "extraStyles": "font-size: 1.8mm; padding: 0.3mm;"}
                   ]
                 }           
               ]
@@ -2307,8 +2145,8 @@
               "codeName": "Risk group number",
               "versionTag": "1.0",
               // Field data
-              "top": 31.5,
-              "left": 0.1,
+              "top": 38.6,
+              "left": 0.0,
               "label": "GRUPO DE RIESGO HVB",
               "showLabel": false,
               "labelOrientation": "Horizontal",
@@ -2316,27 +2154,27 @@
               "labelHeight": 2.3,
               "valueType": "Table",
               "columns": [
-                { "width": 19.8},
-                { "width": 5.0},
-                { "width": 45.0}
+                { "width": 18.1},
+                { "width": 7.0},
+                { "width": 45.8}
               ],
               "rows": [
                 {
                   // Row 1
                   "index": 1,
-                  "height": 6,
+                  "height": 7.3 ,
                   "isHeader": true,
                   "cells": [
                     {
                       "text": "GRUPO DE RIESGO<br>HVB",
-                      "extraStyles": "font-size: 1.8mm; background-color: #F0F0F0;"
+                      "extraStyles": "font-size: 1.8mm;"
                     },
                     {
                       "text": ""
                     },
                     {
-                      "text": "GRUPO DE RIESGO HVB: 1. TRABAJADOR DE SALUD 2. TRABAJAD<br>SEXUALES 3. HSH 4. PRIVADO LIBERTAD 5. FF. AA. 6. POLICIA<br>NACIONAL 7. ESTUDIANTES DE SALUD 8. POLITRANFUNDIDOS 9.<br>DROGO DEPENDIENTES",
-                      "extraStyles": "font-size: 1.2mm;"
+                      "text": "GRUPO DE RIESGO HVB: 1. TRABAJADOR DE SALUD 2. TRABAJAD.<br>SEXUALES 3. HSH 4. PRIVADO LIBERTAD 5. FF. AA. 6. POLICIA<br>NACIONAL 7. ESTUDIANTES DE SALUD 8. POLITRANFUNDIDOS 9.<br>DROGO DEPENDIENTES",
+                      "extraStyles": "font-size: 1.4mm;"
                     } 
                   ]
                 } 
@@ -2352,7 +2190,7 @@
           "title": "DIAGNÓSTICOS",
           "showTitle": true,
           "titleHeight": 2.2,
-          "bodyHeight": 24.0,
+          "bodyHeight": 28.9,
           "bodyWidth": 192.0,
           "top": 237.5,
           "left": 0.0,
@@ -2360,44 +2198,43 @@
           "fields": [
             {
               // Base Field Form Attribute
-              "codeName": "Basic Triage",
+              "codeName": "Diagnostics Table",
               "versionTag": "1.0",
               // Field data
               "top": 0.0,
               "left": 0.0,
-              "label": "ACTIVIDADES PREVENTIVAS",
               "showLabel": false,
-              "labelOrientation": "Horizontal",
-              "labelPosition": "Up",
-              "labelHeight": 2.5,
               "valueType": "Table",
               "columns": [
-                { "width": 4.8},
-                { "width": 110.0},
-                { "width": 14.2}, 
-                { "width": 24.2},
-                { "width": 14.2},
-                { "width": 23.4}
+                { "width": 4.6},
+                { "width": 114.5},
+                { "width": 4.5},
+                { "width": 4.5}, 
+                { "width": 4.5},  
+                { "width": 24.3}, 
+                { "width": 5.2}, 
+                { "width": 5.2},  
+                { "width": 23.6}
               ],
               "rows": [
                 {
                   // Row 1
                   "index": 1,
-                  "height": 4.4,
+                  "height": 5.6,
                   "isHeader": true,
                   "cells": [
                     { "text": "Nº" },
                     { "text": "DESCRIPCIÓN" },
-                    { "text": "DX INGRESO" },
-                    { "text": "CIE - 10" },
-                    { "text": "DX EGRESO" },
-                    { "text": "CIE - 10" },
+                    { "text": "" },
+                    { "text": "" },
+                    { "text": "" },
+                    { "text": "" },
                   ]
                 },
                 {
                   // Row 2
                   "index": 2,
-                  "height": 3.8,
+                  "height": 4.5,
                   "isHeader": true,
                   "cells": [
                     { "text": "1" },
@@ -2411,7 +2248,7 @@
                 {
                   // Row 3
                   "index": 3,
-                  "height": 3.8,
+                  "height": 4.5,
                   "isHeader": true,
                   "cells": [
                     { "text": "2" },
@@ -2425,7 +2262,7 @@
                 {
                   // Row 4
                   "index": 4,
-                  "height": 3.8,
+                  "height": 4.5,
                   "isHeader": true,
                   "cells": [
                     { "text": "3" },
@@ -2439,7 +2276,7 @@
                 {
                   // Row 5
                   "index": 5,
-                  "height": 3.8,
+                  "height": 4.5,
                   "isHeader": true,
                   "cells": [
                     { "text": "4" },
@@ -2453,7 +2290,7 @@
                 {
                   // Row 6
                   "index": 6,
-                  "height": 3.8,
+                  "height": 4.5,
                   "isHeader": true,
                   "cells": [
                     { "text": "5" },
@@ -2476,9 +2313,9 @@
           "title": "NOMBRE DEL RESPONSABLE DE LA ATENCIÓN",
           "showTitle": false,
           "titleHeight": 2.3,
-          "bodyHeight": 21.0,
+          "bodyHeight": 51.5,
           "bodyWidth": 192.0,
-          "top": 266.0,
+          "top": 270.0,
           "left": 0.0,
           "extraStyles": "",
           "fields": [
@@ -2496,35 +2333,32 @@
               "labelHeight": 2.0,
               "valueType": "Table",
               "columns": [
-                { "width": 40.6},
-                { "width": 105.2},
-                { "width": 40.5}
+                { "width": 38.5},
+                { "width": 113.2},
+                { "width": 39.1}
               ],
               "rows": [
                 {
                   // Row 1
                   "index": 1,
-                  "height": 2.3,
+                  "height": 1.0,
                   "isHeader": true,
                   "cells": [
                      {
                       "text": "N° DE DNI",
-                      "extraStyles": "font-size: 2.1mm; padding: 0.3mm; background-color: lightgrey; font-weight: 700;"
                     },
                     {
                       "text": "NOMBRE DEL REPONSABLE DE LA ATENCIÓN",
-                      "extraStyles": "font-size: 2.1mm; padding: 0.3mm; background-color: lightgrey; font-weight: 700;"
                     },
                     {
                       "text": "N° DE COLEGIATURA",
-                      "extraStyles": "font-size: 2.1mm; padding: 0.3mm; background-color:lightgrey; font-weight: 700;"
                     }
                   ]
                 },
                 {
                   // Row 2
                   "index": 2,
-                  "height": 5.0,
+                  "height": 5.9,
                   "isHeader": true,
                   "cells": [
                     {
@@ -2545,7 +2379,7 @@
               "codeName": "Provider data / Specialisation / N° RNE/ Graduate",
               "versionTag": "1.0",
               // Field data
-              "top": 8.5,
+              "top": 8.1,
               "left": 0.0,
               "label": "",
               "showLabel": false,
@@ -2554,46 +2388,42 @@
               "labelHeight": 2.0,
               "valueType": "Table",
               "columns": [
-                { "width": 40.6},
+                { "width": 38.5},
                 { "width": 7.7},
-                { "width": 18.9},
-                { "width": 52.3},
-                { "width": 15.8},
-                { "width": 15.2},
-                { "width": 30.7},
-                { "width": 9.4}
+                { "width": 20.8},
+                { "width": 54.8},
+                { "width": 15.1},
+                { "width": 14.8},
+                { "width": 30.0},
+                { "width": 9.1}
               ],
               "rows": [
                 {
                   // Row 1
                   "index": 1,
-                  "height": 2.9,
+                  "height": 4.1,
                   "isHeader": true,
                   "cells": [
                     {
-                      "text": "RESPONSABLE DE LA ATENCIÓN",
-                      "extraStyles": "background-color: #F0F0F0;"
+                      "text": "RESPONSABLE DE LA ATENCIÓN"
                     },
                     {
                       "text": ""
                     },
                     {
-                      "text": "ESPECIALIDAD",
-                      "extraStyles": "background-color: #F0F0F0;"
+                      "text": "ESPECIALIDAD"
                     },
                     {
                       "text": ""
                     },
                     {
-                      "text": "N° RNE",
-                      "extraStyles": "background-color: #F0F0F0;"
+                      "text": "N° RNE"
                     },
                     {
                       "text": ""
                     },
                     {
-                      "text": "EGRESADO",
-                      "extraStyles": "background-color: #F0F0F0;"
+                      "text": "EGRESADO"
                     },
                     {
                       "text": ""
@@ -2615,7 +2445,7 @@
       "pageNumber": 2,
       "height": 330.0,
       "width": 210.0,
-      "padding_top": 9.5,
+      "padding_top": 7.5,
       "padding_left": 5.7,
       //"extraStyles":  "padding-top: 20px; padding-left: 20px; padding-bottom: 20px; padding-right: 20px;",
       // Page sections
@@ -2628,8 +2458,8 @@
           "title": "",
           "showTitle": false,
           "titleHeight": 3.0,
-          "bodyHeight": 288.0,
-          "bodyWidth": 192.0,
+          "bodyHeight": 286.0,
+          "bodyWidth": 199.0,
           "top": 0.0,
           "left": 0.0,
           "extraStyles": "",
@@ -2640,22 +2470,23 @@
               "versionTag": "1.0",
               // Field data
               "top": 0.0,
-              "left": 132.8,
+              "left": 107.3,
               "label": "FORMATO DE ATENCION N°",
               "showLabel": true,
               "labelOrientation": "Horizontal",
               "labelPosition": "Top",
-              "labelHeight": 2.6,
+              "labelHeight": 2.7,
               "valueType": "Table",
               "columns": [
-                {"width": 22.9},
-                {"width": 35.1}
+                {"width": 35.8},
+                {"width": 15.0},
+                {"width": 39.7}
               ],
               "rows": [
                 {
                   // Row 1
                   "index": 1,
-                  "height": 2.5,
+                  "height": 5.7,
                   "isHeader": true,
                   "cells": [
                      {
@@ -2670,16 +2501,17 @@
               "codeName": "MEDICATION LIST LABEL",
               "versionTag": "1.0",
               // Field data
-              "top": 6.0,
-              "left": 0.0,
-              "label": "MEDICAMENTOS",
+              "top": 9.2,
+              "left": 2.3,
+              "label": "PRODUCTOS FARMACEÙTIVOS / MEDICAMENTOS",
+              "labelExtraStyles": "font-size: 1.2mm;",
               "showLabel": true,
               "labelOrientation": "Horizontal",
               "labelPosition": "Top",
-              "labelHeight": 2.3,
+              "labelHeight": 1.8,
               "valueType": "Field",
-              "width": 191.0,
-              "height": 139.6,
+              "width": 195.5,
+              "height": 138.0,
               "fields": [
                 {
                   // Base Field Form Attribute
@@ -2695,54 +2527,54 @@
                   "labelHeight": 2.0,
                   "valueType": "Table",
                   "columns": [
-                    { "width": 8.7},
-                    { "width": 47.0},
+                    { "width": 8.5},
+                    { "width": 49.2},
+                    { "width": 5.9},
+                    { "width": 18.5},
                     { "width": 5.5},
-                    { "width": 16.3},
-                    { "width": 5.7},
-                    { "width": 5.7},
-                    { "width": 5.7}
+                    { "width": 5.3},
+                    { "width": 5.1}
                   ],
                   "rows": [
                     {
                       // Row 1
                       "index": 1,
-                      "height": 2.3,
+                      "height":  2.1,
                       "isHeader": true,
                       "cells": [
                         {
                           "text": "CÓDIGO<br>SISMED",
-                          "extraStyles" : "font-size: 1.4mm; background-color: lightgrey;"
+                          "extraStyles" : "font-size: 0.8mm; "
                         },
                         {
                           "text": "NOMBRE",
-                          "extraStyles" : "font-size: 1.4mm; background-color: lightgrey;"
+                          "extraStyles" : "font-size: 1.4mm; "
                         },
                         {
                           "text": "FF",
-                          "extraStyles" : "font-size: 1.4mm; background-color: lightgrey;"
+                          "extraStyles" : "font-size: 1.4mm; "
                         },
                         {
                           "text": "CONCENTR",
-                          "extraStyles" : "font-size: 1.4mm; background-color: lightgrey;"
+                          "extraStyles" : "font-size: 1.4mm; "
                         },
                         {
                           "text": "PREN",
-                          "extraStyles" : "font-size: 1.4mm; background-color: lightgrey;"
+                          "extraStyles" : "font-size: 1.4mm; "
                         },
                         {
                           "text": "ENTR",
-                          "extraStyles" : "font-size: 1.4mm; background-color: lightgrey;"
+                          "extraStyles" : "font-size: 1.4mm; "
                         },
                         {
                           "text": "DX",
-                          "extraStyles" : "font-size: 1.4mm; background-color: lightgrey;"
+                          "extraStyles" : "font-size: 1.4mm; "
                         }
                       ]
                     },
                     {
                       "index": 2,
-                      "height": 1.9,
+                      "height":  2.1,
                       "isHeader": true,
                       "cells": [
                         {
@@ -2777,7 +2609,7 @@
                     },
                     {
                       "index": 3,
-                      "height": 1.9,
+                      "height":  2.1,
                       "isHeader": true,
                       "cells": [
                         {
@@ -2812,7 +2644,7 @@
                     },
                     {
                       "index": 4,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -2847,7 +2679,7 @@
                     },
                     {
                       "index": 5,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -2882,7 +2714,7 @@
                     },
                     {
                       "index": 6,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -2917,7 +2749,7 @@
                     },
                     {
                       "index": 7,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -2952,7 +2784,7 @@
                     },
                     {
                       "index": 8,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -2987,7 +2819,7 @@
                     },
                     {
                       "index": 9,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -3022,7 +2854,7 @@
                     },
                     {
                       "index": 10,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -3057,7 +2889,7 @@
                     },
                     {
                       "index": 11,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -3092,7 +2924,7 @@
                     },
                     {
                       "index": 9,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -3127,7 +2959,7 @@
                     },
                     {
                       "index": 13,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -3162,7 +2994,7 @@
                     },
                     {
                       "index": 14,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -3197,7 +3029,7 @@
                     },
                     {
                       "index": 15,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -3232,7 +3064,7 @@
                     },
                     {
                       "index": 16,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -3267,7 +3099,7 @@
                     },
                     {
                       "index": 17,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -3302,7 +3134,7 @@
                     },
                     {
                       "index": 18,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -3337,7 +3169,7 @@
                     },
                     {
                       "index": 19,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -3372,7 +3204,7 @@
                     },
                     {
                       "index": 20,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -3407,7 +3239,7 @@
                     },
                     {
                       "index": 21,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -3442,7 +3274,7 @@
                     },
                     {
                       "index": 22,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -3477,7 +3309,7 @@
                     },
                     {
                       "index": 23,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -3512,7 +3344,7 @@
                     },
                     {
                       "index": 24,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -3547,7 +3379,7 @@
                     },
                     {
                       "index": 25,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -3582,7 +3414,7 @@
                     },
                     {
                       "index": 26,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -3617,7 +3449,7 @@
                     },
                     {
                       "index": 27,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -3652,7 +3484,7 @@
                     },
                     {
                       "index": 28,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -3687,7 +3519,7 @@
                     },
                     {
                       "index": 29,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -3722,7 +3554,7 @@
                     },
                     {
                       "index": 30,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -3757,7 +3589,7 @@
                     },
                     {
                       "index": 31,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -3792,7 +3624,7 @@
                     },
                     {
                       "index": 32,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -3827,7 +3659,7 @@
                     },
                     {
                       "index": 33,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -3862,7 +3694,7 @@
                     },
                     {
                       "index": 34,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -3897,7 +3729,7 @@
                     },
                     {
                       "index": 35,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -3932,7 +3764,7 @@
                     },
                     {
                       "index": 36,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -3967,7 +3799,7 @@
                     },
                     {
                       "index": 37,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -4002,7 +3834,7 @@
                     },
                     {
                       "index": 38,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -4037,7 +3869,7 @@
                     },
                     {
                       "index": 39,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -4072,7 +3904,7 @@
                     },
                     {
                       "index": 40,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -4107,7 +3939,7 @@
                     },
                     {
                       "index": 41,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -4142,7 +3974,7 @@
                     },
                     {
                       "index": 42,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -4177,7 +4009,7 @@
                     },
                     {
                       "index": 43,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -4212,7 +4044,7 @@
                     },
                     {
                       "index": 44,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -4247,7 +4079,7 @@
                     },
                     {
                       "index": 45,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -4282,7 +4114,7 @@
                     },
                     {
                       "index": 46,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -4317,7 +4149,7 @@
                     },
                     {
                       "index": 47,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -4352,7 +4184,7 @@
                     },
                     {
                       "index": 48,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -4387,7 +4219,7 @@
                     },
                     {
                       "index": 49,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -4422,7 +4254,7 @@
                     },
                     {
                       "index": 50,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -4457,7 +4289,7 @@
                     },
                     {
                       "index": 51,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -4492,7 +4324,7 @@
                     },
                     {
                       "index": 52,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -4527,7 +4359,7 @@
                     },
                     {
                       "index": 53,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -4562,7 +4394,7 @@
                     },
                     {
                       "index": 54,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -4597,7 +4429,7 @@
                     },
                     {
                       "index": 55,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -4632,7 +4464,7 @@
                     },
                     {
                       "index": 56,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -4667,7 +4499,7 @@
                     },
                     {
                       "index": 57,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -4702,7 +4534,7 @@
                     },
                     {
                       "index": 58,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -4737,7 +4569,7 @@
                     },
                     {
                       "index": 59,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -4771,142 +4603,30 @@
                       ]
                     },
                     {
-                      "index": 60,
-                      "height": 1.9,
+                      "index": 59,
+                      "height":  2.6,
                       "isHeader": true,
                       "cells": [
                         {
-                          "text": "03322",
-                          "extraStyles": "font-size: 1.4mm;"
+                          "text": ""
                         },
                         {
-                          "text": "ESCOPOLAMINA N BUTILBROMURO",
-                          "extraStyles": "font-size: 1.4mm;"
+                          "text": ""
                         },
                         {
-                          "text": "TAB",
-                          "extraStyles": "font-size: 1.4mm;"
+                          "text": ""
                         },
                         {
-                          "text": "10 mg",
-                          "extraStyles": "font-size: 1.4mm;"
+                          "text": ""
                         },
                         {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
+                          "text": ""
                         },
                         {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
+                          "text": ""
                         },
                         {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        }
-                      ]
-                    },
-                    {
-                      "index": 61,
-                      "height": 1.9,
-                      "isHeader": true,
-                      "cells": [
-                        {
-                          "text": "03323",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "ESCOPOLAMINA N BUTILBROMURO",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "INY",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "20 mg/mL - 1 mL",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        }
-                      ]
-                    },
-                    {
-                      "index": 62,
-                      "height": 1.9,
-                      "isHeader": true,
-                      "cells": [
-                        {
-                          "text": "03356",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "FIERRO SULFATO (Eq. a 60 mg de Hierro)",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "TAB",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "300 mg",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        }
-                      ]
-                    },
-                    {
-                      "index": 63,
-                      "height": 1.9,
-                      "isHeader": true,
-                      "cells": [
-                        {
-                          "text": "03358",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "FIERRO SÓDICO POLIMALTOSADO (8 mL)",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "SOL",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "25 mg eq Fe/mL",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
+                          "text": ""
                         }
                       ]
                     }
@@ -4917,8 +4637,8 @@
                   "codeName": "Medications list 2",
                   "versionTag": "1.0",
                   // Field data
-                  "top": -0.1,
-                  "left": 96.0,
+                  "top": 0.0,
+                  "left": 97.8,
                   "label": "MEDICAMENTOS 2",
                   "showLabel": false,
                   "labelOrientation": "Horizontal",
@@ -4926,54 +4646,54 @@
                   "labelHeight": 2.0,
                   "valueType": "Table",
                   "columns": [
-                    { "width": 8.7},
-                    { "width": 47.0},
+                    { "width": 8.5},
+                    { "width": 49.2},
+                    { "width": 5.9},
+                    { "width": 18.5},
                     { "width": 5.5},
-                    { "width": 16.3},
-                    { "width": 5.7},
-                    { "width": 5.7},
-                    { "width": 5.7}
+                    { "width": 5.3},
+                    { "width": 5.1}
                   ],
                   "rows": [
                     {
                       // Row 1
                       "index": 1,
-                      "height": 2.3,
+                      "height":  2.1,
                       "isHeader": true,
                       "cells": [
                         {
                           "text": "CÓDIGO<br>SISMED",
-                          "extraStyles" : "font-size: 1.4mm; background-color: lightgrey;"
+                          "extraStyles" : "font-size: 0.8mm; "
                         },
                         {
                           "text": "NOMBRE",
-                          "extraStyles" : "font-size: 1.4mm; background-color: lightgrey;"
+                          "extraStyles" : "font-size: 1.4mm; "
                         },
                         {
                           "text": "FF",
-                          "extraStyles" : "font-size: 1.4mm; background-color: lightgrey;"
+                          "extraStyles" : "font-size: 1.4mm; "
                         },
                         {
                           "text": "CONCENTR",
-                          "extraStyles" : "font-size: 1.4mm; background-color: lightgrey;"
+                          "extraStyles" : "font-size: 1.4mm; "
                         },
                         {
                           "text": "PREN",
-                          "extraStyles" : "font-size: 1.4mm; background-color: lightgrey;"
+                          "extraStyles" : "font-size: 1.4mm; "
                         },
                         {
                           "text": "ENTR",
-                          "extraStyles" : "font-size: 1.4mm; background-color: lightgrey;"
+                          "extraStyles" : "font-size: 1.4mm; "
                         },
                         {
                           "text": "DX",
-                          "extraStyles" : "font-size: 1.4mm; background-color: lightgrey;"
+                          "extraStyles" : "font-size: 1.4mm; "
                         }
                       ]
                     },
                     {
                       "index": 2,
-                      "height": 1.9,
+                      "height":  2.1,
                       "isHeader": true,
                       "cells": [
                         {
@@ -5008,7 +4728,7 @@
                     },
                     {
                       "index": 3,
-                      "height": 1.9,
+                      "height":  2.1,
                       "isHeader": true,
                       "cells": [
                         {
@@ -5043,7 +4763,7 @@
                     },
                     {
                       "index": 4,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -5078,7 +4798,7 @@
                     },
                     {
                       "index": 5,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -5113,7 +4833,7 @@
                     },
                     {
                       "index": 6,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -5148,7 +4868,7 @@
                     },
                     {
                       "index": 7,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -5183,7 +4903,7 @@
                     },
                     {
                       "index": 8,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -5218,7 +4938,7 @@
                     },
                     {
                       "index": 9,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -5253,7 +4973,7 @@
                     },
                     {
                       "index": 10,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -5288,7 +5008,7 @@
                     },
                     {
                       "index": 11,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -5323,7 +5043,7 @@
                     },
                     {
                       "index": 9,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -5358,7 +5078,7 @@
                     },
                     {
                       "index": 13,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -5393,7 +5113,7 @@
                     },
                     {
                       "index": 14,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -5428,7 +5148,7 @@
                     },
                     {
                       "index": 15,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -5463,7 +5183,7 @@
                     },
                     {
                       "index": 16,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -5498,7 +5218,7 @@
                     },
                     {
                       "index": 17,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -5533,7 +5253,7 @@
                     },
                     {
                       "index": 18,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -5568,7 +5288,7 @@
                     },
                     {
                       "index": 19,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -5603,7 +5323,7 @@
                     },
                     {
                       "index": 20,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -5638,7 +5358,7 @@
                     },
                     {
                       "index": 21,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -5673,7 +5393,7 @@
                     },
                     {
                       "index": 22,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -5708,7 +5428,7 @@
                     },
                     {
                       "index": 23,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -5743,7 +5463,7 @@
                     },
                     {
                       "index": 24,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -5778,7 +5498,7 @@
                     },
                     {
                       "index": 25,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -5813,7 +5533,7 @@
                     },
                     {
                       "index": 26,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -5848,7 +5568,7 @@
                     },
                     {
                       "index": 27,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -5883,7 +5603,7 @@
                     },
                     {
                       "index": 28,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -5918,7 +5638,7 @@
                     },
                     {
                       "index": 29,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -5953,7 +5673,7 @@
                     },
                     {
                       "index": 30,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -5988,7 +5708,7 @@
                     },
                     {
                       "index": 31,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -6023,7 +5743,7 @@
                     },
                     {
                       "index": 32,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -6058,7 +5778,7 @@
                     },
                     {
                       "index": 33,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -6093,7 +5813,7 @@
                     },
                     {
                       "index": 34,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -6128,7 +5848,7 @@
                     },
                     {
                       "index": 35,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -6163,7 +5883,7 @@
                     },
                     {
                       "index": 36,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -6198,7 +5918,7 @@
                     },
                     {
                       "index": 37,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -6233,7 +5953,7 @@
                     },
                     {
                       "index": 38,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -6268,7 +5988,7 @@
                     },
                     {
                       "index": 39,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -6303,7 +6023,7 @@
                     },
                     {
                       "index": 40,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -6338,7 +6058,7 @@
                     },
                     {
                       "index": 41,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -6373,7 +6093,7 @@
                     },
                     {
                       "index": 42,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -6408,7 +6128,7 @@
                     },
                     {
                       "index": 43,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -6443,7 +6163,7 @@
                     },
                     {
                       "index": 44,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -6478,7 +6198,7 @@
                     },
                     {
                       "index": 45,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -6513,7 +6233,7 @@
                     },
                     {
                       "index": 46,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -6548,7 +6268,7 @@
                     },
                     {
                       "index": 47,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -6583,7 +6303,7 @@
                     },
                     {
                       "index": 48,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -6618,7 +6338,7 @@
                     },
                     {
                       "index": 49,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -6653,7 +6373,7 @@
                     },
                     {
                       "index": 50,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -6688,7 +6408,7 @@
                     },
                     {
                       "index": 51,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -6723,7 +6443,7 @@
                     },
                     {
                       "index": 52,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -6758,7 +6478,7 @@
                     },
                     {
                       "index": 53,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -6793,7 +6513,7 @@
                     },
                     {
                       "index": 54,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -6828,7 +6548,7 @@
                     },
                     {
                       "index": 55,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -6863,7 +6583,7 @@
                     },
                     {
                       "index": 56,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -6898,7 +6618,7 @@
                     },
                     {
                       "index": 57,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -6933,7 +6653,7 @@
                     },
                     {
                       "index": 58,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -6968,7 +6688,7 @@
                     },
                     {
                       "index": 59,
-                      "height": 1.9,
+                      "height":  2.3,
                       "isHeader": true,
                       "cells": [
                         {
@@ -7002,142 +6722,30 @@
                       ]
                     },
                     {
-                      "index": 60,
-                      "height": 1.9,
+                      "index": 59,
+                      "height":  2.6,
                       "isHeader": true,
                       "cells": [
                         {
-                          "text": "03322",
-                          "extraStyles": "font-size: 1.4mm;"
+                          "text": ""
                         },
                         {
-                          "text": "ESCOPOLAMINA N BUTILBROMURO",
-                          "extraStyles": "font-size: 1.4mm;"
+                          "text": ""
                         },
                         {
-                          "text": "TAB",
-                          "extraStyles": "font-size: 1.4mm;"
+                          "text": ""
                         },
                         {
-                          "text": "10 mg",
-                          "extraStyles": "font-size: 1.4mm;"
+                          "text": ""
                         },
                         {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
+                          "text": ""
                         },
                         {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
+                          "text": ""
                         },
                         {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        }
-                      ]
-                    },
-                    {
-                      "index": 61,
-                      "height": 1.9,
-                      "isHeader": true,
-                      "cells": [
-                        {
-                          "text": "03323",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "ESCOPOLAMINA N BUTILBROMURO",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "INY",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "20 mg/mL - 1 mL",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        }
-                      ]
-                    },
-                    {
-                      "index": 62,
-                      "height": 1.9,
-                      "isHeader": true,
-                      "cells": [
-                        {
-                          "text": "03356",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "FIERRO SULFATO (Eq. a 60 mg de Hierro)",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "TAB",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "300 mg",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        }
-                      ]
-                    },
-                    {
-                      "index": 63,
-                      "height": 1.9,
-                      "isHeader": true,
-                      "cells": [
-                        {
-                          "text": "03358",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "FIERRO SÓDICO POLIMALTOSADO (8 mL)",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "SOL",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "25 mg eq Fe/mL",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
+                          "text": ""
                         }
                       ]
                     }
@@ -7147,19 +6755,20 @@
             },
             {
               // Base Field Form Attribute
-              "codeName": "COMPLEMENTARY SUPPLIES Field",
+              "codeName": " Medical dispositives",
               "versionTag": "1.0",
               // Field data
-              "top": 148.0,
-              "left": 0.0,
-              "label": "INSUMOS COMPLEMENTARIOS",
+              "top": 149.0,
+              "left": 2.5,
+              "label": "DISPOSITIVOS MÉDICOS / PRODUCTOS SANITARIOS",
+              "labelExtraStyles": "font-size: 1.2mm;",
               "showLabel": true,
               "labelOrientation": "Horizontal",
               "labelPosition": "Top",
-              "labelHeight": 2.3,
+              "labelHeight": 2.7,
               "valueType": "Field",
-              "width": 191.0,
-              "height": 39.6,
+              "width": 195.5,
+              "height": 30.4,
               "fields": [
                 {
                   // Base Field Form Attribute
@@ -7172,52 +6781,57 @@
                   "showLabel": false,
                   "labelOrientation": "Horizontal",
                   "labelPosition": "Up",
-                  "labelHeight": 2.0,
+                  "labelHeight": 2.4,
                   "valueType": "Table",
                   "columns": [
-                    { "width": 8.7},
-                    { "width": 52.5},
-                    { "width": 16.3},
+                    { "width": 8.4},
+                    { "width": 49.5},
                     { "width": 5.7},
-                    { "width": 5.7},
-                    { "width": 5.7}
+                    { "width": 18.5},
+                    { "width": 5.3},
+                    { "width": 5.1},
+                    { "width": 5.3}
                   ],
                   "rows": [
                     {
                       // Row 1
                       "index": 1,
-                      "height": 1.9,
+                      "height": 2.2,
                       "isHeader": true,
                       "cells": [
                         {
                           "text": "CÓDIGO",
-                          "extraStyles" : "font-size: 1.4mm; background-color: lightgrey;"
+                          "extraStyles" : "font-size: 1.4mm;"
                         },
                         {
                           "text": "NOMBRE",
-                          "extraStyles" : "font-size: 1.4mm; background-color: lightgrey;"
+                          "extraStyles" : "font-size: 1.4mm;"
                         },
                         {
-                          "text": "INB",
-                          "extraStyles" : "font-size: 1.4mm; background-color: lightgrey;"
+                          "text": "PR",
+                          "extraStyles" : "font-size: 1.4mm;"
                         },
                         {
-                          "text": "RES",
-                          "extraStyles" : "font-size: 1.4mm; background-color: lightgrey;"
+                          "text": "CARACT",
+                          "extraStyles" : "font-size: 1.4mm;"
+                        },
+                        {
+                          "text": "PRES",
+                          "extraStyles" : "font-size: 1.4mm;"
+                        },
+                        {
+                          "text": "ENTR",
+                          "extraStyles" : "font-size: 1.4mm;"
                         },
                         {
                           "text": "DX",
-                          "extraStyles" : "font-size: 1.4mm; background-color: lightgrey;"
-                        },
-                        {
-                          "text": "...",
-                          "extraStyles" : "font-size: 1.4mm; background-color: lightgrey;"
+                          "extraStyles" : "font-size: 1.4mm;"
                         }
                       ]
                     },
                     {
                       "index": 2,
-                      "height": 1.7,
+                      "height": 2.1,
                       "isHeader": true,
                       "cells": [
                         {
@@ -7248,11 +6862,11 @@
                     },
                     {
                       "index": 3,
-                      "height": 1.7,
+                      "height": 2.1,
                       "isHeader": true,
                       "cells": [
                         {
-                          "text": "36412",
+                          "text": "36413",
                           "extraStyles": "font-size: 1.4mm;"
                         },
                         {
@@ -7279,11 +6893,11 @@
                     },
                     {
                       "index": 4,
-                      "height": 1.7,
+                      "height": 2.1,
                       "isHeader": true,
                       "cells": [
                         {
-                          "text": "36412",
+                          "text": "36414",
                           "extraStyles": "font-size: 1.4mm;"
                         },
                         {
@@ -7310,11 +6924,11 @@
                     },
                     {
                       "index": 5,
-                      "height": 1.7,
+                      "height": 2.1,
                       "isHeader": true,
                       "cells": [
                         {
-                          "text": "36412",
+                          "text": "36415",
                           "extraStyles": "font-size: 1.4mm;"
                         },
                         {
@@ -7341,11 +6955,11 @@
                     },
                     {
                       "index": 6,
-                      "height": 1.7,
+                      "height": 2.0,
                       "isHeader": true,
                       "cells": [
                         {
-                          "text": "36412",
+                          "text": "36416",
                           "extraStyles": "font-size: 1.4mm;"
                         },
                         {
@@ -7372,11 +6986,11 @@
                     },
                     {
                       "index": 7,
-                      "height": 1.7,
+                      "height": 2.0,
                       "isHeader": true,
                       "cells": [
                         {
-                          "text": "36412",
+                          "text": "36417",
                           "extraStyles": "font-size: 1.4mm;"
                         },
                         {
@@ -7403,11 +7017,11 @@
                     },
                     {
                       "index": 8,
-                      "height": 1.7,
+                      "height": 2.0,
                       "isHeader": true,
                       "cells": [
                         {
-                          "text": "36412",
+                          "text": "36418",
                           "extraStyles": "font-size: 1.4mm;"
                         },
                         {
@@ -7434,11 +7048,11 @@
                     },
                     {
                       "index": 9,
-                      "height": 1.7,
+                      "height": 2.0,
                       "isHeader": true,
                       "cells": [
                         {
-                          "text": "36412",
+                          "text": "36419",
                           "extraStyles": "font-size: 1.4mm;"
                         },
                         {
@@ -7465,11 +7079,11 @@
                     },
                     {
                       "index": 10,
-                      "height": 1.7,
+                      "height": 2.0,
                       "isHeader": true,
                       "cells": [
                         {
-                          "text": "36412",
+                          "text": "36420",
                           "extraStyles": "font-size: 1.4mm;"
                         },
                         {
@@ -7496,11 +7110,11 @@
                     },
                     {
                       "index": 11,
-                      "height": 1.7,
+                      "height": 2.0,
                       "isHeader": true,
                       "cells": [
                         {
-                          "text": "36412",
+                          "text": "36421",
                           "extraStyles": "font-size: 1.4mm;"
                         },
                         {
@@ -7526,12 +7140,12 @@
                       ]
                     },
                     {
-                      "index": 9,
+                      "index": 12,
                       "height": 1.7,
                       "isHeader": true,
                       "cells": [
                         {
-                          "text": "36412",
+                          "text": "36422",
                           "extraStyles": "font-size: 1.4mm;"
                         },
                         {
@@ -7558,11 +7172,11 @@
                     },
                     {
                       "index": 13,
-                      "height": 1.7,
+                      "height": 2.0,
                       "isHeader": true,
                       "cells": [
                         {
-                          "text": "36412",
+                          "text": "36423",
                           "extraStyles": "font-size: 1.4mm;"
                         },
                         {
@@ -7589,157 +7203,9 @@
                     },
                     {
                       "index": 14,
-                      "height": 1.7,
+                      "height": 4.0,
                       "isHeader": true,
-                      "cells": [
-                        {
-                          "text": "36412",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "AEROCAMARA DE PLASTICO ADULTO",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        }
-                      ]
-                    },{
-                      "index": 15,
-                      "height": 1.7,
-                      "isHeader": true,
-                      "cells": [
-                        {
-                          "text": "36412",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "AEROCAMARA DE PLASTICO ADULTO",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        }
-                      ]
-                    },
-                    {
-                      "index": 16,
-                      "height": 1.7,
-                      "isHeader": true,
-                      "cells": [
-                        {
-                          "text": "36412",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "AEROCAMARA DE PLASTICO ADULTO",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        }
-                      ]
-                    },
-                    {
-                      "index": 17,
-                      "height": 1.7,
-                      "isHeader": true,
-                      "cells": [
-                        {
-                          "text": "36412",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "AEROCAMARA DE PLASTICO ADULTO",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        }
-                      ]
-                    },
-                    {
-                      "index": 18,
-                      "height": 1.7,
-                      "isHeader": true,
-                      "cells": [
-                        {
-                          "text": "36412",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "AEROCAMARA DE PLASTICO ADULTO",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        }
-                      ]
+                      "cells": [ ]
                     }
                   ]
                 },
@@ -7749,57 +7215,62 @@
                   "versionTag": "1.0",
                   // Field data
                   "top": 0.0,
-                  "left": 96.0,
+                  "left": 98.0,
                   "label": "INSUMOS COMPLEMENTARIOS 2",
                   "showLabel": false,
                   "labelOrientation": "Horizontal",
                   "labelPosition": "Up",
-                  "labelHeight": 2.0,
+                  "labelHeight": 2.4,
                   "valueType": "Table",
                   "columns": [
-                    { "width": 8.7},
-                    { "width": 52.5},
-                    { "width": 16.3},
+                    { "width": 8.4},
+                    { "width": 49.5},
                     { "width": 5.7},
-                    { "width": 5.7},
-                    { "width": 5.7}
+                    { "width": 18.5},
+                    { "width": 5.3},
+                    { "width": 5.1},
+                    { "width": 5.0}
                   ],
                   "rows": [
                     {
                       // Row 1
                       "index": 1,
-                      "height": 1.9,
+                      "height": 2.2,
                       "isHeader": true,
                       "cells": [
                         {
                           "text": "CÓDIGO",
-                          "extraStyles" : "font-size: 1.4mm; background-color: lightgrey;"
+                          "extraStyles" : "font-size: 1.4mm;"
                         },
                         {
                           "text": "NOMBRE",
-                          "extraStyles" : "font-size: 1.4mm; background-color: lightgrey;"
+                          "extraStyles" : "font-size: 1.4mm;"
                         },
                         {
-                          "text": "IND",
-                          "extraStyles" : "font-size: 1.4mm; background-color: lightgrey;"
+                          "text": "PR",
+                          "extraStyles" : "font-size: 1.4mm;"
                         },
                         {
-                          "text": "EJE",
-                          "extraStyles" : "font-size: 1.4mm; background-color: lightgrey;"
+                          "text": "CARACT",
+                          "extraStyles" : "font-size: 1.4mm;"
                         },
                         {
                           "text": "DX",
-                          "extraStyles" : "font-size: 1.4mm; background-color: lightgrey;"
+                          "extraStyles" : "font-size: 1.4mm;"
                         },
                         {
                           "text": "RES",
-                          "extraStyles" : "font-size: 1.4mm; background-color: lightgrey;"
+                          "extraStyles" : "font-size: 1.4mm;"
+                        },
+                        {
+                          "text": "RES",
+                          "extraStyles" : "font-size: 1.4mm;"
                         }
                       ]
                     },
                     {
                       "index": 2,
-                      "height": 1.7,
+                      "height": 2.1,
                       "isHeader": true,
                       "cells": [
                         {
@@ -7830,11 +7301,11 @@
                     },
                     {
                       "index": 3,
-                      "height": 1.7,
+                      "height": 2.1,
                       "isHeader": true,
                       "cells": [
                         {
-                          "text": "36412",
+                          "text": "36413",
                           "extraStyles": "font-size: 1.4mm;"
                         },
                         {
@@ -7861,11 +7332,11 @@
                     },
                     {
                       "index": 4,
-                      "height": 1.7,
+                      "height": 2.1,
                       "isHeader": true,
                       "cells": [
                         {
-                          "text": "36412",
+                          "text": "36414",
                           "extraStyles": "font-size: 1.4mm;"
                         },
                         {
@@ -7892,11 +7363,11 @@
                     },
                     {
                       "index": 5,
-                      "height": 1.7,
+                      "height": 2.1,
                       "isHeader": true,
                       "cells": [
                         {
-                          "text": "36412",
+                          "text": "36415",
                           "extraStyles": "font-size: 1.4mm;"
                         },
                         {
@@ -7923,11 +7394,11 @@
                     },
                     {
                       "index": 6,
-                      "height": 1.7,
+                      "height": 2.0,
                       "isHeader": true,
                       "cells": [
                         {
-                          "text": "36412",
+                          "text": "36416",
                           "extraStyles": "font-size: 1.4mm;"
                         },
                         {
@@ -7954,11 +7425,11 @@
                     },
                     {
                       "index": 7,
-                      "height": 1.7,
+                      "height": 2.0,
                       "isHeader": true,
                       "cells": [
                         {
-                          "text": "36412",
+                          "text": "36417",
                           "extraStyles": "font-size: 1.4mm;"
                         },
                         {
@@ -7985,11 +7456,11 @@
                     },
                     {
                       "index": 8,
-                      "height": 1.7,
+                      "height": 2.0,
                       "isHeader": true,
                       "cells": [
                         {
-                          "text": "36412",
+                          "text": "36418",
                           "extraStyles": "font-size: 1.4mm;"
                         },
                         {
@@ -8016,11 +7487,11 @@
                     },
                     {
                       "index": 9,
-                      "height": 1.7,
+                      "height": 2.0,
                       "isHeader": true,
                       "cells": [
                         {
-                          "text": "36412",
+                          "text": "36419",
                           "extraStyles": "font-size: 1.4mm;"
                         },
                         {
@@ -8047,11 +7518,11 @@
                     },
                     {
                       "index": 10,
-                      "height": 1.7,
+                      "height": 2.0,
                       "isHeader": true,
                       "cells": [
                         {
-                          "text": "36412",
+                          "text": "36420",
                           "extraStyles": "font-size: 1.4mm;"
                         },
                         {
@@ -8078,11 +7549,11 @@
                     },
                     {
                       "index": 11,
-                      "height": 1.7,
+                      "height": 2.0,
                       "isHeader": true,
                       "cells": [
                         {
-                          "text": "36412",
+                          "text": "36421",
                           "extraStyles": "font-size: 1.4mm;"
                         },
                         {
@@ -8108,12 +7579,12 @@
                       ]
                     },
                     {
-                      "index": 9,
+                      "index": 12,
                       "height": 1.7,
                       "isHeader": true,
                       "cells": [
                         {
-                          "text": "36412",
+                          "text": "36422",
                           "extraStyles": "font-size: 1.4mm;"
                         },
                         {
@@ -8140,11 +7611,11 @@
                     },
                     {
                       "index": 13,
-                      "height": 1.7,
+                      "height": 2.0,
                       "isHeader": true,
                       "cells": [
                         {
-                          "text": "36412",
+                          "text": "36423",
                           "extraStyles": "font-size: 1.4mm;"
                         },
                         {
@@ -8171,157 +7642,9 @@
                     },
                     {
                       "index": 14,
-                      "height": 1.7,
+                      "height": 4.0,
                       "isHeader": true,
-                      "cells": [
-                        {
-                          "text": "36412",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "AEROCAMARA DE PLASTICO ADULTO",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        }
-                      ]
-                    },{
-                      "index": 15,
-                      "height": 1.7,
-                      "isHeader": true,
-                      "cells": [
-                        {
-                          "text": "36412",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "AEROCAMARA DE PLASTICO ADULTO",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        }
-                      ]
-                    },
-                    {
-                      "index": 16,
-                      "height": 1.7,
-                      "isHeader": true,
-                      "cells": [
-                        {
-                          "text": "36412",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "AEROCAMARA DE PLASTICO ADULTO",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        }
-                      ]
-                    },
-                    {
-                      "index": 17,
-                      "height": 1.7,
-                      "isHeader": true,
-                      "cells": [
-                        {
-                          "text": "36412",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "AEROCAMARA DE PLASTICO ADULTO",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        }
-                      ]
-                    },
-                    {
-                      "index": 18,
-                      "height": 1.7,
-                      "isHeader": true,
-                      "cells": [
-                        {
-                          "text": "36412",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "AEROCAMARA DE PLASTICO ADULTO",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        },
-                        {
-                          "text": "",
-                          "extraStyles": "font-size: 1.4mm;"
-                        }
-                      ]
+                      "cells": [ ]
                     }
                   ]
                 }
