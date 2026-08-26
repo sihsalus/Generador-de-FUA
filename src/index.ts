@@ -50,8 +50,8 @@ sequelize.authenticate()
   console.log(`\nConnection has been established with database successfully.\n`);  
   // Syncronize models
   console.log('\n Syncronizing models ... \n');
-  sequelize.sync({ force: true })
-  //sequelize.sync({ alter: true })
+  //sequelize.sync({ force: true })
+  sequelize.sync({ alter: true })
   .then( () : void => {
     console.log('\nEnded syncronizing models ...\n');
   } );  
