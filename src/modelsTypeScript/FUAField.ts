@@ -16,8 +16,6 @@ export interface FUAFieldInterface extends BaseFieldFormEntityInterface{
     labelPosition?: string;
     labelExtraStyles?: string;
     valueType: string; //
-    //columns: number; //
-    //fields: Array<Field>; //
 };
 
 export const FUAFieldSchema = z.object({

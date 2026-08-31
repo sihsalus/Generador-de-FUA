@@ -12,7 +12,7 @@ module.exports = {
                             // Visit Date
                             codeName: "Visit Date",
                             fieldType: "Table",
-                            mappings: [
+                            mappings: [ 
                                 {
                                     // DIA
                                     target: "payload.startDatetime",
