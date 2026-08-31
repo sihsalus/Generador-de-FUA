@@ -23,6 +23,13 @@ services:
       DB_PASSWORD: ${DB_PASSWORD:-postgres}
       DB_NAME: ${DB_NAME:-mydatabase}
       DB_PORT: 5432
+      TOKEN: ${TOKEN}
+      SECRET_KEY: ${SECRET_KEY}
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY}
+      HMAC_SECRET: ${HMAC_SECRET}
+      BACKEND_USERNAME: ${BACKEND_USERNAME}
+      BACKEND_PASSWORD: ${BACKEND_PASSWORD}
+      BACKEND_BASEURL: ${BACKEND_BASEURL}
     ports:
       - "3000:3000"
     links:
