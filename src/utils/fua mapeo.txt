@@ -35,6 +35,23 @@ Codename: "DeathDate", 				Fecha de fallecimiento (dia),	Si patient.person.dead 
 Codename: "DeathDate", 				Fecha de fallecimiento (mes),	Si patient.person.dead == true, entonces poner patient.person.deathDate, sino colocar " "
 Codename: "DeathDate", 				Fecha de fallecimiento (año),	Si patient.person.dead == true, entonces poner patient.person.deathDate, sino colocar " "
 
+Codename: "Visit Type", 			Tipo de atencion (ambulatoria)	Si visitType.name == "", entonces poner patient.person.deathDate, sino colocar " "
+Codename: "Visit Type", 			Fecha de fallecimiento (mes),	Si patient.person.dead == true, entonces poner patient.person.deathDate, sino colocar " "
+Codename: "Visit Type", 			Fecha de fallecimiento (año),	Si patient.person.dead == true, entonces poner patient.person.deathDate, sino colocar " "
+
+
+Codename: "Diagnostico"				Diagnostico (descripcion),		encounters.diagnoses.display
+Codename: "Diagnostico"				Diagnostico (tipo de dx, P),	Si encounters.diagnoses.certainty=="PROVISIONAL", entonces colocar "X" en la P
+Codename: "Diagnostico"				Diagnostico (tipo de dx, D),	Si encounters.diagnoses.certainty=="", entonces colocar "X" en la D
+Codename: "Diagnostico"				Diagnostico (tipo de dx, R),	Si encounters.diagnoses.certainty=="", entonces colocar "X" en la R
+Codename: "Diagnostico"				Diagnostico (CIE-10),			Si encounters.diagnoses.diagnosis.coded.names.conceptNameType=="SHORT", entonces colocar el encounters.diagnoses.diagnosis.coded.names.name de ese concepto
+
+
+
+
+MUCHAS PREGUNTAS RESPECTO A "ENCOUNTERS", consultar a alguien
+
+
 falta numero de etnia, hay en ocl pero se necesita el numero de etnia
 duda sobre encounterproviders y auditinfo, faltan varios datos de los doctores, consultar con tommy
 
