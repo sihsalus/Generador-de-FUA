@@ -15,16 +15,6 @@ const BaseEntityVersion_MiddleTableModel = sequelize.define(
       primaryKey: true,
       allowNull: false
     }, 
-    /* MainEntityUUID: {
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
-      allowNull: false
-    },
-    RelatedEntityUUID: {
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
-      allowNull: false
-    }, */
   },
   {
     sequelize,          // We need to pass the connection instance,

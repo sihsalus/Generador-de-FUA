@@ -9,6 +9,8 @@ import User from './User';
 import FUAFromVisitModel from './FUAFromVisitModel';
 import FUAFromVisitPDFModel from './FUAFromVisitPDFModel';
 
+import FUAMappingModel from './FUAMappingModel';
+
 import BaseEntityVersionModel from "./BaseEntityVersionModel.js";
 import BaseEntityVersion_MiddleTableModel from './BaseEntityVersion_MiddleTableModel.js';
 import FUAFormatFromSchemaModel from './FUAFormatFromSchemaModel';
@@ -117,5 +119,6 @@ export {
     FUAFromVisitModel,
     FUAFromVisitPDFModel,
     BaseEntityVersionModel,
-    BaseEntityVersion_MiddleTableModel
+    BaseEntityVersion_MiddleTableModel,
+    FUAMappingModel
 };
