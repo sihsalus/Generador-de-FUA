@@ -47,7 +47,7 @@ export async function createDemoFormat(printMode : boolean, printReference?: boo
     const mappingObject = eval(`(${mappingContent})`);
     */
     
-    const visitPath = path.resolve(process.cwd(), "./src/utils/VisitExamples/Visit2.json");
+    const visitPath = path.resolve(process.cwd(), "./src/utils/VisitExamples/Test_Visit01.json");
     const visitContent = fs.readFileSync(visitPath, 'utf-8');
 
     const procMapping = importPayloadToMapping(visitContent,mappingObject);
