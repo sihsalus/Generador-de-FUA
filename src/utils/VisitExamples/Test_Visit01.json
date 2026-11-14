@@ -1,0 +1,2723 @@
+{
+    "payload": 
+        {
+            "uuid": "f3fcf2e3-87dd-4afb-be62-24cc4b0f081b",
+            "location": {
+                "uuid": "35d2234e-129a-4c40-abb2-1ae0b2400001",
+                "display": "UPSS - CONSULTA EXTERNA",
+                "name": "UPSS - CONSULTA EXTERNA",
+                "description": "Specialized outpatient consultation services unit at Hospital Santa Clotilde.",
+                "address1": null,
+                "address2": null,
+                "cityVillage": null,
+                "stateProvince": null,
+                "country": null,
+                "postalCode": null,
+                "latitude": null,
+                "longitude": null,
+                "countyDistrict": null,
+                "address3": null,
+                "address4": null,
+                "address5": null,
+                "address6": null,
+                "tags": [
+                    {
+                        "uuid": "a2327745-2970-4752-ac8a-dd0ba131f40a",
+                        "display": "queue location",
+                        "links": [
+                            {
+                                "rel": "self",
+                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/locationtag/a2327745-2970-4752-ac8a-dd0ba131f40a",
+                                "resourceAlias": "locationtag"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "e2a1b3c4-d5e6-7890-1abc-def234567890",
+                        "display": "Visit Location",
+                        "links": [
+                            {
+                                "rel": "self",
+                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/locationtag/e2a1b3c4-d5e6-7890-1abc-def234567890",
+                                "resourceAlias": "locationtag"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "b8bbf83e-645f-451f-8efe-a0db56f09676",
+                        "display": "Login Location",
+                        "links": [
+                            {
+                                "rel": "self",
+                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/locationtag/b8bbf83e-645f-451f-8efe-a0db56f09676",
+                                "resourceAlias": "locationtag"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "9783aba6-df7b-4969-be6e-1e03e7a08965",
+                        "display": "Transfer Location",
+                        "links": [
+                            {
+                                "rel": "self",
+                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/locationtag/9783aba6-df7b-4969-be6e-1e03e7a08965",
+                                "resourceAlias": "locationtag"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "7546bb3d-ca21-11f0-b271-0242ac120004",
+                        "display": "Appointment Location",
+                        "links": [
+                            {
+                                "rel": "self",
+                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/locationtag/7546bb3d-ca21-11f0-b271-0242ac120004",
+                                "resourceAlias": "locationtag"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "f5b9737b-14d5-402b-8475-dd558808e172",
+                        "display": "Admission Location",
+                        "links": [
+                            {
+                                "rel": "self",
+                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/locationtag/f5b9737b-14d5-402b-8475-dd558808e172",
+                                "resourceAlias": "locationtag"
+                            }
+                        ]
+                    }
+                ],
+                "parentLocation": {
+                    "uuid": "35d2234e-129a-4c40-abb2-1ae0b72c1602",
+                    "display": "Hospital Santa Clotilde",
+                    "links": [
+                        {
+                            "rel": "self",
+                            "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/location/35d2234e-129a-4c40-abb2-1ae0b72c1602",
+                            "resourceAlias": "location"
+                        }
+                    ]
+                },
+                "childLocations": [],
+                "retired": false,
+                "attributes": [],
+                "address7": null,
+                "address8": null,
+                "address9": null,
+                "address10": null,
+                "address11": null,
+                "address12": null,
+                "address13": null,
+                "address14": null,
+                "address15": null,
+                "links": [
+                    {
+                        "rel": "self",
+                        "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/location/35d2234e-129a-4c40-abb2-1ae0b2400001",
+                        "resourceAlias": "location"
+                    },
+                    {
+                        "rel": "full",
+                        "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/location/35d2234e-129a-4c40-abb2-1ae0b2400001?v=full",
+                        "resourceAlias": "location"
+                    }
+                ],
+                "resourceVersion": "2.0"
+            },
+            "encounters": [
+                {
+                    "uuid": "6f17621d-c542-4edc-a12b-4b295f3d2abd",
+                    "diagnoses": [],
+                    "form": {
+                        "uuid": "184b139f-6b91-35be-9dc6-66d556f63282",
+                        "display": "(Página 37) Ficha de Tamizaje Violencia y maltrato infantil",
+                        "name": "(Página 37) Ficha de Tamizaje Violencia y maltrato infantil",
+                        "description": "Página 37",
+                        "encounterType": {
+                            "uuid": "3w4x5y6z-3234-5678-9101-abcdefghij23",
+                            "display": "Control de Niño Sano",
+                            "name": "Control de Niño Sano",
+                            "description": "Evaluaciones periódicas del crecimiento y desarrollo infantil. Basado en la NTS N° 102-MINSA.",
+                            "retired": false,
+                            "links": [
+                                {
+                                    "rel": "self",
+                                    "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/encountertype/3w4x5y6z-3234-5678-9101-abcdefghij23",
+                                    "resourceAlias": "encountertype"
+                                },
+                                {
+                                    "rel": "full",
+                                    "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/encountertype/3w4x5y6z-3234-5678-9101-abcdefghij23?v=full",
+                                    "resourceAlias": "encountertype"
+                                }
+                            ],
+                            "resourceVersion": "1.8"
+                        },
+                        "version": "1.0",
+                        "resources": [
+                            {
+                                "uuid": "97d680af-d7f8-4966-bb6c-57a422bf1054",
+                                "display": "JSON schema",
+                                "name": "JSON schema",
+                                "valueReference": "833dbfae-9497-43c8-9fbf-3ded53e0bcf9"
+                            }
+                        ]
+                    },
+                    "encounterDatetime": "2025-12-10T16:53:55.000+0000",
+                    "orders": [],
+                    "obs": [
+                        {
+                            "uuid": "8f0d2e3d-9606-4052-a4c5-1184b563a91c",
+                            "concept": {
+                                "uuid": "313baa99-a2e3-449c-bc5f-3230d2508695",
+                                "display": "Violencia familiar",
+                                "conceptClass": {
+                                    "uuid": "8d492774-c2cc-11de-8d13-0010c6dffd0f",
+                                    "display": "Misc"
+                                }
+                            },
+                            "display": "Violencia familiar: Sí",
+                            "groupMembers": null,
+                            "value": {
+                                "uuid": "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                "display": "Sí",
+                                "name": {
+                                    "display": "Sí",
+                                    "uuid": "108333BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                    "name": "Sí",
+                                    "locale": "es",
+                                    "localePreferred": true,
+                                    "conceptNameType": "FULLY_SPECIFIED",
+                                    "links": [
+                                        {
+                                            "rel": "self",
+                                            "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/108333BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                            "resourceAlias": "name"
+                                        },
+                                        {
+                                            "rel": "full",
+                                            "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/108333BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB?v=full",
+                                            "resourceAlias": "name"
+                                        }
+                                    ],
+                                    "resourceVersion": "1.9"
+                                },
+                                "datatype": {
+                                    "uuid": "8d4a4c94-c2cc-11de-8d13-0010c6dffd0f",
+                                    "display": "N/A",
+                                    "links": [
+                                        {
+                                            "rel": "self",
+                                            "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/conceptdatatype/8d4a4c94-c2cc-11de-8d13-0010c6dffd0f",
+                                            "resourceAlias": "conceptdatatype"
+                                        }
+                                    ]
+                                },
+                                "conceptClass": {
+                                    "uuid": "8d492774-c2cc-11de-8d13-0010c6dffd0f",
+                                    "display": "Misc",
+                                    "links": [
+                                        {
+                                            "rel": "self",
+                                            "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/conceptclass/8d492774-c2cc-11de-8d13-0010c6dffd0f",
+                                            "resourceAlias": "conceptclass"
+                                        }
+                                    ]
+                                },
+                                "set": false,
+                                "version": null,
+                                "retired": false,
+                                "names": [
+                                    {
+                                        "uuid": "1137BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Oui",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/1137BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "127332BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "হ্যাঁ",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/127332BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "126316BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Sì",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/126316BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "106307BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Yego",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/106307BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "126313BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "True",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/126313BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "dbc381aa-4328-410c-b16d-72f257f997fb",
+                                        "display": "ចាស",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/dbc381aa-4328-410c-b16d-72f257f997fb",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "137332BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Vre",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/137332BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "126317BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Vero",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/126317BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "108333BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Sí",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/108333BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "1136BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Yes",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/1136BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "126314BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Vrai",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/126314BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "137331BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Wi",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/137331BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "111198BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Да",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/111198BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "126315BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Verdadero",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/126315BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "126318BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Sim",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/126318BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "139802BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "ہاں",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/139802BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "0635ba27-b95b-4c14-b895-bf402867547a",
+                                        "display": "हुन्छ",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/0635ba27-b95b-4c14-b895-bf402867547a",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "126319BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Verdadeiro",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/126319BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "626c68d8-6ba2-4ebf-981f-89e17c94acbe",
+                                        "display": "បាទ",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/626c68d8-6ba2-4ebf-981f-89e17c94acbe",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "106919BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "እወ",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/106919BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "descriptions": [
+                                    {
+                                        "uuid": "1068FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                                        "display": "Generic answer to a question.",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/description/1068FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                                                "resourceAlias": "description"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "18158FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                                        "display": "کسی سوال کا عام جواب",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/description/18158FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                                                "resourceAlias": "description"
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "mappings": [
+                                    {
+                                        "uuid": "143596ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "PIH: 1065",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/mapping/143596ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "mapping"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "133840ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "SNOMED-CT: 373066001",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/mapping/133840ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "mapping"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "144378ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "PIH-Malawi: 1065",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/mapping/144378ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "mapping"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "171328ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "CIEL: 1065",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/mapping/171328ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "mapping"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "134737ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "AMPATH: 1065",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/mapping/134737ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "mapping"
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "answers": [],
+                                "setMembers": [],
+                                "attributes": [],
+                                "links": [
+                                    {
+                                        "rel": "self",
+                                        "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "resourceAlias": "concept"
+                                    },
+                                    {
+                                        "rel": "full",
+                                        "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA?v=full",
+                                        "resourceAlias": "concept"
+                                    }
+                                ],
+                                "resourceVersion": "2.0"
+                            },
+                            "obsDatetime": "2025-12-10T16:53:55.000+0000"
+                        },
+                        {
+                            "uuid": "8636fd0d-9d96-4384-9204-071458f9dedf",
+                            "concept": {
+                                "uuid": "a33bf670-e9a0-4cf0-8348-7a99e66a1d30",
+                                "display": "¿Alguna vez algún miembro de la familia le insulta?",
+                                "conceptClass": {
+                                    "uuid": "8d491a9a-c2cc-11de-8d13-0010c6dffd0f",
+                                    "display": "Finding"
+                                }
+                            },
+                            "display": "¿Alguna vez algún miembro de la familia le insulta?: Sí",
+                            "groupMembers": null,
+                            "value": {
+                                "uuid": "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                "display": "Sí",
+                                "name": {
+                                    "display": "Sí",
+                                    "uuid": "108333BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                    "name": "Sí",
+                                    "locale": "es",
+                                    "localePreferred": true,
+                                    "conceptNameType": "FULLY_SPECIFIED",
+                                    "links": [
+                                        {
+                                            "rel": "self",
+                                            "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/108333BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                            "resourceAlias": "name"
+                                        },
+                                        {
+                                            "rel": "full",
+                                            "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/108333BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB?v=full",
+                                            "resourceAlias": "name"
+                                        }
+                                    ],
+                                    "resourceVersion": "1.9"
+                                },
+                                "datatype": {
+                                    "uuid": "8d4a4c94-c2cc-11de-8d13-0010c6dffd0f",
+                                    "display": "N/A",
+                                    "links": [
+                                        {
+                                            "rel": "self",
+                                            "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/conceptdatatype/8d4a4c94-c2cc-11de-8d13-0010c6dffd0f",
+                                            "resourceAlias": "conceptdatatype"
+                                        }
+                                    ]
+                                },
+                                "conceptClass": {
+                                    "uuid": "8d492774-c2cc-11de-8d13-0010c6dffd0f",
+                                    "display": "Misc",
+                                    "links": [
+                                        {
+                                            "rel": "self",
+                                            "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/conceptclass/8d492774-c2cc-11de-8d13-0010c6dffd0f",
+                                            "resourceAlias": "conceptclass"
+                                        }
+                                    ]
+                                },
+                                "set": false,
+                                "version": null,
+                                "retired": false,
+                                "names": [
+                                    {
+                                        "uuid": "1137BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Oui",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/1137BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "127332BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "হ্যাঁ",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/127332BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "126316BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Sì",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/126316BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "106307BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Yego",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/106307BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "126313BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "True",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/126313BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "dbc381aa-4328-410c-b16d-72f257f997fb",
+                                        "display": "ចាស",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/dbc381aa-4328-410c-b16d-72f257f997fb",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "137332BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Vre",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/137332BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "126317BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Vero",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/126317BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "108333BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Sí",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/108333BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "1136BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Yes",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/1136BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "126314BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Vrai",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/126314BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "137331BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Wi",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/137331BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "111198BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Да",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/111198BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "126315BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Verdadero",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/126315BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "126318BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Sim",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/126318BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "139802BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "ہاں",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/139802BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "0635ba27-b95b-4c14-b895-bf402867547a",
+                                        "display": "हुन्छ",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/0635ba27-b95b-4c14-b895-bf402867547a",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "126319BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Verdadeiro",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/126319BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "626c68d8-6ba2-4ebf-981f-89e17c94acbe",
+                                        "display": "បាទ",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/626c68d8-6ba2-4ebf-981f-89e17c94acbe",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "106919BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "እወ",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/106919BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "descriptions": [
+                                    {
+                                        "uuid": "1068FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                                        "display": "Generic answer to a question.",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/description/1068FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                                                "resourceAlias": "description"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "18158FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                                        "display": "کسی سوال کا عام جواب",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/description/18158FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                                                "resourceAlias": "description"
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "mappings": [
+                                    {
+                                        "uuid": "143596ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "PIH: 1065",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/mapping/143596ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "mapping"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "133840ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "SNOMED-CT: 373066001",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/mapping/133840ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "mapping"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "144378ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "PIH-Malawi: 1065",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/mapping/144378ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "mapping"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "171328ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "CIEL: 1065",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/mapping/171328ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "mapping"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "134737ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "AMPATH: 1065",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/mapping/134737ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "mapping"
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "answers": [],
+                                "setMembers": [],
+                                "attributes": [],
+                                "links": [
+                                    {
+                                        "rel": "self",
+                                        "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "resourceAlias": "concept"
+                                    },
+                                    {
+                                        "rel": "full",
+                                        "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA?v=full",
+                                        "resourceAlias": "concept"
+                                    }
+                                ],
+                                "resourceVersion": "2.0"
+                            },
+                            "obsDatetime": "2025-12-10T16:53:55.000+0000"
+                        }
+                    ],
+                    "encounterType": {
+                        "uuid": "3w4x5y6z-3234-5678-9101-abcdefghij23",
+                        "display": "Control de Niño Sano",
+                        "viewPrivilege": null,
+                        "editPrivilege": null
+                    },
+                    "encounterProviders": [
+                        {
+                            "uuid": "133377b4-f898-4c45-bed0-75a1f6ffac3c",
+                            "display": "Super  User  : Unknown",
+                            "encounterRole": {
+                                "uuid": "a0b03050-c99b-11e0-9572-0800200c9a66",
+                                "display": "Unknown"
+                            },
+                            "provider": {
+                                "uuid": "c474db79-b596-4e41-9889-af0a7458b88c",
+                                "person": {
+                                    "uuid": "5f87c042-6814-11e8-923f-e9a88dcb533f",
+                                    "display": "Super  User  "
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "uuid": "a6d1f74e-5db9-4340-a138-90c9630ead08",
+                    "diagnoses": [],
+                    "form": null,
+                    "encounterDatetime": "2025-12-10T16:15:14.000+0000",
+                    "orders": [],
+                    "obs": [
+                        {
+                            "uuid": "478aab50-1aba-4df4-b159-5ee71fe49e2a",
+                            "concept": {
+                                "uuid": "5092AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                "display": "Saturación de oxígeno",
+                                "conceptClass": {
+                                    "uuid": "8d491e50-c2cc-11de-8d13-0010c6dffd0f",
+                                    "display": "Question"
+                                }
+                            },
+                            "display": "Saturación de oxígeno: 100",
+                            "groupMembers": null,
+                            "value": 100,
+                            "obsDatetime": "2025-12-10T16:15:14.000+0000"
+                        },
+                        {
+                            "uuid": "abc8721d-17d4-4f00-9790-41de0c471fa9",
+                            "concept": {
+                                "uuid": "5086AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                "display": "Presión diastólica",
+                                "conceptClass": {
+                                    "uuid": "8d491a9a-c2cc-11de-8d13-0010c6dffd0f",
+                                    "display": "Finding"
+                                }
+                            },
+                            "display": "Presión diastólica: 100",
+                            "groupMembers": null,
+                            "value": 100,
+                            "obsDatetime": "2025-12-10T16:15:14.000+0000"
+                        },
+                        {
+                            "uuid": "0110b83a-4c72-4d25-8018-008104908abc",
+                            "concept": {
+                                "uuid": "5088AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                "display": "Temperatura (C°)",
+                                "conceptClass": {
+                                    "uuid": "8d491a9a-c2cc-11de-8d13-0010c6dffd0f",
+                                    "display": "Finding"
+                                }
+                            },
+                            "display": "Temperatura (C°): 37,0",
+                            "groupMembers": null,
+                            "value": 37.0,
+                            "obsDatetime": "2025-12-10T16:15:14.000+0000"
+                        },
+                        {
+                            "uuid": "087f162b-476e-478f-824c-f2b6c75d8806",
+                            "concept": {
+                                "uuid": "5085AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                "display": "Presión sistólica",
+                                "conceptClass": {
+                                    "uuid": "8d491a9a-c2cc-11de-8d13-0010c6dffd0f",
+                                    "display": "Finding"
+                                }
+                            },
+                            "display": "Presión sistólica: 90",
+                            "groupMembers": null,
+                            "value": 90,
+                            "obsDatetime": "2025-12-10T16:15:14.000+0000"
+                        },
+                        {
+                            "uuid": "19515dfa-e6a4-4735-8a99-a78a8ed94948",
+                            "concept": {
+                                "uuid": "5090AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                "display": "Talla (cm)",
+                                "conceptClass": {
+                                    "uuid": "8d491a9a-c2cc-11de-8d13-0010c6dffd0f",
+                                    "display": "Finding"
+                                }
+                            },
+                            "display": "Talla (cm): 45,0",
+                            "groupMembers": null,
+                            "value": 45.0,
+                            "obsDatetime": "2025-12-10T16:15:14.000+0000"
+                        },
+                        {
+                            "uuid": "b5f3a332-0e6c-42a8-a1b7-9101a1b07f50",
+                            "concept": {
+                                "uuid": "5087AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                "display": "Frecuencia Cardíaca",
+                                "conceptClass": {
+                                    "uuid": "8d491a9a-c2cc-11de-8d13-0010c6dffd0f",
+                                    "display": "Finding"
+                                }
+                            },
+                            "display": "Frecuencia Cardíaca: 106",
+                            "groupMembers": null,
+                            "value": 106,
+                            "obsDatetime": "2025-12-10T16:15:14.000+0000"
+                        },
+                        {
+                            "uuid": "e27f5cc0-7cc9-4448-b02a-9622fba6ef26",
+                            "concept": {
+                                "uuid": "5242AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                "display": "Frecuencia Respiratoria",
+                                "conceptClass": {
+                                    "uuid": "8d491e50-c2cc-11de-8d13-0010c6dffd0f",
+                                    "display": "Question"
+                                }
+                            },
+                            "display": "Frecuencia Respiratoria: 37",
+                            "groupMembers": null,
+                            "value": 37,
+                            "obsDatetime": "2025-12-10T16:15:14.000+0000"
+                        },
+                        {
+                            "uuid": "8039cb24-0878-4708-9ea1-744fc3bfed5e",
+                            "concept": {
+                                "uuid": "5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                "display": "Peso Corporal (kg)",
+                                "conceptClass": {
+                                    "uuid": "8d491a9a-c2cc-11de-8d13-0010c6dffd0f",
+                                    "display": "Finding"
+                                }
+                            },
+                            "display": "Peso Corporal (kg): 5,0",
+                            "groupMembers": null,
+                            "value": 5.0,
+                            "obsDatetime": "2025-12-10T16:15:14.000+0000"
+                        }
+                    ],
+                    "encounterType": {
+                        "uuid": "67a71486-1a54-468f-ac3e-7091a9a79584",
+                        "display": "Triaje",
+                        "viewPrivilege": null,
+                        "editPrivilege": null
+                    },
+                    "encounterProviders": []
+                },
+                {
+                    "uuid": "88740681-ff81-4ae8-9ca4-daec730eedfc",
+                    "diagnoses": [],
+                    "form": {
+                        "uuid": "184b139f-6b91-35be-9dc6-66d556f63282",
+                        "display": "(Página 37) Ficha de Tamizaje Violencia y maltrato infantil",
+                        "name": "(Página 37) Ficha de Tamizaje Violencia y maltrato infantil",
+                        "description": "Página 37",
+                        "encounterType": {
+                            "uuid": "3w4x5y6z-3234-5678-9101-abcdefghij23",
+                            "display": "Control de Niño Sano",
+                            "name": "Control de Niño Sano",
+                            "description": "Evaluaciones periódicas del crecimiento y desarrollo infantil. Basado en la NTS N° 102-MINSA.",
+                            "retired": false,
+                            "links": [
+                                {
+                                    "rel": "self",
+                                    "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/encountertype/3w4x5y6z-3234-5678-9101-abcdefghij23",
+                                    "resourceAlias": "encountertype"
+                                },
+                                {
+                                    "rel": "full",
+                                    "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/encountertype/3w4x5y6z-3234-5678-9101-abcdefghij23?v=full",
+                                    "resourceAlias": "encountertype"
+                                }
+                            ],
+                            "resourceVersion": "1.8"
+                        },
+                        "version": "1.0",
+                        "resources": [
+                            {
+                                "uuid": "97d680af-d7f8-4966-bb6c-57a422bf1054",
+                                "display": "JSON schema",
+                                "name": "JSON schema",
+                                "valueReference": "833dbfae-9497-43c8-9fbf-3ded53e0bcf9"
+                            }
+                        ]
+                    },
+                    "encounterDatetime": "2025-12-10T16:08:30.000+0000",
+                    "orders": [],
+                    "obs": [
+                        {
+                            "uuid": "9c2929d2-a337-418c-a27e-1f4dbadb8c7e",
+                            "concept": {
+                                "uuid": "4d41937f-e524-4119-bf47-ad2052d6647a",
+                                "display": "¿Algún miembro de su familia le golpea?",
+                                "conceptClass": {
+                                    "uuid": "8d491a9a-c2cc-11de-8d13-0010c6dffd0f",
+                                    "display": "Finding"
+                                }
+                            },
+                            "display": "¿Algún miembro de su familia le golpea?: Sí",
+                            "groupMembers": null,
+                            "value": {
+                                "uuid": "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                "display": "Sí",
+                                "name": {
+                                    "display": "Sí",
+                                    "uuid": "108333BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                    "name": "Sí",
+                                    "locale": "es",
+                                    "localePreferred": true,
+                                    "conceptNameType": "FULLY_SPECIFIED",
+                                    "links": [
+                                        {
+                                            "rel": "self",
+                                            "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/108333BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                            "resourceAlias": "name"
+                                        },
+                                        {
+                                            "rel": "full",
+                                            "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/108333BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB?v=full",
+                                            "resourceAlias": "name"
+                                        }
+                                    ],
+                                    "resourceVersion": "1.9"
+                                },
+                                "datatype": {
+                                    "uuid": "8d4a4c94-c2cc-11de-8d13-0010c6dffd0f",
+                                    "display": "N/A",
+                                    "links": [
+                                        {
+                                            "rel": "self",
+                                            "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/conceptdatatype/8d4a4c94-c2cc-11de-8d13-0010c6dffd0f",
+                                            "resourceAlias": "conceptdatatype"
+                                        }
+                                    ]
+                                },
+                                "conceptClass": {
+                                    "uuid": "8d492774-c2cc-11de-8d13-0010c6dffd0f",
+                                    "display": "Misc",
+                                    "links": [
+                                        {
+                                            "rel": "self",
+                                            "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/conceptclass/8d492774-c2cc-11de-8d13-0010c6dffd0f",
+                                            "resourceAlias": "conceptclass"
+                                        }
+                                    ]
+                                },
+                                "set": false,
+                                "version": null,
+                                "retired": false,
+                                "names": [
+                                    {
+                                        "uuid": "1137BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Oui",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/1137BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "127332BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "হ্যাঁ",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/127332BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "126316BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Sì",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/126316BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "106307BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Yego",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/106307BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "126313BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "True",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/126313BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "dbc381aa-4328-410c-b16d-72f257f997fb",
+                                        "display": "ចាស",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/dbc381aa-4328-410c-b16d-72f257f997fb",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "137332BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Vre",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/137332BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "126317BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Vero",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/126317BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "108333BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Sí",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/108333BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "1136BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Yes",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/1136BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "126314BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Vrai",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/126314BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "137331BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Wi",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/137331BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "111198BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Да",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/111198BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "126315BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Verdadero",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/126315BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "126318BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Sim",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/126318BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "139802BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "ہاں",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/139802BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "0635ba27-b95b-4c14-b895-bf402867547a",
+                                        "display": "हुन्छ",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/0635ba27-b95b-4c14-b895-bf402867547a",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "126319BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Verdadeiro",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/126319BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "626c68d8-6ba2-4ebf-981f-89e17c94acbe",
+                                        "display": "បាទ",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/626c68d8-6ba2-4ebf-981f-89e17c94acbe",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "106919BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "እወ",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/106919BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "descriptions": [
+                                    {
+                                        "uuid": "1068FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                                        "display": "Generic answer to a question.",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/description/1068FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                                                "resourceAlias": "description"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "18158FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                                        "display": "کسی سوال کا عام جواب",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/description/18158FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                                                "resourceAlias": "description"
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "mappings": [
+                                    {
+                                        "uuid": "143596ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "PIH: 1065",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/mapping/143596ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "mapping"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "133840ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "SNOMED-CT: 373066001",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/mapping/133840ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "mapping"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "144378ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "PIH-Malawi: 1065",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/mapping/144378ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "mapping"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "171328ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "CIEL: 1065",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/mapping/171328ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "mapping"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "134737ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "AMPATH: 1065",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/mapping/134737ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "mapping"
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "answers": [],
+                                "setMembers": [],
+                                "attributes": [],
+                                "links": [
+                                    {
+                                        "rel": "self",
+                                        "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "resourceAlias": "concept"
+                                    },
+                                    {
+                                        "rel": "full",
+                                        "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA?v=full",
+                                        "resourceAlias": "concept"
+                                    }
+                                ],
+                                "resourceVersion": "2.0"
+                            },
+                            "obsDatetime": "2025-12-10T16:08:30.000+0000"
+                        },
+                        {
+                            "uuid": "810fdc1e-896f-4ac9-a954-51b90c928e92",
+                            "concept": {
+                                "uuid": "a33bf670-e9a0-4cf0-8348-7a99e66a1d30",
+                                "display": "¿Alguna vez algún miembro de la familia le insulta?",
+                                "conceptClass": {
+                                    "uuid": "8d491a9a-c2cc-11de-8d13-0010c6dffd0f",
+                                    "display": "Finding"
+                                }
+                            },
+                            "display": "¿Alguna vez algún miembro de la familia le insulta?: Sí",
+                            "groupMembers": null,
+                            "value": {
+                                "uuid": "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                "display": "Sí",
+                                "name": {
+                                    "display": "Sí",
+                                    "uuid": "108333BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                    "name": "Sí",
+                                    "locale": "es",
+                                    "localePreferred": true,
+                                    "conceptNameType": "FULLY_SPECIFIED",
+                                    "links": [
+                                        {
+                                            "rel": "self",
+                                            "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/108333BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                            "resourceAlias": "name"
+                                        },
+                                        {
+                                            "rel": "full",
+                                            "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/108333BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB?v=full",
+                                            "resourceAlias": "name"
+                                        }
+                                    ],
+                                    "resourceVersion": "1.9"
+                                },
+                                "datatype": {
+                                    "uuid": "8d4a4c94-c2cc-11de-8d13-0010c6dffd0f",
+                                    "display": "N/A",
+                                    "links": [
+                                        {
+                                            "rel": "self",
+                                            "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/conceptdatatype/8d4a4c94-c2cc-11de-8d13-0010c6dffd0f",
+                                            "resourceAlias": "conceptdatatype"
+                                        }
+                                    ]
+                                },
+                                "conceptClass": {
+                                    "uuid": "8d492774-c2cc-11de-8d13-0010c6dffd0f",
+                                    "display": "Misc",
+                                    "links": [
+                                        {
+                                            "rel": "self",
+                                            "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/conceptclass/8d492774-c2cc-11de-8d13-0010c6dffd0f",
+                                            "resourceAlias": "conceptclass"
+                                        }
+                                    ]
+                                },
+                                "set": false,
+                                "version": null,
+                                "retired": false,
+                                "names": [
+                                    {
+                                        "uuid": "1137BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Oui",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/1137BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "127332BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "হ্যাঁ",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/127332BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "126316BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Sì",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/126316BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "106307BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Yego",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/106307BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "126313BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "True",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/126313BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "dbc381aa-4328-410c-b16d-72f257f997fb",
+                                        "display": "ចាស",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/dbc381aa-4328-410c-b16d-72f257f997fb",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "137332BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Vre",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/137332BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "126317BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Vero",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/126317BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "108333BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Sí",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/108333BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "1136BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Yes",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/1136BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "126314BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Vrai",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/126314BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "137331BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Wi",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/137331BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "111198BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Да",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/111198BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "126315BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Verdadero",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/126315BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "126318BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Sim",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/126318BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "139802BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "ہاں",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/139802BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "0635ba27-b95b-4c14-b895-bf402867547a",
+                                        "display": "हुन्छ",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/0635ba27-b95b-4c14-b895-bf402867547a",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "126319BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Verdadeiro",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/126319BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "626c68d8-6ba2-4ebf-981f-89e17c94acbe",
+                                        "display": "បាទ",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/626c68d8-6ba2-4ebf-981f-89e17c94acbe",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "106919BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "እወ",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/106919BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "descriptions": [
+                                    {
+                                        "uuid": "1068FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                                        "display": "Generic answer to a question.",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/description/1068FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                                                "resourceAlias": "description"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "18158FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                                        "display": "کسی سوال کا عام جواب",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/description/18158FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                                                "resourceAlias": "description"
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "mappings": [
+                                    {
+                                        "uuid": "143596ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "PIH: 1065",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/mapping/143596ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "mapping"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "133840ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "SNOMED-CT: 373066001",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/mapping/133840ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "mapping"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "144378ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "PIH-Malawi: 1065",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/mapping/144378ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "mapping"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "171328ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "CIEL: 1065",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/mapping/171328ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "mapping"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "134737ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "AMPATH: 1065",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/mapping/134737ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "mapping"
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "answers": [],
+                                "setMembers": [],
+                                "attributes": [],
+                                "links": [
+                                    {
+                                        "rel": "self",
+                                        "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "resourceAlias": "concept"
+                                    },
+                                    {
+                                        "rel": "full",
+                                        "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA?v=full",
+                                        "resourceAlias": "concept"
+                                    }
+                                ],
+                                "resourceVersion": "2.0"
+                            },
+                            "obsDatetime": "2025-12-10T16:08:30.000+0000"
+                        },
+                        {
+                            "uuid": "59dcb0f4-9568-4726-8e73-0307d5b2a88a",
+                            "concept": {
+                                "uuid": "6cbf0391-a087-4cbe-985d-aadb0081005f",
+                                "display": "¿Alguna vez algún miembro de su familia le chantejea?",
+                                "conceptClass": {
+                                    "uuid": "8d491a9a-c2cc-11de-8d13-0010c6dffd0f",
+                                    "display": "Finding"
+                                }
+                            },
+                            "display": "¿Alguna vez algún miembro de su familia le chantejea?: Sí",
+                            "groupMembers": null,
+                            "value": {
+                                "uuid": "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                "display": "Sí",
+                                "name": {
+                                    "display": "Sí",
+                                    "uuid": "108333BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                    "name": "Sí",
+                                    "locale": "es",
+                                    "localePreferred": true,
+                                    "conceptNameType": "FULLY_SPECIFIED",
+                                    "links": [
+                                        {
+                                            "rel": "self",
+                                            "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/108333BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                            "resourceAlias": "name"
+                                        },
+                                        {
+                                            "rel": "full",
+                                            "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/108333BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB?v=full",
+                                            "resourceAlias": "name"
+                                        }
+                                    ],
+                                    "resourceVersion": "1.9"
+                                },
+                                "datatype": {
+                                    "uuid": "8d4a4c94-c2cc-11de-8d13-0010c6dffd0f",
+                                    "display": "N/A",
+                                    "links": [
+                                        {
+                                            "rel": "self",
+                                            "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/conceptdatatype/8d4a4c94-c2cc-11de-8d13-0010c6dffd0f",
+                                            "resourceAlias": "conceptdatatype"
+                                        }
+                                    ]
+                                },
+                                "conceptClass": {
+                                    "uuid": "8d492774-c2cc-11de-8d13-0010c6dffd0f",
+                                    "display": "Misc",
+                                    "links": [
+                                        {
+                                            "rel": "self",
+                                            "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/conceptclass/8d492774-c2cc-11de-8d13-0010c6dffd0f",
+                                            "resourceAlias": "conceptclass"
+                                        }
+                                    ]
+                                },
+                                "set": false,
+                                "version": null,
+                                "retired": false,
+                                "names": [
+                                    {
+                                        "uuid": "1137BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Oui",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/1137BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "127332BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "হ্যাঁ",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/127332BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "126316BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Sì",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/126316BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "106307BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Yego",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/106307BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "126313BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "True",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/126313BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "dbc381aa-4328-410c-b16d-72f257f997fb",
+                                        "display": "ចាស",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/dbc381aa-4328-410c-b16d-72f257f997fb",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "137332BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Vre",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/137332BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "126317BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Vero",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/126317BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "108333BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Sí",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/108333BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "1136BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Yes",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/1136BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "126314BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Vrai",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/126314BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "137331BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Wi",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/137331BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "111198BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Да",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/111198BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "126315BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Verdadero",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/126315BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "126318BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Sim",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/126318BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "139802BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "ہاں",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/139802BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "0635ba27-b95b-4c14-b895-bf402867547a",
+                                        "display": "हुन्छ",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/0635ba27-b95b-4c14-b895-bf402867547a",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "126319BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "Verdadeiro",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/126319BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "626c68d8-6ba2-4ebf-981f-89e17c94acbe",
+                                        "display": "បាទ",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/626c68d8-6ba2-4ebf-981f-89e17c94acbe",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "106919BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "እወ",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/name/106919BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "name"
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "descriptions": [
+                                    {
+                                        "uuid": "1068FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                                        "display": "Generic answer to a question.",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/description/1068FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                                                "resourceAlias": "description"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "18158FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                                        "display": "کسی سوال کا عام جواب",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/description/18158FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                                                "resourceAlias": "description"
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "mappings": [
+                                    {
+                                        "uuid": "143596ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "PIH: 1065",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/mapping/143596ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "mapping"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "133840ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "SNOMED-CT: 373066001",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/mapping/133840ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "mapping"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "144378ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "PIH-Malawi: 1065",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/mapping/144378ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "mapping"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "171328ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "CIEL: 1065",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/mapping/171328ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "mapping"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "134737ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                        "display": "AMPATH: 1065",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/mapping/134737ABBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                                                "resourceAlias": "mapping"
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "answers": [],
+                                "setMembers": [],
+                                "attributes": [],
+                                "links": [
+                                    {
+                                        "rel": "self",
+                                        "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "resourceAlias": "concept"
+                                    },
+                                    {
+                                        "rel": "full",
+                                        "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA?v=full",
+                                        "resourceAlias": "concept"
+                                    }
+                                ],
+                                "resourceVersion": "2.0"
+                            },
+                            "obsDatetime": "2025-12-10T16:08:30.000+0000"
+                        }
+                    ],
+                    "encounterType": {
+                        "uuid": "3w4x5y6z-3234-5678-9101-abcdefghij23",
+                        "display": "Control de Niño Sano",
+                        "viewPrivilege": null,
+                        "editPrivilege": null
+                    },
+                    "encounterProviders": [
+                        {
+                            "uuid": "154d87e7-7fa0-4906-b008-b9b869f96680",
+                            "display": "Super  User  : Unknown",
+                            "encounterRole": {
+                                "uuid": "a0b03050-c99b-11e0-9572-0800200c9a66",
+                                "display": "Unknown"
+                            },
+                            "provider": {
+                                "uuid": "c474db79-b596-4e41-9889-af0a7458b88c",
+                                "person": {
+                                    "uuid": "5f87c042-6814-11e8-923f-e9a88dcb533f",
+                                    "display": "Super  User  "
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "uuid": "41dfb416-9f0e-4eb5-b256-792d0af78120",
+                    "diagnoses": [],
+                    "form": null,
+                    "encounterDatetime": "2025-12-03T20:57:46.000+0000",
+                    "orders": [],
+                    "obs": [
+                        {
+                            "uuid": "ea84ac03-171f-4621-a5a3-3388687158aa",
+                            "concept": {
+                                "uuid": "5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                "display": "Peso Corporal (kg)",
+                                "conceptClass": {
+                                    "uuid": "8d491a9a-c2cc-11de-8d13-0010c6dffd0f",
+                                    "display": "Finding"
+                                }
+                            },
+                            "display": "Peso Corporal (kg): 1,0",
+                            "groupMembers": null,
+                            "value": 1.0,
+                            "obsDatetime": "2025-12-03T20:57:46.000+0000"
+                        }
+                    ],
+                    "encounterType": {
+                        "uuid": "67a71486-1a54-468f-ac3e-7091a9a79584",
+                        "name": "Triaje",
+                        "display": "Triaje",
+                        "viewPrivilege": null,
+                        "editPrivilege": null
+                    },
+                    "encounterProviders": []
+                },
+                {
+                    "uuid": "ff2b2cc5-5e58-4c21-8bc4-df3c0eef938a",
+                    "diagnoses": [],
+                    "form": null,
+                    "encounterDatetime": "2025-12-03T20:57:08.000+0000",
+                    "orders": [],
+                    "obs": [
+                        {
+                            "uuid": "b401e17c-49f9-406b-a7c1-7f9e907a9b9f",
+                            "concept": {
+                                "uuid": "5088AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                "display": "Temperatura (C°)",
+                                "conceptClass": {
+                                    "uuid": "8d491a9a-c2cc-11de-8d13-0010c6dffd0f",
+                                    "display": "Finding"
+                                }
+                            },
+                            "display": "Temperatura (C°): 38,0",
+                            "groupMembers": null,
+                            "value": 38.0,
+                            "obsDatetime": "2025-12-03T20:57:08.000+0000"
+                        }
+                    ],
+                    "encounterType": {
+                        "uuid": "67a71486-1a54-468f-ac3e-7091a9a79584",
+                        "display": "Triaje",
+                        "viewPrivilege": null,
+                        "editPrivilege": null
+                    },
+                    "encounterProviders": []
+                },
+                {
+                    "uuid": "c3e1a2b4-d5f6-7890-abcd-ef1234567890",
+                    "diagnoses": [],
+                    "form": null,
+                    "encounterDatetime": "2025-12-10T17:10:00.000+0000",
+                    "orders": [],
+                    "obs": [
+                        {
+                            "uuid": "a1b2c3d4-e5f6-7890-abcd-111111111111",
+                            "concept": {
+                                "uuid": "159947AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                "display": "Diagnóstico (CIE-10)",
+                                "conceptClass": {
+                                    "uuid": "8d4918b0-c2cc-11de-8d13-0010c6dffd0f",
+                                    "display": "Diagnosis"
+                                }
+                            },
+                            "display": "Diagnóstico (CIE-10): J06.9",
+                            "groupMembers": null,
+                            "value": "J06.9",
+                            "obsDatetime": "2025-12-10T17:10:00.000+0000"
+                        },
+                        {
+                            "uuid": "b2c3d4e5-f6a7-8901-bcde-222222222222",
+                            "concept": {
+                                "uuid": "PRESCODE-0001-AAAAAAAAAAAAAAAAAAAAAAA",
+                                "display": "Código Prestacional",
+                                "conceptClass": {
+                                    "uuid": "8d492774-c2cc-11de-8d13-0010c6dffd0f",
+                                    "display": "Misc"
+                                }
+                            },
+                            "display": "Código Prestacional: 0101",
+                            "groupMembers": null,
+                            "value": "0101",
+                            "obsDatetime": "2025-12-10T17:10:00.000+0000"
+                        },
+                        {
+                            "uuid": "c3d4e5f6-a7b8-9012-cdef-333333333301",
+                            "concept": {
+                                "uuid": "HOSPITALIZACION-0001-AAAAAAAAAAAAAAAAAAA",
+                                "display": "Hospitalización",
+                                "conceptClass": {
+                                    "uuid": "8d492774-c2cc-11de-8d13-0010c6dffd0f",
+                                    "display": "Misc"
+                                }
+                            },
+                            "display": "Hospitalización: No",
+                            "groupMembers": null,
+                            "value": false,
+                            "obsDatetime": "2025-12-10T17:10:00.000+0000"
+                        },
+                        {
+                            "uuid": "d4e5f6a7-b8c9-0123-defa-333333333302",
+                            "concept": {
+                                "uuid": "GESTANTE-0001-AAAAAAAAAAAAAAAAAAAAAAA",
+                                "display": "Gestante",
+                                "conceptClass": {
+                                    "uuid": "8d492774-c2cc-11de-8d13-0010c6dffd0f",
+                                    "display": "Misc"
+                                }
+                            },
+                            "display": "Gestante: Si",
+                            "groupMembers": null,
+                            "value": true,
+                            "obsDatetime": "2025-12-10T17:10:00.000+0000"
+                        },
+                        {
+                            "uuid": "e5f6a7b8-c9d0-1234-efab-333333333303",
+                            "concept": {
+                                "uuid": "PUERPERA-0001-AAAAAAAAAAAAAAAAAAAAAAA",
+                                "display": "Puérpera",
+                                "conceptClass": {
+                                    "uuid": "8d492774-c2cc-11de-8d13-0010c6dffd0f",
+                                    "display": "Misc"
+                                }
+                            },
+                            "display": "Puérpera: Si",
+                            "groupMembers": null,
+                            "value": true,
+                            "obsDatetime": "2025-12-10T17:10:00.000+0000"
+                        }
+                    ],
+                    "encounterType": {
+                        "uuid": "9a8b7c6d-5e4f-3a2b-1c0d-ef9876543210",
+                        "name": "Consulta Médica",
+                        "display": "Consulta Médica",
+                        "viewPrivilege": null,
+                        "editPrivilege": null
+                    },
+                    "encounterProviders": [
+                        {
+                            "uuid": "d4e5f6a7-b8c9-0123-defa-333333333333",
+                            "display": "Super  User  : Médico",
+                            "encounterRole": {
+                                "uuid": "a0b03050-c99b-11e0-9572-0800200c9a66",
+                                "display": "Unknown"
+                            },
+                            "provider": {
+                                "uuid": "c474db79-b596-4e41-9889-af0a7458b88c",
+                                "person": {
+                                    "uuid": "5f87c042-6814-11e8-923f-e9a88dcb533f",
+                                    "display": "Super  User  "
+                                }
+                            }
+                        }
+                    ]
+                }
+            ],
+            "visitType": {
+                "uuid": "b1f0e8a1-9c5d-4f0e-8892-81f3140fbc09",
+                "name": "Consulta Ambulatoria",
+                "display": "Consulta Ambulatoria"
+            },
+            "startDatetime": "2025-12-03T20:51:22.000+0000",
+            "stopDatetime": null,
+            "patient": {
+                "uuid": "b4db49c6-6f1c-4d58-a9a0-43d9c8333933",
+                "display": "11223344 - Victor Guzman  Perez  ",
+                "identifiers": [
+                    {
+                        "uuid": "25b4e00c-3ad8-4ac5-8f55-7523dc22d043",
+                        "display": "DNI = 11223344",
+                        "links": [
+                            {
+                                "rel": "self",
+                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/patient/b4db49c6-6f1c-4d58-a9a0-43d9c8333933/identifier/25b4e00c-3ad8-4ac5-8f55-7523dc22d043",
+                                "resourceAlias": "identifier"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "2f6c31e9-4cb1-4583-9484-0130e20ca73b",
+                        "display": "N° Historia Clínica = 100001W",
+                        "links": [
+                            {
+                                "rel": "self",
+                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/patient/b4db49c6-6f1c-4d58-a9a0-43d9c8333933/identifier/2f6c31e9-4cb1-4583-9484-0130e20ca73b",
+                                "resourceAlias": "identifier"
+                            }
+                        ]
+                    }
+                ],
+                "person": {
+                    "uuid": "b4db49c6-6f1c-4d58-a9a0-43d9c8333933",
+                    "display": "Victor Guzman  Perez  ",
+                    "gender": "M",
+                    "age": 0,
+                    "birthdate": "2025-11-26T00:00:00.000+0000",
+                    "birthdateEstimated": false,
+                    "dead": true,
+                    "deathDate": "2025-12-15T00:00:00.000+0000",
+                    "causeOfDeath": null,
+                    "preferredName": {
+                        "uuid": "b433cb04-afbf-4db5-ba6c-1b69c4dd9ba0",
+                        "display": "Victor Guzman  Perez  ",
+                        "links": [
+                            {
+                                "rel": "self",
+                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/person/b4db49c6-6f1c-4d58-a9a0-43d9c8333933/name/b433cb04-afbf-4db5-ba6c-1b69c4dd9ba0",
+                                "resourceAlias": "name"
+                            }
+                        ]
+                    },
+                    "preferredAddress": {
+                        "uuid": "8515b44b-b7f3-4959-92aa-d49b98cfc68d",
+                        "display": "LORETO",
+                        "links": [
+                            {
+                                "rel": "self",
+                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/person/b4db49c6-6f1c-4d58-a9a0-43d9c8333933/address/8515b44b-b7f3-4959-92aa-d49b98cfc68d",
+                                "resourceAlias": "address"
+                            }
+                        ]
+                    },
+                    "attributes": [],
+                    "voided": false,
+                    "birthtime": null,
+                    "deathdateEstimated": false,
+                    "links": [
+                        {
+                            "rel": "self",
+                            "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/person/b4db49c6-6f1c-4d58-a9a0-43d9c8333933",
+                            "resourceAlias": "person"
+                        },
+                        {
+                            "rel": "full",
+                            "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/person/b4db49c6-6f1c-4d58-a9a0-43d9c8333933?v=full",
+                            "resourceAlias": "person"
+                        }
+                    ],
+                    "resourceVersion": "1.11"
+                },
+                "voided": false,
+                "links": [
+                    {
+                        "rel": "self",
+                        "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/patient/b4db49c6-6f1c-4d58-a9a0-43d9c8333933",
+                        "resourceAlias": "patient"
+                    },
+                    {
+                        "rel": "full",
+                        "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/patient/b4db49c6-6f1c-4d58-a9a0-43d9c8333933?v=full",
+                        "resourceAlias": "patient"
+                    }
+                ],
+                "resourceVersion": "1.8"
+            },
+            "attributes": [
+                {
+                    "attributeType": {
+                        "uuid": "aac48226-d143-4274-80e0-264db4e368ee",
+                        "display": "Número de Seguro",
+                        "links": [
+                            {
+                                "rel": "self",
+                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/visitattributetype/aac48226-d143-4274-80e0-264db4e368ee",
+                                "resourceAlias": "visitattributetype"
+                            }
+                        ]
+                    },
+                    "display": "Número de Seguro: 134153153515",
+                    "uuid": "4a702a7a-23d7-4a0d-813b-34e5d95c5e0a",
+                    "value": "134153153515"
+                },
+                {
+                    "attributeType": {
+                        "uuid": "3a988e33-a6c0-4b76-b924-01abb998944b",
+                        "display": "Financiador",
+                        "links": [
+                            {
+                                "rel": "self",
+                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/visitattributetype/3a988e33-a6c0-4b76-b924-01abb998944b",
+                                "resourceAlias": "visitattributetype"
+                            }
+                        ]
+                    },
+                    "display": "Financiador: Concept #27903",
+                    "uuid": "e77938f0-2147-483e-ac7d-fffd3d952b8a",
+                    "value": {
+                        "uuid": "d054da83-799f-449e-91ee-420c7fa9354f",
+                        "display": "S.I.S",
+                        "name": {
+                            "display": "S.I.S",
+                            "uuid": "02d10ed4-85a0-4430-80ef-66ebbde83359",
+                            "name": "S.I.S",
+                            "locale": "es",
+                            "localePreferred": true,
+                            "conceptNameType": "FULLY_SPECIFIED",
+                            "links": [
+                                {
+                                    "rel": "self",
+                                    "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/d054da83-799f-449e-91ee-420c7fa9354f/name/02d10ed4-85a0-4430-80ef-66ebbde83359",
+                                    "resourceAlias": "name"
+                                },
+                                {
+                                    "rel": "full",
+                                    "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/d054da83-799f-449e-91ee-420c7fa9354f/name/02d10ed4-85a0-4430-80ef-66ebbde83359?v=full",
+                                    "resourceAlias": "name"
+                                }
+                            ],
+                            "resourceVersion": "1.9"
+                        },
+                        "datatype": {
+                            "uuid": "8d4a4c94-c2cc-11de-8d13-0010c6dffd0f",
+                            "display": "N/A",
+                            "links": [
+                                {
+                                    "rel": "self",
+                                    "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/conceptdatatype/8d4a4c94-c2cc-11de-8d13-0010c6dffd0f",
+                                    "resourceAlias": "conceptdatatype"
+                                }
+                            ]
+                        },
+                        "conceptClass": {
+                            "uuid": "8d492774-c2cc-11de-8d13-0010c6dffd0f",
+                            "display": "Misc",
+                            "links": [
+                                {
+                                    "rel": "self",
+                                    "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/conceptclass/8d492774-c2cc-11de-8d13-0010c6dffd0f",
+                                    "resourceAlias": "conceptclass"
+                                }
+                            ]
+                        },
+                        "set": false,
+                        "version": null,
+                        "retired": false,
+                        "names": [
+                            {
+                                "uuid": "7eb8f155-8587-4e7a-a7b3-a3cea3eba337",
+                                "display": "S.I.S",
+                                "links": [
+                                    {
+                                        "rel": "self",
+                                        "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/d054da83-799f-449e-91ee-420c7fa9354f/name/7eb8f155-8587-4e7a-a7b3-a3cea3eba337",
+                                        "resourceAlias": "name"
+                                    }
+                                ]
+                            },
+                            {
+                                "uuid": "02d10ed4-85a0-4430-80ef-66ebbde83359",
+                                "display": "S.I.S",
+                                "links": [
+                                    {
+                                        "rel": "self",
+                                        "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/d054da83-799f-449e-91ee-420c7fa9354f/name/02d10ed4-85a0-4430-80ef-66ebbde83359",
+                                        "resourceAlias": "name"
+                                    }
+                                ]
+                            }
+                        ],
+                        "descriptions": [
+                            {
+                                "uuid": "3ac49685-c592-5862-9aa3-31e4bfa6c4f5",
+                                "display": "S.I.S",
+                                "links": [
+                                    {
+                                        "rel": "self",
+                                        "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/d054da83-799f-449e-91ee-420c7fa9354f/description/3ac49685-c592-5862-9aa3-31e4bfa6c4f5",
+                                        "resourceAlias": "description"
+                                    }
+                                ]
+                            }
+                        ],
+                        "mappings": [],
+                        "answers": [],
+                        "setMembers": [],
+                        "attributes": [],
+                        "links": [
+                            {
+                                "rel": "self",
+                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/d054da83-799f-449e-91ee-420c7fa9354f",
+                                "resourceAlias": "concept"
+                            },
+                            {
+                                "rel": "full",
+                                "uri": "http://hii1sc-qlty.inf.pucp.edu.pe/openmrs/ws/rest/v1/concept/d054da83-799f-449e-91ee-420c7fa9354f?v=full",
+                                "resourceAlias": "concept"
+                            }
+                        ],
+                        "resourceVersion": "2.0"
+                    }
+                }
+            ]
+        }
+        
+
+}
