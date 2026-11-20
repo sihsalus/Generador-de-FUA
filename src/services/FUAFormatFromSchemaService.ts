@@ -1,5 +1,6 @@
 import {z} from "zod";
 import { parse } from 'jsonc-parser';
+import { parseFUAFormatContent } from '../utils/parseFUAFormatContent';
 
 
 import { isValidUUIDv4 } from "../utils/utils";
@@ -70,6 +71,8 @@ class FUAFormatFromSchemaService {
             throw newError;
         }
         
+        parseFUAFormatContent(result.data.content);
+
         // FUAFormat creation
         let returnedFUAFormat = null;
         try {
@@ -268,7 +271,7 @@ class FUAFormatFromSchemaService {
 
         let htmlContent = ''; 
 
-        let parsedContent = parse(auxFuaFormat.content);
+        const parsedContent = parseFUAFormatContent(auxFuaFormat.content);
 
         try{
             let auxFormat = await new FUAFormat(parsedContent);
@@ -306,6 +309,8 @@ class FUAFormatFromSchemaService {
             throw newError;
         }
         
+        parseFUAFormatContent(result.data.content);
+
         // FUAFormat edit
         let returnedFUAFormat = null;
         try {

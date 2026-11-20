@@ -4,6 +4,8 @@ const fs = require('fs');
 const path = require('path');
 import { parse } from 'jsonc-parser';
 import FUAFormatFromSchemaService from '../services/FUAFormatFromSchemaService';
+import { FUAFormatValidationError } from '../errors/FUAFormatValidationError';
+import { parseFUAFormatContent } from '../utils/parseFUAFormatContent';
 import { pdfMetadataHashSignatureVerification } from '../utils/PDF_HASH_Signature';
 
 
@@ -29,18 +31,10 @@ class FUAFormatFromSchemaController {
             const controllerBody = req.body;
             const files = req.files as { [fieldname: string]: Express.Multer.File[] };
 
-            const file = files['formatPayload']?.[0];
+            const file = files?.['formatPayload']?.[0];
             
-            const jsoncContent = file.buffer.toString('utf-8');
-            const parsed = parse(jsoncContent);
-
-            // Parsed payload wasn't a jsonc object
-            if(parsed === undefined){
-                let auxError = new Error('Error in FUA Format From Schema Controller - create: File sent wasnt jsonc compliant (parsing error). ');
-                throw auxError;
-            }
-
-            // Validation parsing validation pending needed
+            const jsoncContent = file?.buffer.toString('utf-8') ?? '';
+            parseFUAFormatContent(jsoncContent);
 
             let newFUAFormat = null;
             newFUAFormat = await FUAFormatFromSchemaService.create({
@@ -74,6 +68,10 @@ class FUAFormatFromSchemaController {
 
             res.status(201).json(newFUAFormat);   
         } catch (err: any) {
+            if (err instanceof FUAFormatValidationError) {
+                res.status(err.status).json(err.response());
+                return;
+            }
             res.status(500).json({
                 error: 'Failed to create FUA Format From Schema. (Controller)', 
                 message: (err as (Error)).message,
@@ -237,10 +235,13 @@ class FUAFormatFromSchemaController {
                 { name: "database" }
             ]);   
         } catch (err: any) {
+            if (err instanceof FUAFormatValidationError) {
+                res.status(err.status).json(err.response());
+                return;
+            }
             res.status(500).json({
-                error: 'Failed to render FUA Format. (Controller)', 
-                message: (err as (Error)).message,
-                details: (err as any).details ?? null, 
+                error: 'FUA_RENDER_FAILED',
+                message: 'No se pudo generar el formato FUA.',
             });
             let auxLog = new Log({
                 timeStamp: new Date(),
@@ -262,17 +263,18 @@ class FUAFormatFromSchemaController {
         const controllerBody = req.body;
         const files = req.files as { [fieldname: string]: Express.Multer.File[] };
 
-        const file = files['formatPayload']?.[0];
+        const file = files?.['formatPayload']?.[0];
 
          
-        const jsoncContent = file.buffer.toString('utf-8');
-        const parsed = parse(jsoncContent);
+        const jsoncContent = file?.buffer.toString('utf-8') ?? '';
 
-        // Validation parsing validation pending needed
 
         let editFUAFormat = null;
+        let transactionStarted = false;
         try {
-            transactionInst.renewTransaction()
+            parseFUAFormatContent(jsoncContent);
+            await transactionInst.renewTransaction();
+            transactionStarted = true;
             editFUAFormat = await FUAFormatFromSchemaService.edit({
                 uuid: req.params.id,
                 name: controllerBody.name,
@@ -283,6 +285,8 @@ class FUAFormatFromSchemaController {
                 updatedBy: controllerBody.updatedBy
             });
             if (editFUAFormat == null){
+                await transactionInst.unconfirmTransaction();
+                transactionStarted = false;
                 res.status(304).json({
                     error: `FUA Field by UUID '${controllerBody.uuid}' couldnt be found. `,
                 });
@@ -302,10 +306,17 @@ class FUAFormatFromSchemaController {
                 { name: "file", file: "logs/auxLog.log"},
                 { name: "database" }
             ]);  
-            transactionInst.confirmTransaction();
+            await transactionInst.confirmTransaction();
+            transactionStarted = false;
             res.status(200).json(editFUAFormat);
         } catch (err: any) {
-            transactionInst.unconfirmTransaction();
+            if (transactionStarted) {
+                await transactionInst.unconfirmTransaction();
+            }
+            if (err instanceof FUAFormatValidationError) {
+                res.status(err.status).json(err.response());
+                return;
+            }
             res.status(500).json({
                 error: 'Failed to edit FUA Format From Schema. (Controller)', 
                 message: (err as (Error)).message,
