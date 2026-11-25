@@ -404,7 +404,6 @@ class FUAFormatFromSchemaController {
                 throw new Error("Missing SECRET_KEY environment variable");
                 }
             const secretKey: string = process.env.SECRET_KEY;
-            console.log(secretKey);
 
             if (!file) {
             res.status(400).json({ error: "No PDF provided (field 'pdf')." });
@@ -415,7 +414,7 @@ class FUAFormatFromSchemaController {
             res.status(200).json(result);
 
         } catch (err: any) {
-            console.error("Error in FUAFormatFromSchema Controller - pdfMetadataHashSignatureVerification:", err);
+            console.error("Error in FUAFormatFromSchema Controller - pdfMetadataHashSignatureVerification");
             res.status(500).json({
             error: "Failed to verify PDF signature. (Controller)",
             message: (err as Error).message,

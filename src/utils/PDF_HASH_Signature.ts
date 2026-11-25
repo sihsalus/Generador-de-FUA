@@ -22,7 +22,6 @@ export async function pdfMetadataAccess(pdfBytes : any){
 
     console.log('Title:', pdfDoc.getTitle());
     console.log('Author:', pdfDoc.getAuthor());
-    console.log('Subject:', pdfDoc.getSubject());
     console.log('Creator:', pdfDoc.getCreator());
     console.log('Keywords:', pdfDoc.getKeywords());
     console.log('Producer:', pdfDoc.getProducer());
@@ -67,14 +66,5 @@ export async function pdfMetadataHashSignatureVerification(pdfBytes : any, secre
 
     const hmacHex = computeHmacHex(pdfBytesNoSignature, secretKey); 
 
-    console.log(signature);
-    console.log(`${signaturePrefix}${hmacHex}`);
-
-    if (signature == `${signaturePrefix}${hmacHex}`){
-        console.log("Same signature.");
-        return true;
-    }else{
-       console.log("Not the same signature."); 
-       return false;
-    }
+    return signature === `${signaturePrefix}${hmacHex}`;
 }
