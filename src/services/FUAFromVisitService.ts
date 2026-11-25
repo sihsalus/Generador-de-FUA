@@ -200,18 +200,9 @@ class FUAFromVisitService {
         
             const hmacHex = computeHmacHex(pdfBytesNoSignature, secretKey);
         
-            console.log(signature);
-            console.log(`${signaturePrefix}${hmacHex}`);
-        
-            if (signature === `${signaturePrefix}${hmacHex}`){
-                console.log("Same signature.");
-                return true;
-            }else{
-                console.log("Not the same signature."); 
-                return false;
-            }
+            return signature === `${signaturePrefix}${hmacHex}`;
         } catch(err: unknown){
-            console.error('Error in FUA From Visit Service - hashSignatureVerification : ', err);
+            console.error('Error in FUA From Visit Service - hashSignatureVerification');
             (err as Error).message =  'Error in FUA From Visit Service - hashSignatureVerification : ' + (err as Error).message;
             throw err; 
         }
